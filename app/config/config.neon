@@ -9,7 +9,7 @@ common:
 		database:
 			driver: mysql
 			host: localhost
-			dbname: mpr
+			dbname: mpr2012
 			user: root
 			password: root
 
@@ -41,5 +41,12 @@ common:
 
 
 production < common:
+	parameters:
+		database:
+			driver: mysql
+			host: innodb.endora.cz
+			dbname: mpr2012
+			user: mpr2012
+			password: ones111
 
 development < common:
