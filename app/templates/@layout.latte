@@ -1,0 +1,75 @@
+{**
+ * My Application layout template.
+ *
+ * @copyright  Copyright (c) 2010 John Doe
+ * @package    MyApplication
+ *
+ * @param string   $basePath web base path
+ * @param string   $robots   tell robots how to index the content of a page (optional)
+ * @param array    $flashes  flash messages
+ *}
+
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+	<meta name="description" content="MPR projekt 2012, FIT, VUTBR">
+	<meta name="robots" content="{$robots}" n:ifset="$robots">
+
+	<title>Ones - MPR 2012</title>
+
+	<link rel="stylesheet" media="screen,projection,tv" href="{$basePath}/css/screen.css" type="text/css">
+	<link rel="stylesheet" media="print" href="{$basePath}/css/print.css" type="text/css">
+	<link rel="shortcut icon" href="{$basePath}/favicon.ico" type="image/x-icon">
+
+<!--	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.min.js"></script>-->
+	<script type="text/javascript" src="{$basePath}/js/netteForms.js"></script>
+	<script type="text/javascript" src="{$basePath}/js/jquery.min.js"></script>
+	{block head}{/block}
+</head>
+
+<body>
+	<script> document.body.className+=' js' </script>
+
+    {if $user->isLoggedIn()}
+        <div id="top">
+            <h1><a n:href="Homepage:" title="Ones - MPR 2012"><span>Ones - MPR 2012</span></a></h1>
+            <ul>
+                <li{ifCurrent Homepage:*} class="active"{/ifCurrent}><a n:href="Homepage:" title="Novinky">Novinky</a></li>
+                <li{ifCurrent NewMatrix:*} class="active"{/ifCurrent}><a n:href="NewMatrix:" title="Nová logická rámcová matice">Nová matice</a></li>
+                <li{ifCurrent Print:*} class="active"{/ifCurrent}><a n:href="Print:" title="Tisknout">Tisknout</a></li>
+                <li{ifCurrent Settings:*} class="active"{/ifCurrent}><a n:href="Settings:" title="Nastavení">Nastavení</a></li>
+                <li{ifCurrent MatrixOverview:*} class="active"{/ifCurrent}><a n:href="MatrixOverview:" title="Přehled logických rámcových matic">Přehled matic</a></li>
+                <li{ifCurrent NewActivity:*} class="active"{/ifCurrent}><a n:href="NewActivity:" title="Nová aktivita">Nová aktivita</a></li>
+                <li{ifCurrent Export:*} class="active"{/ifCurrent}><a n:href="Export:" title="Exportovat">Exportovat</a></li>
+                <li><a n:href="Sign:out" title="Odhlásit se">Odhlásit se</a></li>
+            </ul>
+        </div>
+        <hr />
+    {/if}
+    
+    <div n:foreach="$flashes as $flash" class="flash {$flash->type}">{$flash->message}</div>
+    {if $flashes}
+        <hr />
+    {/if}
+    
+    <div id="content">
+    	{include #content}
+    </div>
+    
+    {if $user->isLoggedIn()}
+        <hr />
+        <div id="footer">
+            <div class="floatLeft">
+                <small>Portál týmu <b>Ones</b> předmětu MPR na FIT, VUTBR &copy; 2012</small>
+            </div>
+            <div class="floatRight">
+                <small>Jste přihlášen(a) jako: <b>{$user->getIdentity()->username}</b> |
+                <a n:href="Sign:out" title="Odhlásit se">Odhlásit se</a></small>
+            </div>
+        </div>
+    {/if}
+    
+</body>
+</html>

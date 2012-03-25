@@ -1,0 +1,17 @@
+{block content}
+<div id="homepage">
+    <h1>Novinky</h1>
+    {if $news}
+    <div class="news">
+    {foreach $news as $new}
+        <div class="new">
+            <h2>{$new->header}<span>{$authors[$new->author]->username} | {$new->date}</span></h2>
+            <p>{$new->text}</p>
+        </div>
+    {/foreach}
+    </div>
+    {else}
+    <center>Žádné novinky v databázi nenalezeny.</center>
+    {/if}
+    {widget insertNewForm}
+</div>
