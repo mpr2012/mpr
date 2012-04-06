@@ -1,8 +1,8 @@
 body {
-	font: 16px/1.5 "Trebuchet MS", "Geneva CE", lucida, sans-serif;
-	color: #333;
-	background-color: #fff;
-    width: 900px;
+    font: 66% "Trebuchet MS", "Geneva CE", lucida, sans-serif;
+    color: #333;
+    background-color: #fff;
+    width: 960px;
     margin: auto;
 }
 
@@ -27,6 +27,7 @@ div.flash, form ul.error {
 	border: 1px solid #E2C822;
 	padding: 1em;
 	margin: 1em 0;
+        font-size: 16px;
     list-style-type: none;
 }
 
@@ -59,7 +60,7 @@ hr {
 #top h1 a {
     display: block;
     height: 100px;
-    width: 250px;
+    width: 310px;
     background: url('../images/logo.png') no-repeat;
     float: left;
 }
@@ -76,7 +77,8 @@ hr {
 
 #top ul li {
     float: left;
-    width: 25%;
+    width: 23%;
+    margin: 0 1px 1px 0px;
 }
 
 #top ul li a {
@@ -84,16 +86,22 @@ hr {
     text-align: center;
     display: block;
     line-height: 50px;
+    font-size: 16px;
+    font-weight: normal;
+    color: black;
 }
-
-#top ul li a:hover, #top ul li.active a {
-    background-color: black;
+#top ul li a:hover {
+    color: white;
+}
+#top ul li.active a {
+    background-color: #0073ea;
     color: white;
 }
 
 #content {
     min-height: 200px;
     padding: 16px;
+    clear:both;
 }
 
 #homepage div.news {
