@@ -1,5 +1,5 @@
 body {
-    font: 66% "Trebuchet MS", "Geneva CE", lucida, sans-serif;
+    font: 100% "Trebuchet MS", "Geneva CE", lucida, sans-serif;
     color: #333;
     background-color: #fff;
     width: 960px;
@@ -136,6 +136,10 @@ hr {
     background-image: url('../images/logo.png');
     background-repeat: no-repeat;
     background-position: 440px 20px;
+}
+
+#matrix-view {
+    font-size: 66%;
 }
 
 #footer * {

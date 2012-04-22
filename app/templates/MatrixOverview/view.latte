@@ -1,0 +1,232 @@
+{block content}
+<div id="matrix-view">
+    <table class="matrix">
+        <tr id="row1">
+            <td id="zamer"><h2>Záměr</h2>
+                <ul id="ul_zamer">
+                    <li>{$matice->zamer ?: '-'}</li>
+                </ul>
+            </td>
+            <td><h2>Ověřitelné ukazatele</h2>
+                <ul id="ul_zamer_uk">
+                    {if count($ukazatele1)}
+                        {foreach $ukazatele1 as $ukazatel1}
+                            <li id="uk{$ukazatel1->id}">{$ukazatel1->nazev}</li>
+                        {/foreach}
+                    {else}
+                        <li><i>N/A</i></li>
+                    {/if}
+                </ul>
+            </td>
+            <td><h2>Zdroje ověření</h2>
+                <ul id="ul_zamer_zdroje">
+                    {if count($zdroje_overeni1)}
+                        {foreach $zdroje_overeni1 as $zdroj_overeni1}
+                            <li id="zdr{$zdroj_overeni1->id}">{$zdroj_overeni1->nazev}</li>
+                        {/foreach}
+                    {else}
+                        <li><i>N/A</i></li>
+                    {/if}
+                </ul>
+            </td>
+            <td><h2>&nbsp;</h2>
+            </td>
+        </tr>
+        <tr id="row2">
+            <td id="cil"><h2>Cíl</h2>
+                <ul id="ul_cil">
+                    <li>{$matice->cil ?: '-'}</li>
+                </ul>
+            </td>
+            <td><h2>Ověřitelné ukazatele</h2>
+                <ul id="ul_cil_uk">
+                    {if count($ukazatele2)}
+                        {foreach $ukazatele2 as $ukazatel2}
+                            <li id="uk{$ukazatel2->id}">{$ukazatel2->nazev}</li>
+                        {/foreach}
+                    {else}
+                        <li><i>N/A</i></li>
+                    {/if}
+                </ul>
+            </td>
+            <td><h2>Zdroje ověření</h2>
+                <ul id="ul_cil_zdroje">
+                {if count($zdroje_overeni2)}
+                        {foreach $zdroje_overeni2 as $zdroj_overeni2}
+                            <li id="zdr{$zdroj_overeni2->id}">{$zdroj_overeni2->nazev}</li>
+                        {/foreach}
+                    {else}
+                        <li><i>N/A</i></li>
+                    {/if}
+                </ul>
+            </td>
+            <td><h2>Předpoklady</h2>
+                <ul id="ul_cil_predpoklady">
+                    {if count($predpoklady2)}
+                        {foreach $predpoklady2 as $predpoklad2}
+                            <li id="pr{$predpoklad2->id}">{$predpoklad2->nazev}</li>
+                        {/foreach}
+                    {else}
+                        <li><i>N/A</i></li>
+                    {/if}
+                </ul>
+            </td>
+        </tr>
+        <tr id="row3">
+            <td id="vystupy"><h2>Výstupy</h2>
+                <ul id="ul_vystupy">
+                {if count($vystupy)}
+                    {var $counter = 1}
+                    {foreach $vystupy as $vystup}
+                        <li id="vys{$vystup->id}">
+                            <input id="vys{$vystup->id}_cb" type="checkbox"/>
+                            <label for="vys{$vystup->id}_cb">
+                                <span class="vystup_num">{$counter++}</span> {$vystup->nazev}
+                            </label>
+                        </li>
+                    {/foreach}
+                {else}
+                    <li><i>N/A</i></li>
+                {/if}
+                </ul>
+            </td>
+            <td><h2>Ověřitelné ukazatele</h2>
+                <ul id="ul_vystupy_uk">
+                    {if count($ukazatele3)}
+                        {foreach $ukazatele3 as $ukazatel3}
+                            <li id="uk{$ukazatel3->id}">{$ukazatel3->nazev}</li>
+                        {/foreach}
+                    {else}
+                        <li><i>N/A</i></li>
+                    {/if}
+                </ul>
+            </td>
+            <td><h2>Zdroje ověření</h2>
+                <ul id="ul_vystupy_zdroje">
+                    {if count($zdroje_overeni3)}
+                        {foreach $zdroje_overeni3 as $zdroj_overeni3}
+                            <li id="zdr{$zdroj_overeni3->id}">{$zdroj_overeni3->nazev}</li>
+                        {/foreach}
+                    {else}
+                        <li><i>N/A</i></li>
+                    {/if}
+                </ul>
+            </td>
+            <td><h2>Předpoklady</h2>
+                <ul id="ul_vystupy_predpoklady">
+                    {if count($predpoklady3)}
+                        {foreach $predpoklady3 as $predpoklad3}
+                            <li id="pr{$predpoklad3->id}">{$predpoklad3->nazev}</li>
+                        {/foreach}
+                    {else}
+                        <li><i>N/A</i></li>
+                    {/if}
+                </ul>
+            </td>
+        </tr>
+        <tr  id="row4">
+            <td><h2>Aktivity</h2>
+                <ul id="ul_aktivity">
+                {if count($vystupy)}
+                    {var $outputCounter = 1}
+                    {var $activityCounter = 1}
+                    {var $oldOutputId = NULL}
+                    {foreach $vystupy as $vystup}
+                        {var ($oldOutputId == NULL) ? $oldOutputId = $vystup->id}
+                        {var ($oldOutputId != $vystup->id) ? $activityCounter = 1}
+                        {var ($oldOutputId != $vystup->id) ? $oldOutputId = $vystup->id}
+                        {if count($aktivity[$vystup->id])}
+                            {foreach $aktivity[$vystup->id] as $aktivita}
+                            <li id="akt{$aktivita->id}" class="vys{$aktivita->vystup}">
+                                <span class="vystup_num">{$outputCounter}</span>.<span class="ak_num">{$activityCounter++}</span> {$aktivita->nazev}
+                            </li>
+                            {/foreach}
+                        {/if}
+                        {var $outputCounter++}
+                    {/foreach}
+                {else}
+                    <li><i>N/A</i></li>
+                {/if}
+                </ul>
+            </td>
+            <td><h2>Zdroje</h2>
+                <ul id="ul_aktivity_zdroje">
+                {if count($vystupy)}
+                    {var $outputCounter = 1}
+                    {var $activityCounter = 1}
+                    {var $oldOutputId = NULL}
+                    {foreach $vystupy as $vystup}
+                        {var ($oldOutputId == NULL) ? $oldOutputId = $vystup->id}
+                        {var ($oldOutputId != $vystup->id) ? $activityCounter = 1}
+                        {var ($oldOutputId != $vystup->id) ? $oldOutputId = $vystup->id}
+                        {if count($aktivity[$vystup->id])}
+                            {foreach $aktivity[$vystup->id] as $aktivita}
+                            <li class="vys{$aktivita->vystup} akt{$aktivita->id}">
+                                <span class="vystup_num">{$outputCounter}</span>.<span class="ak_num">{$activityCounter++}</span> {$aktivita->zdroje}
+                            </li>
+                            {/foreach}
+                        {/if}
+                        {var $outputCounter++}
+                    {/foreach}
+                {else}
+                    <li><i>N/A</i></li>
+                {/if}
+                </ul>
+            </td>
+            <td><h2>Časový ramec</h2>
+                <ul id="ul_aktivity_cas">
+                {if count($vystupy)}
+                    {var $outputCounter = 1}
+                    {var $activityCounter = 1}
+                    {var $oldOutputId = NULL}
+                    {foreach $vystupy as $vystup}
+                        {var ($oldOutputId == NULL) ? $oldOutputId = $vystup->id}
+                        {var ($oldOutputId != $vystup->id) ? $activityCounter = 1}
+                        {var ($oldOutputId != $vystup->id) ? $oldOutputId = $vystup->id}
+                        {if count($aktivity[$vystup->id])}
+                            {foreach $aktivity[$vystup->id] as $aktivita}
+                            <li class="vys{$aktivita->vystup} akt{$aktivita->id}">
+                                <span class="vystup_num">{$outputCounter}</span>.<span class="ak_num">{$activityCounter++}</span> {$aktivita->zacatek|date:'%d.%m.%Y'} - {$aktivita->konec|date:'%d.%m.%Y'}
+                            </li>
+                            {/foreach}
+                        {/if}
+                        {var $outputCounter++}
+                    {/foreach}
+                {else}
+                    <li><i>N/A</i></li>
+                {/if}
+                </ul>
+            </td>
+            <td><h2>Předpoklady</h2>
+                <ul id="ul_aktivity_predpoklady">
+                    {if count($predpoklady4)}
+                        {foreach $predpoklady4 as $predpoklad4}
+                            <li id="pr{$predpoklad4->id}">{$predpoklad4->nazev}</li>
+                        {/foreach}
+                    {else}
+                        <li><i>N/A</i></li>
+                    {/if}
+                </ul>
+            </td>
+        </tr>
+        <tr  id="row5">
+            <td><h2>&nbsp;</h2>
+            </td>
+            <td><h2>&nbsp;</h2>
+            </td>
+            <td><h2>&nbsp;</h2>
+            </td>
+            <td><h2>Předběžné podmínky</h2>
+                <ul id="ul_pred_podm">
+                    {if count($predpoklady4)}
+                        {foreach $predpoklady4 as $predpoklad4}
+                            <li id="pr{$predpoklad4->id}">{$predpoklad4->nazev}</li>
+                        {/foreach}
+                    {else}
+                        <li><i>N/A</i></li>
+                    {/if}
+                </ul>
+            </td>
+        </tr>
+    </table>
+</div>

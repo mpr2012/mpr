@@ -46,6 +46,7 @@ root {
 /*    border: 2px solid blue;*/
 }
 table.matrix {
+    border-spacing: 0;
     width:100%;
     clear: both;
     margin-top: 10px;
@@ -81,6 +82,11 @@ table.matrix tr {
 /*    border: 1px lightgrey solid;*/
     border-collapse: collapse;
 }
+
+table.matrix tr#row1 td {
+    width: 25%;
+}
+
 .ui-state-default-header { 
     border: 1px solid #555555; 
     border-collapse: collapse;
