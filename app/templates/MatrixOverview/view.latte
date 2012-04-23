@@ -1,10 +1,16 @@
 {block content}
+
+<!-- AJAX example - start -->
+<a class="ajax" href="{plink editZamer! 'id' => $matrixId}">AJAX - editace záměru</a>
+<input class="ajax" value="nový záměr" />
+<!-- AJAX example - end -->
+
 <div id="matrix-view">
     <table class="matrix">
         <tr id="row1">
             <td id="zamer"><h2>Záměr</h2>
                 <ul id="ul_zamer">
-                    <li>{$matice->zamer ?: '-'}</li>
+                    <li>{snippet zamer}{$zamer}{/snippet}</li>
                 </ul>
             </td>
             <td><h2>Ověřitelné ukazatele</h2>
@@ -35,7 +41,7 @@
         <tr id="row2">
             <td id="cil"><h2>Cíl</h2>
                 <ul id="ul_cil">
-                    <li>{$matice->cil ?: '-'}</li>
+                    <li>{snippet cil}{$cil}{/snippet}</li>
                 </ul>
             </td>
             <td><h2>Ověřitelné ukazatele</h2>
