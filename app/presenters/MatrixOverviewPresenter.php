@@ -49,4 +49,11 @@ class MatrixOverviewPresenter extends SecuredPresenter
         $this->invalidateControl('zamer');
     }
     
+    public function handleCreate_ul_zamer_uk($id, $nazev)
+    {
+        $this->db->table('ukazatel')->insert(array('matice' => $id, 'radek' => '1', 'nazev' => $nazev));
+        $this->template->ukazatele1 = $this->db->table('ukazatel')->where(array('matice' => $id, 'radek' => '1'));
+        $this->invalidateControl('ul_zamer_uk');
+    }
+    
 }

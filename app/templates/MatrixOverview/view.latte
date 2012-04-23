@@ -1,7 +1,10 @@
 {block content}
 
+<!-- matrix ID for AJAX -->
+<input id="matrixId" type="hidden" value="{$matrixId}" />
+
 <!-- AJAX example - start -->
-<a class="ajax" href="{plink editZamer! 'id' => $matrixId}">AJAX - editace záměru</a>
+<a class="ajax" href="{plink editZamer!}">AJAX - editace záměru</a>
 <input class="ajax" value="nový záměr" />
 <!-- AJAX example - end -->
 
@@ -15,13 +18,13 @@
             </td>
             <td><h2>Ověřitelné ukazatele</h2>
                 <ul id="ul_zamer_uk">
+                    {snippet ul_zamer_uk}
                     {if count($ukazatele1)}
                         {foreach $ukazatele1 as $ukazatel1}
                             <li id="uk{$ukazatel1->id}">{$ukazatel1->nazev}</li>
                         {/foreach}
-                    {else}
-                        <li><i>N/A</i></li>
                     {/if}
+                    {/snippet}
                 </ul>
             </td>
             <td><h2>Zdroje ověření</h2>

@@ -51,6 +51,11 @@
                 var text = '&text=' + $(this).parent().find('input.ajax').attr('value');
                 $.get(this.href + text);
             });
+            $("span.ui-icon-check").live("click", function (event) {
+                event.preventDefault();
+                var nazev = '&nazev=' + $(this).parent().parent().find('.edit_input').attr('value');
+                $.get('/mpr/matrix-overview/view/' + $('#matrixId').attr('value') + '?do=create_ul_zamer_uk' + nazev);
+            });
             
         })
     </script>
