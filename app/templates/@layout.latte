@@ -54,7 +54,7 @@
             $("span.ui-icon-check").live("click", function (event) {
                 event.preventDefault();
                 var nazev = '&nazev=' + $(this).parent().parent().find('.edit_input').attr('value');
-                $.get('/mpr/matrix-overview/view/' + $('#matrixId').attr('value') + '?do=create_ul_zamer_uk' + nazev);
+                $.get('?do=create_ul_zamer_uk' + nazev);
             });
             
         })
