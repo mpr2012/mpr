@@ -220,5 +220,8 @@ class MatrixOverviewPresenter extends SecuredPresenter
         $this->invalidateControl('ul_zdroje');
         $this->invalidateControl('ul_casram');
     }
+    public function handleChange_seq_vystupy($id)
+    {
+    }
     
 }

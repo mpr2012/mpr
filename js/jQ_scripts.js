@@ -43,7 +43,7 @@ $(document).ready(function(){
                     $(this).parent().data("data",data);
                 });
                 console.log($(this).data("data"));
-                $.post('?do=change_seq_vystupy',$(this).data("data"));
+                $.get('?do=change_seq_vystupy',$(this).data("data"));
             } else {
                 // aktivity
                 $(this).find("li").each(function(){
