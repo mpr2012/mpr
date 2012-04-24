@@ -93,6 +93,7 @@
         </tr>
         <tr id="row3">
             <td id="vystupy"><h2>Výstupy</h2>
+                {snippet ul_vys}
                 <ul id="ul_vystupy">
                 {if count($vystupy)}
                     {var $counter = 1}
@@ -108,6 +109,7 @@
                     {/foreach}
                 {/if}
                 </ul>
+                {/snippet}
             </td>
             <td><h2>Ověřitelné ukazatele</h2>
                 {snippet ul_uk3}
@@ -154,6 +156,7 @@
         </tr>
         <tr  id="row4">
             <td><h2>Aktivity</h2>
+                {snippet ul_akt}
                 <ul id="ul_aktivity">
                 {if count($vystupy)}
                     {var $outputCounter = 1}
@@ -176,8 +179,10 @@
                     {/foreach}
                 {/if}
                 </ul>
+                {/snippet}
             </td>
             <td><h2>Zdroje</h2>
+                {snippet ul_zdroje}
                 <ul id="ul_aktivity_zdroje">
                 {if count($vystupy)}
                     {var $outputCounter = 1}
@@ -198,8 +203,10 @@
                     {/foreach}
                 {/if}
                 </ul>
+                {/snippet}
             </td>
             <td><h2>Časový ramec</h2>
+                {snippet ul_casram}
                 <ul id="ul_aktivity_cas">
                 {if count($vystupy)}
                     {var $outputCounter = 1}
@@ -220,6 +227,7 @@
                     {/foreach}
                 {/if}
                 </ul>
+                {/snippet}
             </td>
             <td><h2>Předpoklady</h2>
                 {snippet ul_pr4}

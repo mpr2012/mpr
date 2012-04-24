@@ -289,7 +289,12 @@ $(document).ready(function(){
                         action = 'new_predpoklady';     
                         data["text"]= input.attr("value");
                         data["row_id"]= ul.parents("tr").attr("id").toString().substr(3);
-                        break;                        
+                        break;
+                   case  "ul_vystupy":
+                        action = 'new_vystupy';
+                        data['text'] = input.attr("value");
+                        break;
+
                 }   
            } else if (input.attr("id") == "editing_input") {
                // editace stare hodnoty
@@ -388,7 +393,7 @@ $(document).ready(function(){
             var ul = $(this).parents("ul");
             var action;
             var data = {};
-            // najdu, co edituju
+            // najdu, co mazu
             switch(ul.attr("id")){
                 case "ul_zamer":
                     action = "delete_zamer";
@@ -435,7 +440,7 @@ $(document).ready(function(){
                 title: "Smazat",
                 buttons: {
                     Ano: function() {
-                        $.post('?do='+$(this).data("action"),$(this).data("data"));
+                        $.get('?do='+$(this).data("action"),$(this).data("data"));
                         $( this ).dialog( "close" );
                     },
                     Ne: function() {

@@ -252,43 +252,43 @@ INSERT INTO `zdroj_overeni` (`id`, `nazev`, `radek`, `matice`) VALUES
 -- Omezení pro tabulku `aktivita`
 --
 ALTER TABLE `aktivita`
-  ADD CONSTRAINT `aktivita_ibfk_1` FOREIGN KEY (`vystup`) REFERENCES `vystup` (`id`);
+  ADD CONSTRAINT `aktivita_ibfk_1` FOREIGN KEY (`vystup`) REFERENCES `vystup` (`id`) ON DELETE CASCADE;
 
 --
 -- Omezení pro tabulku `clen`
 --
 ALTER TABLE `clen`
-  ADD CONSTRAINT `clen_ibfk_1` FOREIGN KEY (`matice`) REFERENCES `matice` (`id`);
+  ADD CONSTRAINT `clen_ibfk_1` FOREIGN KEY (`matice`) REFERENCES `matice` (`id`) ON DELETE CASCADE;
 
 --
 -- Omezení pro tabulku `news`
 --
 ALTER TABLE `news`
-  ADD CONSTRAINT `news_ibfk_1` FOREIGN KEY (`author`) REFERENCES `users` (`id`);
+  ADD CONSTRAINT `news_ibfk_1` FOREIGN KEY (`author`) REFERENCES `users` (`id`) ON DELETE CASCADE;
 
 --
 -- Omezení pro tabulku `predpoklad`
 --
 ALTER TABLE `predpoklad`
-  ADD CONSTRAINT `predpoklad_ibfk_1` FOREIGN KEY (`matice`) REFERENCES `matice` (`id`);
+  ADD CONSTRAINT `predpoklad_ibfk_1` FOREIGN KEY (`matice`) REFERENCES `matice` (`id`) ON DELETE CASCADE;
 
 --
 -- Omezení pro tabulku `ukazatel`
 --
 ALTER TABLE `ukazatel`
-  ADD CONSTRAINT `ukazatel_ibfk_1` FOREIGN KEY (`matice`) REFERENCES `matice` (`id`);
+  ADD CONSTRAINT `ukazatel_ibfk_1` FOREIGN KEY (`matice`) REFERENCES `matice` (`id`) ON DELETE CASCADE;
 
 --
 -- Omezení pro tabulku `vystup`
 --
 ALTER TABLE `vystup`
-  ADD CONSTRAINT `vystup_ibfk_1` FOREIGN KEY (`matice`) REFERENCES `matice` (`id`);
+  ADD CONSTRAINT `vystup_ibfk_1` FOREIGN KEY (`matice`) REFERENCES `matice` (`id`) ON DELETE CASCADE;
 
 --
 -- Omezení pro tabulku `zdroj_overeni`
 --
 ALTER TABLE `zdroj_overeni`
-  ADD CONSTRAINT `zdroj_overeni_ibfk_1` FOREIGN KEY (`matice`) REFERENCES `matice` (`id`);
+  ADD CONSTRAINT `zdroj_overeni_ibfk_1` FOREIGN KEY (`matice`) REFERENCES `matice` (`id`) ON DELETE CASCADE;
 SET FOREIGN_KEY_CHECKS=1;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

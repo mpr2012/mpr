@@ -182,4 +182,43 @@ class MatrixOverviewPresenter extends SecuredPresenter
         $this->invalidateControl('ul_pr' . $row_id);
     }
     
+    // vystupy
+    public function handleNew_vystupy($id, $text)
+    {
+        $max_poradi = $this->db->table('vystup')->where(array('matice' => $id))->max('poradi');
+        $this->db->table('vystup')->insert(array(
+            'matice'    => $id,
+            'nazev'     => $text,
+            'poradi'     => ($max_poradi + 10)
+        ));
+        $this->template->vystupy = $this->db->table('vystup')->where(array(
+            'matice'    => $id
+        ))->order('poradi');
+        $this->invalidateControl('ul_vys');
+    }
+    public function handleEdit_vystupy($id, $text, $vys_id)
+    {
+        $this->db->table('vystup')->get($vys_id)->update(array(
+            'nazev'     => $text
+        ));
+        $this->template->vystupy = $this->db->table('vystup')->where(array(
+            'matice'    => $id
+        ))->order('poradi');
+        $this->invalidateControl('ul_vys');
+    }
+    public function handleDelete_vystupy($id, $rec_id)
+    {
+        $this->db->table('vystup')->get($rec_id)->delete();
+        $this->template->vystupy = $this->db->table('vystup')->where(array(
+            'matice'    => $id
+        ))->order('poradi');
+        $this->template->aktivity           = array();
+        foreach ($this->template->vystupy as $vystup)
+            $this->template->aktivity[$vystup->id] = $this->db->table('aktivita')->where(array('vystup' => $vystup->id))->order('poradi');
+        $this->invalidateControl('ul_vys');
+        $this->invalidateControl('ul_akt');
+        $this->invalidateControl('ul_zdroje');
+        $this->invalidateControl('ul_casram');
+    }
+    
 }
