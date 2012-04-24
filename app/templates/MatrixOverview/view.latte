@@ -3,15 +3,15 @@
     <table class="matrix">
         <tr id="row1">
             <td id="zamer"><h2>Záměr</h2>
+                {snippet ul_zamer}
                 <ul id="ul_zamer">
-                    {snippet ul_zamer}
                     <li class="ui-state-default">{$zamer}</li>
-                    {/snippet}
                 </ul>
+                {/snippet}
             </td>
             <td><h2>Ověřitelné ukazatele</h2>
+                {snippet ul_uk1}
                 <ul id="ul_zamer_uk">
-                    {snippet ul_zamer_uk1}
                     {if count($ukazatele1)}
                         {foreach $ukazatele1 as $ukazatel1}
                             <li id="uk{$ukazatel1->id}" class="ui-state-default">{$ukazatel1->nazev}
@@ -20,10 +20,11 @@
                             </li>
                         {/foreach}
                     {/if}
-                    {/snippet}
                 </ul>
+                {/snippet}
             </td>
             <td><h2>Zdroje ověření</h2>
+                {snippet ul_zd1}
                 <ul id="ul_zamer_zdroje">
                     {if count($zdroje_overeni1)}
                         {foreach $zdroje_overeni1 as $zdroj_overeni1}
@@ -32,23 +33,23 @@
                                 <span class="icon-container floatr ui-corner-all"><span class="ui-icon ui-icon-close"></span></span>
                             </li>
                         {/foreach}
-                    {else}
-                        <li class="ui-state-default"><i>N/A</i></li>
                     {/if}
                 </ul>
+                {/snippet}
             </td>
             <td><h2 class="empty_cell">&nbsp;</h2>
             </td>
         </tr>
         <tr id="row2">
             <td id="cil"><h2>Cíl</h2>
+                {snippet ul_cil}
                 <ul id="ul_cil">
-                    {snippet ul_cil}
                     <li class="ui-state-default">{$cil}</li>
-                    {/snippet}
                 </ul>
+                {/snippet}
             </td>
             <td><h2>Ověřitelné ukazatele</h2>
+                {snippet ul_uk2}
                 <ul id="ul_cil_uk">
                     {if count($ukazatele2)}
                         {foreach $ukazatele2 as $ukazatel2}
@@ -57,12 +58,12 @@
                                 <span class="icon-container floatr ui-corner-all"><span class="ui-icon ui-icon-close"></span></span>
                             </li>
                         {/foreach}
-                    {else}
-                        <li class="ui-state-default"><i>N/A</i></li>
                     {/if}
                 </ul>
+                {/snippet}
             </td>
             <td><h2>Zdroje ověření</h2>
+                {snippet ul_zd2}
                 <ul id="ul_cil_zdroje">
                 {if count($zdroje_overeni2)}
                         {foreach $zdroje_overeni2 as $zdroj_overeni2}
@@ -71,12 +72,12 @@
                                 <span class="icon-container floatr ui-corner-all"><span class="ui-icon ui-icon-close"></span></span>
                             </li>
                         {/foreach}
-                    {else}
-                        <li class="ui-state-default"><i>N/A</i></li>
                     {/if}
                 </ul>
+                {/snippet}
             </td>
             <td><h2>Předpoklady</h2>
+                {snippet ul_pr2}
                 <ul id="ul_cil_predpoklady">
                     {if count($predpoklady2)}
                         {foreach $predpoklady2 as $predpoklad2}
@@ -85,10 +86,9 @@
                                 <span class="icon-container floatr ui-corner-all"><span class="ui-icon ui-icon-close"></span></span>
                             </li>
                         {/foreach}
-                    {else}
-                        <li class="ui-state-default"><i>N/A</i></li>
                     {/if}
                 </ul>
+                {/snippet}
             </td>
         </tr>
         <tr id="row3">
@@ -106,12 +106,11 @@
                             <span class="icon-container floatr ui-corner-all"><span class="ui-icon ui-icon-close"></span></span>    
                         </li>
                     {/foreach}
-                {else}
-                    <li class="ui-state-default"><i>N/A</i></li>
                 {/if}
                 </ul>
             </td>
             <td><h2>Ověřitelné ukazatele</h2>
+                {snippet ul_uk3}
                 <ul id="ul_vystupy_uk">
                     {if count($ukazatele3)}
                         {foreach $ukazatele3 as $ukazatel3}
@@ -120,12 +119,12 @@
                                 <span class="icon-container floatr ui-corner-all"><span class="ui-icon ui-icon-close"></span></span>
                             </li>
                         {/foreach}
-                    {else}
-                        <li class="ui-state-default"><i>N/A</i></li>
                     {/if}
                 </ul>
+                {/snippet}
             </td>
             <td><h2>Zdroje ověření</h2>
+                {snippet ul_zd3}
                 <ul id="ul_vystupy_zdroje">
                     {if count($zdroje_overeni3)}
                         {foreach $zdroje_overeni3 as $zdroj_overeni3}
@@ -134,12 +133,12 @@
                                 <span class="icon-container floatr ui-corner-all"><span class="ui-icon ui-icon-close"></span></span>
                             </li>
                         {/foreach}
-                    {else}
-                        <li class="ui-state-default"><i>N/A</i></li>
                     {/if}
                 </ul>
+                {/snippet}
             </td>
             <td><h2>Předpoklady</h2>
+                {snippet ul_pr3}
                 <ul id="ul_vystupy_predpoklady">
                     {if count($predpoklady3)}
                         {foreach $predpoklady3 as $predpoklad3}
@@ -148,10 +147,9 @@
                                 <span class="icon-container floatr ui-corner-all"><span class="ui-icon ui-icon-close"></span></span>
                             </li>
                         {/foreach}
-                    {else}
-                        <li class="ui-state-default"><i>N/A</i></li>
                     {/if}
                 </ul>
+                {/snippet}
             </td>
         </tr>
         <tr  id="row4">
@@ -176,8 +174,6 @@
                         {/if}
                         {var $outputCounter++}
                     {/foreach}
-                {else}
-                    <li class="ui-state-default"><i>N/A</i></li>
                 {/if}
                 </ul>
             </td>
@@ -200,8 +196,6 @@
                         {/if}
                         {var $outputCounter++}
                     {/foreach}
-                {else}
-                    <li class="ui-state-default"><i>N/A</i></li>
                 {/if}
                 </ul>
             </td>
@@ -224,12 +218,11 @@
                         {/if}
                         {var $outputCounter++}
                     {/foreach}
-                {else}
-                    <li class="ui-state-default"><i>N/A</i></li>
                 {/if}
                 </ul>
             </td>
             <td><h2>Předpoklady</h2>
+                {snippet ul_pr4}
                 <ul id="ul_aktivity_predpoklady">
                     {if count($predpoklady4)}
                         {foreach $predpoklady4 as $predpoklad4}
@@ -238,10 +231,9 @@
                                 <span class="icon-container floatr ui-corner-all"><span class="ui-icon ui-icon-close"></span></span>
                             </li>
                         {/foreach}
-                    {else}
-                        <li><i>N/A</i></li>
                     {/if}
                 </ul>
+                {/snippet}
             </td>
         </tr>
         <tr  id="row5">
@@ -252,15 +244,18 @@
             <td><h2 class="empty_cell">&nbsp;</h2>
             </td>
             <td><h2>Předběžné podmínky</h2>
+                {snippet ul_pr5}
                 <ul id="ul_pred_podm">
-                    {if count($predpoklady4)}
-                        {foreach $predpoklady4 as $predpoklad4}
-                            <li id="pr{$predpoklad4->id}" class="ui-state-default">{$predpoklad4->nazev}</li>
+                    {if count($predpoklady5)}
+                        {foreach $predpoklady5 as $predpoklad5}
+                            <li id="pr{$predpoklad5->id}" class="ui-state-default">{$predpoklad5->nazev}
+                                <span class="icon-container floatr ui-corner-all"><span class="ui-icon ui-icon-pencil"></span></span>
+                                <span class="icon-container floatr ui-corner-all"><span class="ui-icon ui-icon-close"></span></span>
+                            </li>
                         {/foreach}
-                    {else}
-                        <li class="ui-state-default"><i>N/A</i></li>
                     {/if}
                 </ul>
+                {/snippet}
             </td>
         </tr>
     </table>
@@ -273,9 +268,11 @@
             <label for="akt_frm_cas_do">Do</label> <input type="text" id="akt_frm_do"/>
             <h3>Priradit k vystupu</h3>
             <ul id="akt_frm_vystupy">
-                <li class="ui-state-default"> Vystup 1</li>
-                <li class="ui-state-default"> Vystup 2</li>
+                <li> Vystup 1</li>
+                <li> Vystup 2</li>
             </ul>
+            <input type="button" id="akt_frm_storno" value="Storno"/>
+            <input type="button" id="akt_frm_ok" value="OK"/>
         {/snippet}
     </div>
 </div>

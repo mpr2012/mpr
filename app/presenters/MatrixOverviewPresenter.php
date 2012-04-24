@@ -42,6 +42,7 @@ class MatrixOverviewPresenter extends SecuredPresenter
         }
     }
     
+    // zamer
     public function handleEdit_zamer($id, $text)
     {
         $this->db->table('matice')->get($id)->update(array(
@@ -51,6 +52,7 @@ class MatrixOverviewPresenter extends SecuredPresenter
         $this->invalidateControl('ul_zamer');
     }
     
+    // cil
     public function handleEdit_cil($id, $text)
     {
         $this->db->table('matice')->get($id)->update(array(
@@ -60,6 +62,7 @@ class MatrixOverviewPresenter extends SecuredPresenter
         $this->invalidateControl('ul_cil');
     }
     
+    // overitelne ukazatele
     public function handleNew_uk($id, $text, $row_id)
     {
         $ukazatele  = 'ukazatele' . $row_id;
@@ -72,9 +75,8 @@ class MatrixOverviewPresenter extends SecuredPresenter
             'matice'    => $id,
             'radek'     => $row_id
         ));
-        $this->invalidateControl('ul_zamer_uk' . $row_id);
+        $this->invalidateControl('ul_uk' . $row_id);
     }
-    
     public function handleEdit_uk($id, $text, $uk_id)
     {
         $row_id     = $this->db->table('ukazatel')->get($uk_id)->radek;
@@ -86,7 +88,98 @@ class MatrixOverviewPresenter extends SecuredPresenter
             'matice'    => $id,
             'radek'     => $row_id
         ));
-        $this->invalidateControl('ul_zamer_uk' . $row_id);
+        $this->invalidateControl('ul_uk' . $row_id);
+    }
+    public function handleDelete_uk($id, $rec_id)
+    {
+        $row_id     = $this->db->table('ukazatel')->get($rec_id)->radek;
+        $ukazatele  = 'ukazatele' . $row_id;
+        $this->db->table('ukazatel')->get($rec_id)->delete();
+        $this->template->$ukazatele = $this->db->table('ukazatel')->where(array(
+            'matice'    => $id,
+            'radek'     => $row_id
+        ));
+        $this->invalidateControl('ul_uk' . $row_id);
+    }
+    
+    // zdroje overeni
+    public function handleNew_zdroje($id, $text, $row_id)
+    {
+        $zdroje  = 'zdroje_overeni' . $row_id;
+        $this->db->table('zdroj_overeni')->where(array('matice' => $id, 'radek' => $row_id))->insert(array(
+            'matice'    => $id,
+            'radek'     => $row_id,
+            'nazev'     => $text
+        ));
+        $this->template->$zdroje = $this->db->table('zdroj_overeni')->where(array(
+            'matice'    => $id,
+            'radek'     => $row_id
+        ));
+        $this->invalidateControl('ul_zd' . $row_id);
+    }
+    public function handleEdit_zdroje($id, $text, $zdr_id)
+    {
+        $row_id     = $this->db->table('zdroj_overeni')->get($zdr_id)->radek;
+        $zdroje  = 'zdroje_overeni' . $row_id;
+        $this->db->table('zdroj_overeni')->get($zdr_id)->update(array(
+            'nazev'     => $text
+        ));
+        $this->template->$zdroje = $this->db->table('zdroj_overeni')->where(array(
+            'matice'    => $id,
+            'radek'     => $row_id
+        ));
+        $this->invalidateControl('ul_zd' . $row_id);
+    }
+    public function handleDelete_zdroje($id, $rec_id)
+    {
+        $row_id     = $this->db->table('zdroj_overeni')->get($rec_id)->radek;
+        $zdroje  = 'zdroje_overeni' . $row_id;
+        $this->db->table('zdroj_overeni')->get($rec_id)->delete();
+        $this->template->$zdroje = $this->db->table('zdroj_overeni')->where(array(
+            'matice'    => $id,
+            'radek'     => $row_id
+        ));
+        $this->invalidateControl('ul_zd' . $row_id);
+    }
+    
+    // predpoklady
+    public function handleNew_predpoklady($id, $text, $row_id)
+    {
+        $predpoklady  = 'predpoklady' . $row_id;
+        $this->db->table('predpoklad')->where(array('matice' => $id, 'radek' => $row_id))->insert(array(
+            'matice'    => $id,
+            'radek'     => $row_id,
+            'nazev'     => $text
+        ));
+        $this->template->$predpoklady = $this->db->table('predpoklad')->where(array(
+            'matice'    => $id,
+            'radek'     => $row_id
+        ));
+        $this->invalidateControl('ul_pr' . $row_id);
+    }
+    public function handleEdit_predpoklady($id, $text, $pr_id)
+    {
+        $row_id     = $this->db->table('predpoklad')->get($pr_id)->radek;
+        $predpoklady  = 'predpoklady' . $row_id;
+        $this->db->table('predpoklad')->get($pr_id)->update(array(
+            'nazev'     => $text
+        ));
+        $this->template->$predpoklady = $this->db->table('predpoklad')->where(array(
+            'matice'    => $id,
+            'radek'     => $row_id
+        ));
+        $this->invalidateControl('ul_pr' . $row_id);
+    }
+    public function handleDelete_predpoklady($id, $rec_id)
+    {
+        $row_id     = $this->db->table('predpoklad')->get($rec_id)->radek;
+        $predpoklady  = 'predpoklady' . $row_id;
+        $this->db->table('predpoklad')->get($rec_id)->delete();
+        $this->template->$predpoklady = $this->db->table('predpoklad')->where(array(
+            'matice'    => $id,
+            'radek'     => $row_id
+        ));
+        $this->invalidateControl('ul_pr' . $row_id);
     }
     
 }
