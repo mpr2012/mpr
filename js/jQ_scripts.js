@@ -18,6 +18,8 @@
 //});
 $(document).ready(function(){
     
+//    $("#ul_cil_uk").selectable();    
+    
     var icon_pencil = '<span class="icon-container floatr ui-corner-all"><span class="ui-icon ui-icon-pencil"></span></span>';     
     var icon_plus =   '<span class="icon-container floatr ui-corner-all"> <span class="ui-icon ui-icon-plusthick"></span></span>';     
     var icon_accept = '<span class="icon-container floatr ui-corner-all"> <span class="ui-icon ui-icon-check"></span></span>';     
@@ -118,6 +120,7 @@ $(document).ready(function(){
     /*
      * Vystupy
      */
+    
     /* Hover vsech aktivit souvisejicich s vystupem */
     $(document).on({
         mouseenter: function(){
@@ -149,6 +152,8 @@ $(document).ready(function(){
     },"table.matrix ul#ul_vystupy li input:checkbox");
     
     /******************* Aktivity ****************************/
+    /* selectable aktivity */
+    
     /*Pri najeti na aktivitu - hover cely radek */
     $(document).on({
         mouseenter: function(){
@@ -204,6 +209,28 @@ $(document).ready(function(){
             } else if ($(this).parents("td").find("ul").attr("id") == "ul_aktivity"){
                 // pridani aktivity
                 
+                $("#dialog")
+//                    .data("action",action)
+//                    .data("data",data)
+                    .html('') //<div id="snippet--aktivita_form"></div>
+                    .append($("#snippet--aktivita_form"))
+//                    .attr("title", "Nová aktivita")
+                    .dialog({
+                        width: 800,
+                        modal: true,
+                        title: "Nová aktivita",
+                        buttons: {
+                            "Uložit": function() {
+                                $.post('?do='+$(this).data("action"),$(this).data("data"));
+                                $( this ).dialog( "close" );
+                            },
+                            "Storno": function() {
+                                $( this ).dialog( "close" );
+                            }
+                        }
+                    });
+                    $("#aktivity_frm_vystupy").selectable();    
+                    return;
             }
             // najde, k cemu pridat li
             $(this).parents("td").find("ul")
@@ -213,7 +240,7 @@ $(document).ready(function(){
                 '</li>')
             .find(".icon-container")
 
-                $("#inserting_input").focus();
+            $("#inserting_input").focus();
         });
         
        /* Ikonka accept */
@@ -404,6 +431,8 @@ $(document).ready(function(){
             .attr("title", "Smazat")
             .dialog({
                 modal: true,
+                width: 300,
+                title: "Smazat",
                 buttons: {
                     Ano: function() {
                         $.post('?do='+$(this).data("action"),$(this).data("data"));

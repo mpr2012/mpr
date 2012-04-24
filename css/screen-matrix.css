@@ -52,7 +52,7 @@ table.matrix {
     margin-top: 10px;
     border: 1px solid #f0f0f0; 
 }
-table.matrix ul {
+table.matrix ul,#akt_frm_vystupy {
     min-height: 1.5em;
 /*    border: 1px grey solid;*/
     list-style: none;
@@ -62,7 +62,10 @@ table.matrix ul {
     width: 100%;
     border-collapse: collapse;
 }
-table.matrix ul li {
+#akt_frm_vystupy {
+    width: 300px;
+}
+table.matrix ul li,#akt_frm_vystupy li {
      margin: 0 6px 1px 6px;
      padding: 5px;
      font-size: 1.2em;
