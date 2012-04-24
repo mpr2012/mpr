@@ -226,22 +226,23 @@ $(document).ready(function(){
            var data = {};
            
            if (input.attr("id") == "inserting_input"){
+
                // pridani neceho noveho
                switch(ul.attr("id")){
                     case "ul_zamer":
                         action = 'newZamer';
-                        data["text"]= $("#editing_input").attr("value");
+                        data["text"]= input.attr("value");
                         break;
                     case "ul_cil":
                         action = 'edit_cil';     
-                        data["text"]= $("#editing_input").attr("value");
+                        data["text"]= input.attr("value");
                         break;                        
                     case "ul_zamer_uk":
                     case "ul_cil_uk":
                     case "ul_vystupy_uk":
                         // data: text, id radku
                         action = 'new_uk';     
-                        data["text"]= $("#editing_input").attr("value");
+                        data["text"]= input.attr("value");
                         data["row_id"]= ul.parents("tr").attr("id").toString().substr(3);
                         break;                        
                     case "ul_zamer_zdroje":
@@ -249,7 +250,7 @@ $(document).ready(function(){
                     case "ul_vystupy_zdroje":
                         // data: text, id radku
                         action = 'new_zdroje';     
-                        data["text"]= $("#editing_input").attr("value");
+                        data["text"]= input.attr("value");
                         data["row_id"]= ul.parents("tr").attr("id").toString().substr(3);
                         break;                        
 
@@ -259,29 +260,29 @@ $(document).ready(function(){
                     case "ul_pred_podm":
                         // data: text, id radku
                         action = 'new_predpoklady';     
-                        data["text"]= $("#editing_input").attr("value");
+                        data["text"]= input.attr("value");
                         data["row_id"]= ul.parents("tr").attr("id").toString().substr(3);
                         break;                        
                 }   
            } else if (input.attr("id") == "editing_input") {
                // editace stare hodnoty
-               
+
                // najdu, co edituju
                switch(ul.attr("id")){
                     case "ul_zamer":
-                        action = 'editZamer';
-                        data["text"]= $("#editing_input").attr("value");
+                        action = 'edit_zamer';
+                        data["text"]= input.attr("value");
                         break;
                     case "ul_cil":
                         action = 'edit_cil';     
-                        data["text"]= $("#editing_input").attr("value");
+                        data["text"]= input.attr("value");
                         break;                        
                     case "ul_zamer_uk":
                     case "ul_cil_uk":
                     case "ul_vystupy_uk":
                         // data: text, id ukazatele
                         action = 'edit_uk';     
-                        data["text"]= $("#editing_input").attr("value");
+                        data["text"]= input.attr("value");
                         data["uk_id"]= li.attr("id").toString().substr(2);
                         break;                        
                     case "ul_zamer_zdroje":
@@ -289,7 +290,7 @@ $(document).ready(function(){
                     case "ul_vystupy_zdroje":
                         // data: text, id radku
                         action = 'edit_zdroje';     
-                        data["text"]= $("#editing_input").attr("value");
+                        data["text"]= input.attr("value");
                         data["zdr_id"]= li.attr("id").toString().substr(3);
                         break;                        
                     
@@ -299,7 +300,7 @@ $(document).ready(function(){
                     case "ul_pred_podm":
                         // data: text, id radku
                         action = 'edit_predpoklady';     
-                        data["text"]= $("#editing_input").attr("value");
+                        data["text"]= input.attr("value");
                         data["pr_id"]= li.attr("id").toString().substr(2);
                         break;     
                    case  "ul_vystupy":
@@ -310,8 +311,12 @@ $(document).ready(function(){
                    
                }                     
            }
-//           alert("?do="+action+" ; data: "+data);
-           $.post('?do='+action, data);
+           //alert("?do="+action+" ; data: "+data);
+           var params = '';
+           for (var nazev in data)
+               params += '&' + nazev + '=' + data[nazev];
+//           alert('?do=' + action + params);
+           $.get('?do=' + action + params);
        }); 
        
        
