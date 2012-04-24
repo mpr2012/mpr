@@ -73,11 +73,12 @@ $(document).ready(function(){
         .addClass("ui-widget-header ui-corner-all")
         .not(".empty_cell")
         .append(icon_help)
-        .append(icon_plus)
         .hover(
             function(){$(this).find(".icon-container").show(200)},
             function(){$(this).find(".icon-container").hide(200)}
         )
+        .not($("table.matrix td").has("#ul_aktivity_zdroje,#ul_aktivity_cas").find("h2"))
+        .append(icon_plus)
     ;
     /* Zobrazovani ikonek po najeti na li */
     $(document).on({
@@ -153,6 +154,13 @@ $(document).ready(function(){
     
     /******************* Aktivity ****************************/
     /* selectable aktivity */
+    $(document).on("click", "#akt_frm_vystupy li",function(){
+        $("#akt_frm_vystupy li").removeClass("ui-state-hover").removeClass("color_white");
+        $(this).addClass("ui-state-hover").addClass("color_white")
+    });
+    /* aktivity form kalendare */
+    addCalendars();
+    
     
     /*Pri najeti na aktivitu - hover cely radek */
     $(document).on({
@@ -209,11 +217,11 @@ $(document).ready(function(){
             } else if ($(this).parents("td").find("ul").attr("id") == "ul_aktivity"){
                 // pridani aktivity
                 
-                $("#dialog")
+                $("#snippet--aktivita_form")
 //                    .data("action",action)
 //                    .data("data",data)
-                    .html('') //<div id="snippet--aktivita_form"></div>
-                    .append($("#snippet--aktivita_form"))
+//                    .html('') //<div id="snippet--aktivita_form"></div>
+//                    .append($("#snippet--aktivita_form"))
 //                    .attr("title", "Nová aktivita")
                     .dialog({
                         width: 800,
@@ -221,7 +229,21 @@ $(document).ready(function(){
                         title: "Nová aktivita",
                         buttons: {
                             "Uložit": function() {
-                                $.post('?do='+$(this).data("action"),$(this).data("data"));
+                                var action = "new_aktivita";
+                                var vys_id = $("#akt_frm_vystupy li.ui-state-hover").attr("id");
+                                if (!vys_id){
+                                    $("#akt_frm_msg").text("Není vybrán výstup").show();//removeClass("ui-helper-hidden");
+                                    return;
+                                }
+                                var data = {};
+                                data['nazev'] = $("#akt_frm_nazev").attr("value");
+                                data['zdroje'] = $("#akt_frm_zdroje").attr("value");
+                                data['cas_od'] = $("#akt_frm_od").attr("value");
+                                data['cas_do'] = $("#akt_frm_do").attr("value");
+                                data['vys_id'] = vys_id.substr(3);
+//                                $.post('?do='+$(this).data("action"));
+                                console.log('?do='+action);
+                                console.log(data);
                                 $( this ).dialog( "close" );
                             },
                             "Storno": function() {
@@ -229,7 +251,6 @@ $(document).ready(function(){
                             }
                         }
                     });
-                    $("#aktivity_frm_vystupy").selectable();    
                     return;
             }
             // najde, k cemu pridat li
@@ -366,6 +387,7 @@ $(document).ready(function(){
                 li.html(li.data("oldVal"));
             }
         });
+        
         /* Ikonka edit */
         $(document).on("click","li .ui-icon-pencil",function(){
             if ($("#editing_input").length){
@@ -375,6 +397,56 @@ $(document).ready(function(){
             }
             //editace li - ikonka primo v li
             var li = $(this).parents("li");
+            var ul = $(this).parents("ul");
+            switch(ul.attr("id")){
+                case "ul_aktivity":
+                case "ul_aktivity_zdroje":
+                case "ul_aktivity_cas":
+                    // otevre editaci v popup
+                    var akt_id;
+                    if(li.attr("id")) {
+                        akt_id = li.attr("id").substr(3);
+                    }
+                    else {
+                        var st = $(this).attr("class").indexOf("akt");
+                        var end = $(this).attr("class").indexOf(" ", st);
+                        akt_id = end == -1 ? $(this).attr("class").substr(st) : $(this).attr("class").substr(st, end-st);
+                    }
+                    $.get('?do=edit_aktivity&akt_id='+akt_id,function(){
+                        // po tom, co je nacten novy obsah do snippetu zobrazi dialog
+                        $("#snippet--aktivita_form")
+                            .dialog({
+                                width: 800,
+                                modal: true,
+                                title: "Editace aktivity",
+                                buttons: {
+                                    "Uložit": function() {
+                                        var action = "edit_aktivita";
+                                        var vys_id = $("#akt_frm_vystupy li.ui-state-hover").attr("id");
+                                        if (!vys_id){
+                                            $("#akt_frm_msg").text("Není vybrán výstup").show();//removeClass("ui-helper-hidden");
+                                            return;
+                                        }
+                                        var data = {};
+                                        data['nazev'] = $("#akt_frm_nazev").attr("value");
+                                        data['zdroje'] = $("#akt_frm_zdroje").attr("value");
+                                        data['cas_od'] = $("#akt_frm_od").attr("value");
+                                        data['cas_do'] = $("#akt_frm_do").attr("value");
+                                        data['vys_id'] = vys_id.substr(3);
+                                        //                                $.post('?do='+$(this).data("action"));
+                                        console.log('?do='+action);
+                                        console.log(data);
+                                        $( this ).dialog( "close" );
+                                    },
+                                    "Storno": function() {
+                                        $( this ).dialog( "close" );
+                                    }
+                                }
+                            });
+                    });
+                    return;
+                default:
+            }
             li.data("oldVal",li.html());
             var label = li.find("label");
             var newLi;
@@ -454,3 +526,7 @@ $(document).ready(function(){
 //            li.html(newLi);
         });
 });
+
+function addCalendars(){
+    $(".date_input").datepicker($.datepicker.regional['cs']);
+}

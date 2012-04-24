@@ -65,7 +65,7 @@ table.matrix ul,#akt_frm_vystupy {
 #akt_frm_vystupy {
     width: 300px;
 }
-table.matrix ul li,#akt_frm_vystupy li {
+table.matrix ul li {
      margin: 0 6px 1px 6px;
      padding: 5px;
      font-size: 1.2em;
@@ -108,6 +108,49 @@ table.matrix h2 {
     margin: 0 1px 0 1px;
 }
 
+/* Aktivity formular */
+.akt_frm_left ul {
+    list-style: none;
+}
+
+.akt_frm_left ul li {
+    line-height: 1.3em;
+}
+
+.akt_frm_left input.text_input {
+    width: 250px;
+}
+.akt_frm_left input.date_input {
+    width: 100px;
+}
+
+.akt_frm_left {
+    clear: both;
+    float:left;
+    border-right:  1px solid lightblue;
+    padding-right: 25px;
+    height: 100%;
+}
+.akt_frm_right {
+    float:left;
+    margin-left: 25px;
+}
+#akt_frm_vystupy li {
+     margin: 0 6px 1px 6px;
+     padding: 4px;
+/*     font-size: 1.0em;*/
+     height: 18px; 
+     border-collapse: collapse;
+     color: #444;
+     font-weight: normal;
+}
+#akt_frm_msg {
+    padding: 0.7em;
+    width: 90%;
+/*    clear: both;*/
+    float:left;
+    margin-top: 20px;
+}
 /* Ikony */
 .icon { display: block; text-indent: -99999px; overflow: hidden; background-repeat: no-repeat; width: 16px; height: 16px; cursor: pointer;}
 .icon-add {background-image: url(icons/add.png);}

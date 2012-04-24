@@ -196,6 +196,7 @@
                             {foreach $aktivity[$vystup->id] as $aktivita}
                             <li class="ui-state-default vys{$aktivita->vystup} akt{$aktivita->id}">
                                 <span class="vystup_num">{$outputCounter}</span>.<span class="ak_num">{$activityCounter++}</span> {$aktivita->zdroje}
+                                <span class="icon-container floatr ui-corner-all"><span class="ui-icon ui-icon-pencil"></span></span>
                             </li>
                             {/foreach}
                         {/if}
@@ -220,6 +221,7 @@
                             {foreach $aktivity[$vystup->id] as $aktivita}
                             <li class="ui-state-default vys{$aktivita->vystup} akt{$aktivita->id}">
                                 <span class="vystup_num">{$outputCounter}</span>.<span class="ak_num">{$activityCounter++}</span> {$aktivita->zacatek|date:'%d.%m.%Y'} - {$aktivita->konec|date:'%d.%m.%Y'}
+                                <span class="icon-container floatr ui-corner-all"><span class="ui-icon ui-icon-pencil"></span></span>
                             </li>
                             {/foreach}
                         {/if}
@@ -270,17 +272,29 @@
     <div id="dialog" class="ui-helper-hidden"></div>    
     <div id="aktivita_form" class="ui-helper-hidden">
         {snippet aktivita_form}
-            <label for="akt_frm_nazev">Název</label> <input type="text" id="akt_frm_nazev"/>
-            <label for="akt_frm_zdroje">Zdroje</label> <input type="text" id="akt_frm_zdroje"/>
-            <label for="akt_frm_cas_od">Od</label> <input type="text" id="akt_frm_od"/>
-            <label for="akt_frm_cas_do">Do</label> <input type="text" id="akt_frm_do"/>
-            <h3>Priradit k vystupu</h3>
-            <ul id="akt_frm_vystupy">
-                <li> Vystup 1</li>
-                <li> Vystup 2</li>
-            </ul>
-            <input type="button" id="akt_frm_storno" value="Storno"/>
-            <input type="button" id="akt_frm_ok" value="OK"/>
+            <div class="akt_frm_left">
+                <h5>Údaje o aktivitě:</h5>
+                <table>
+                    <tr><td width="100"><label for="akt_frm_nazev">Název</label> </td><td> <input class="text_input" type="text" id="akt_frm_nazev"/> </td></tr>                    
+                    <tr><td><label for="akt_frm_zdroje">Zdroje</label> </td><td>  <input class="text_input"type="text" id="akt_frm_zdroje"/></td> </tr>                    
+                    <tr><td><label for="akt_frm_cas_od">Od</label>  </td><td> <input class="date_input" type="date" id="akt_frm_od"/> </td></tr>                    
+                    <tr><td><label for="akt_frm_cas_do">Do</label>  </td><td> <input class="date_input" type="date" id="akt_frm_do"/> </td></tr>                    
+                </table>                
+            </div>
+            <div class="akt_frm_right">
+                <h5>Přiřadit k výstupu:</h5>
+                <ul id="akt_frm_vystupy">
+                    {if count($vystupy)}
+                        {var $counter = 1}
+                        {foreach $vystupy as $vystup}
+                            <li id="vys{$vystup->id}" class="ui-state-default">
+                                    <span class="vystup_num">{$counter++}</span> {$vystup->nazev}
+                            </li>
+                        {/foreach}
+                    {/if}
+                </ul>
+            </div>
+            <div class="ui-state-error ui-corner-all ui-helper-hidden" id="akt_frm_msg">Bla bla bla</div>
         {/snippet}
     </div>
 </div>

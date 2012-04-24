@@ -223,5 +223,9 @@ class MatrixOverviewPresenter extends SecuredPresenter
     public function handleChange_seq_vystupy($id)
     {
     }
+    public function handleEdit_aktivity($akt_id)
+    {
+        $this->invalidateControl('aktivity_form');
+    }
     
 }
