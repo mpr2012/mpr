@@ -1,24 +1,17 @@
 {block content}
-
-<!-- matrix ID for AJAX -->
-<input id="matrixId" type="hidden" value="{$matrixId}" />
-
-<!-- AJAX example - start -->
-<a class="ajax" href="{plink editZamer!}">AJAX - editace záměru</a>
-<input class="ajax" value="nový záměr" />
-<!-- AJAX example - end -->
-
 <div id="matrix-view">
     <table class="matrix">
         <tr id="row1">
             <td id="zamer"><h2>Záměr</h2>
                 <ul id="ul_zamer">
-                    <li class="ui-state-default">{snippet zamer}{$zamer}{/snippet}</li>
+                    {snippet ul_zamer}
+                    <li class="ui-state-default">{$zamer}</li>
+                    {/snippet}
                 </ul>
             </td>
             <td><h2>Ověřitelné ukazatele</h2>
                 <ul id="ul_zamer_uk">
-                    {snippet ul_zamer_uk}
+                    {snippet ul_zamer_uk1}
                     {if count($ukazatele1)}
                         {foreach $ukazatele1 as $ukazatel1}
                             <li id="uk{$ukazatel1->id}" class="ui-state-default">{$ukazatel1->nazev}
@@ -47,7 +40,9 @@
         <tr id="row2">
             <td id="cil"><h2>Cíl</h2>
                 <ul id="ul_cil">
-                    <li class="ui-state-default">{snippet cil}{$cil}{/snippet}</li>
+                    {snippet ul_cil}
+                    <li class="ui-state-default">{$cil}</li>
+                    {/snippet}
                 </ul>
             </td>
             <td><h2>Ověřitelné ukazatele</h2>

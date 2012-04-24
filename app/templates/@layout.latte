@@ -38,25 +38,7 @@
 	<script> document.body.className+=' js' </script>
     <script>
         $(document).ready(function(){
-            
-            // AJAX požadavky
-            $(".ajax").live("click", function (event) {
-                event.preventDefault();
-                /*
-                 * AJAX editace
-                 * - ID matice jako prvni parametr jde automaticky z sablony
-                 * - kazdy dalsi parametr je nutno pridat rucne (viz napr. text)
-                 * - nazvy parametru musi souhlasit s nazvy metodam handle
-                 */
-                var text = '&text=' + $(this).parent().find('input.ajax').attr('value');
-                $.get(this.href + text);
-            });
-//            $("span.ui-icon-check").live("click", function (event) {
-//                event.preventDefault();
-//                var nazev = '&nazev=' + $(this).parent().parent().find('.edit_input').attr('value');
-//                $.get('?do=create_ul_zamer_uk' + nazev);
-//            });
-            
+            //
         })
     </script>
     {if $user->isLoggedIn()}

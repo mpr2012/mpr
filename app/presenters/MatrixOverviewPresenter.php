@@ -42,18 +42,51 @@ class MatrixOverviewPresenter extends SecuredPresenter
         }
     }
     
-    public function handleEditZamer($id, $text)
+    public function handleEdit_zamer($id, $text)
     {
-        $this->db->table('matice')->get($id)->update(array('zamer' => $text));
+        $this->db->table('matice')->get($id)->update(array(
+            'zamer' => $text
+        ));
         $this->template->zamer  = $this->db->table('matice')->get($id)->zamer;
-        $this->invalidateControl('zamer');
+        $this->invalidateControl('ul_zamer');
     }
     
-    public function handleCreate_ul_zamer_uk($id, $nazev)
+    public function handleEdit_cil($id, $text)
     {
-        $this->db->table('ukazatel')->insert(array('matice' => $id, 'radek' => '1', 'nazev' => $nazev));
-        $this->template->ukazatele1 = $this->db->table('ukazatel')->where(array('matice' => $id, 'radek' => '1'));
-        $this->invalidateControl('ul_zamer_uk');
+        $this->db->table('matice')->get($id)->update(array(
+            'cil' => $text
+        ));
+        $this->template->cil  = $this->db->table('matice')->get($id)->cil;
+        $this->invalidateControl('ul_cil');
+    }
+    
+    public function handleNew_uk($id, $text, $row_id)
+    {
+        $ukazatele  = 'ukazatele' . $row_id;
+        $this->db->table('ukazatel')->where(array('matice' => $id, 'radek' => $row_id))->insert(array(
+            'matice'    => $id,
+            'radek'     => $row_id,
+            'nazev'     => $text
+        ));
+        $this->template->$ukazatele = $this->db->table('ukazatel')->where(array(
+            'matice'    => $id,
+            'radek'     => $row_id
+        ));
+        $this->invalidateControl('ul_zamer_uk' . $row_id);
+    }
+    
+    public function handleEdit_uk($id, $text, $uk_id)
+    {
+        $row_id     = $this->db->table('ukazatel')->get($uk_id)->radek;
+        $ukazatele  = 'ukazatele' . $row_id;
+        $this->db->table('ukazatel')->get($uk_id)->update(array(
+            'nazev'     => $text
+        ));
+        $this->template->$ukazatele = $this->db->table('ukazatel')->where(array(
+            'matice'    => $id,
+            'radek'     => $row_id
+        ));
+        $this->invalidateControl('ul_zamer_uk' . $row_id);
     }
     
 }
