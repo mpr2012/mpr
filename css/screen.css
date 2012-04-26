@@ -138,8 +138,41 @@ hr {
     background-position: 440px 20px;
 }
 
+#martix-overview .controls {
+    float: right;
+}
+
+#martix-overview ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    width: 500px;
+    margin-bottom: 40px;
+}
+
+#martix-overview ul li {
+    padding: 5px;
+    line-height: 30px;
+}
+
+#martix-overview a {
+    padding: 5px;
+    text-decoration: none;
+    color: black;
+    background-color: #f6f6f6;
+    border: 1px solid #dddddd;
+}
+#martix-overview a:hover {
+    background-color: #0073EA;
+    color: white;
+}
+
 #matrix-view {
     font-size: 66%;
+}
+
+#matrix-view h1, #matrix-create h1 {
+    font-size: 32px;
 }
 
 #footer * {

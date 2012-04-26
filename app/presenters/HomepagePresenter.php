@@ -11,8 +11,8 @@ class HomepagePresenter extends SecuredPresenter
 
 	public function renderDefault()
 	{
-		$this->template->news = $this->db->table('news')->order('id DESC');
-        $this->template->authors = $this->db->table('users');
+		$this->template->news = $this->db->table('novinka')->order('id DESC');
+        $this->template->authors = $this->db->table('uzivatel');
 	}
     
     public function createComponentInsertNewForm($name)
@@ -36,7 +36,7 @@ class HomepagePresenter extends SecuredPresenter
         $values = $form->getValues();
         try
         {
-            $this->db->table('news')->insert($values);
+            $this->db->table('novinka')->insert($values);
             $this->flashMessage('Novinka úspěšně vložena.');
         }
         catch (\PDOException $e)

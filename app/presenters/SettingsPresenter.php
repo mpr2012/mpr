@@ -37,11 +37,11 @@ class SettingsPresenter extends SecuredPresenter
     public function changePasswordFormSubmitted(\Nette\Application\UI\Form $form)
     {
         $values = $form->getValues();
-        if (md5($values['old_pass']) == $this->db->table('users')->get($this->getUser()->getIdentity()->id)->password)
+        if (md5($values['old_pass']) == $this->db->table('uzivatel')->get($this->getUser()->getIdentity()->id)->password)
         {
             try
             {
-                $this->db->table('users')->where(array('username' => 'xzajic07@stud.fit.vutbr.cz'))->update(array('password' => md5($values['new_pass'])));
+                $this->db->table('uzivatel')->where(array('username' => 'xzajic07@stud.fit.vutbr.cz'))->update(array('password' => md5($values['new_pass'])));
                 $this->flashMessage('Heslo bylo úspěšně změněno!');
             }
             catch(\PDOException $e)

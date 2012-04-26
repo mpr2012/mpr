@@ -14,9 +14,60 @@ class MatrixOverviewPresenter extends SecuredPresenter
 		$this->template->matrixs = $this->db->table('matice')->order('nazev DESC');
 	}
     
+    public function renderCreate()
+    {
+        
+    }
+    
+    public function createComponentCreateNewMatrixForm()
+    {
+		$form = new \Nette\Application\UI\Form;
+        $form->addGroup('LRM');
+		$form->addText('nazev', 'Název projektu:')
+            ->setAttribute('size', '30')
+			->setRequired('Název nesmí být prázdný řetězec.');
+
+        $form->addGroup('Oprávnění');
+        $users = array();
+        foreach ($this->db->table('uzivatel') as $user)
+            if ($user->id != $this->getUser()->getId())
+                $users[$user->id] = $user->username;
+        $form->addCheckboxList('users', 'Uživatelé:', $users);
+        
+        $form->addGroup();
+		$form->addSubmit('create', 'Vytvořit');
+
+		$form->onSuccess[] = callback($this, 'NewMatrixFormSubmitted');
+		return $form;
+    }
+    
+    public function newMatrixFormSubmitted(\Nette\Application\UI\Form $form)
+    {
+        $values = $form->getValues();
+        $nazev = $values['nazev'];
+        unset($values['nazev']);
+        $this->db->table('matice')->insert(array('nazev' => $nazev));
+        $maticeId = $this->db->lastInsertId();
+        $this->db->table('clen')->insert(array('matice' => $maticeId, 'uzivatel' => $this->getUser()->getId()));
+        if ($values['users'])
+            foreach ($values['users'] as $userId)
+                $this->db->table('clen')->insert(array('matice' => $maticeId, 'uzivatel' => $userId));
+        $this->flashMessage("Matice s názvem '$nazev' byla úspěšně vložena. Pokračujte její editací.");
+        $this->redirect('MatrixOverview:view', $maticeId);
+    }
+    
+    public function renderDelete($id)
+    {
+        $nazev = $this->db->table('matice')->get($id)->nazev;
+        $this->db->table('matice')->get($id)->delete();
+        $this->flashMessage("Matice '$nazev' byla úspěšně smazána.");
+        $this->redirect('MatrixOverview:');
+    }
+    
     public function renderView($id)
     {
         $this->template->matrixId = $id;
+        $this->template->matrixNazev = $this->db->table('matice')->get($id)->nazev;
         
         if (!$this->isAjax())
         {
@@ -198,8 +249,13 @@ class MatrixOverviewPresenter extends SecuredPresenter
         $this->template->vystupy = $this->db->table('vystup')->where(array(
             'matice'    => $id
         ))->order('poradi');
+        $this->template->akt_frm_nazev = '';
+        $this->template->akt_frm_zdroje = '';
+        $this->template->akt_frm_od = '';
+        $this->template->akt_frm_do = '';
         $this->invalidateControl('ul_vys');
         $this->invalidateControl('aktivita_form');
+
     }
     public function handleEdit_vystupy($id, $text, $vys_id)
     {
@@ -209,6 +265,10 @@ class MatrixOverviewPresenter extends SecuredPresenter
         $this->template->vystupy = $this->db->table('vystup')->where(array(
             'matice'    => $id
         ))->order('poradi');
+        $this->template->akt_frm_nazev = '';
+        $this->template->akt_frm_zdroje = '';
+        $this->template->akt_frm_od = '';
+        $this->template->akt_frm_do = '';
         $this->invalidateControl('ul_vys');
         $this->invalidateControl('aktivita_form');
     }
@@ -221,6 +281,10 @@ class MatrixOverviewPresenter extends SecuredPresenter
         $this->template->aktivity = array();
         foreach ($this->template->vystupy as $vystup)
             $this->template->aktivity[$vystup->id] = $this->db->table('aktivita')->where(array('vystup' => $vystup->id))->order('poradi');
+        $this->template->akt_frm_nazev = '';
+        $this->template->akt_frm_zdroje = '';
+        $this->template->akt_frm_od = '';
+        $this->template->akt_frm_do = '';
         $this->invalidateControl('ul_vys');
         $this->invalidateControl('ul_akt');
         $this->invalidateControl('ul_zdroje');
@@ -240,6 +304,10 @@ class MatrixOverviewPresenter extends SecuredPresenter
         $this->template->aktivity = array();
         foreach ($this->template->vystupy as $vystup)
             $this->template->aktivity[$vystup->id] = $this->db->table('aktivita')->where(array('vystup' => $vystup->id))->order('poradi');
+        $this->template->akt_frm_nazev = '';
+        $this->template->akt_frm_zdroje = '';
+        $this->template->akt_frm_od = '';
+        $this->template->akt_frm_do = '';
         $this->invalidateControl('ul_vys');
         $this->invalidateControl('ul_akt');
         $this->invalidateControl('ul_zdroje');

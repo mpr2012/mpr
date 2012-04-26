@@ -32,6 +32,7 @@ $container = $configurator->createContainer();
 $container->router[] = new Route('index.php', 'Homepage:default', Route::ONE_WAY);
 $container->router[] = new Route('<presenter>/<action>[/<id>]', 'Homepage:default');
 
+Nette\Forms\Controls\CheckboxList::register();
 
 // Configure and run the application!
 $container->application->run();

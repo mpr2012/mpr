@@ -3,19 +3,13 @@
 -- http://www.phpmyadmin.net
 --
 -- Počítač: localhost
--- Vygenerováno: Ned 22. dub 2012, 20:14
+-- Vygenerováno: Čtv 26. dub 2012, 20:55
 -- Verze MySQL: 5.5.9
 -- Verze PHP: 5.3.6
 
 SET FOREIGN_KEY_CHECKS=0;
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
-
-
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8 */;
 
 --
 -- Databáze: `mpr2012`
@@ -62,7 +56,8 @@ CREATE TABLE IF NOT EXISTS `clen` (
   `uzivatel` int(11) NOT NULL,
   `matice` int(11) NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `matice` (`matice`)
+  KEY `matice` (`matice`),
+  KEY `uzivatel` (`uzivatel`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
@@ -258,6 +253,7 @@ ALTER TABLE `aktivita`
 -- Omezení pro tabulku `clen`
 --
 ALTER TABLE `clen`
+  ADD CONSTRAINT `clen_ibfk_2` FOREIGN KEY (`uzivatel`) REFERENCES `users` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `clen_ibfk_1` FOREIGN KEY (`matice`) REFERENCES `matice` (`id`) ON DELETE CASCADE;
 
 --
@@ -290,7 +286,3 @@ ALTER TABLE `vystup`
 ALTER TABLE `zdroj_overeni`
   ADD CONSTRAINT `zdroj_overeni_ibfk_1` FOREIGN KEY (`matice`) REFERENCES `matice` (`id`) ON DELETE CASCADE;
 SET FOREIGN_KEY_CHECKS=1;
-
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
