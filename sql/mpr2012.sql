@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Počítač: localhost
--- Vygenerováno: Pát 27. dub 2012, 00:27
+-- Vygenerováno: Pát 27. dub 2012, 00:42
 -- Verze MySQL: 5.5.9
 -- Verze PHP: 5.3.6
 
@@ -42,8 +42,7 @@ INSERT INTO `aktivita` (`id`, `nazev`, `vystup`, `zacatek`, `konec`, `zdroje`, `
 (1, 'Ukol 1', 1, '2012-04-10 12:11:06', '2012-04-26 07:29:49', 'Zdroj 1', 10),
 (2, 'Ukol 2', 1, '2012-04-11 00:00:00', '2012-04-19 00:00:00', 'Zdroj asdf', 20),
 (3, 'asdf', 1, '2012-00-00 00:00:00', '2012-00-00 00:00:00', '', 0),
-(4, 'Něco', 5, '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', 0),
-(13, 'a', 14, '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', 0);
+(4, 'Něco', 5, '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', 0);
 
 -- --------------------------------------------------------
 
@@ -60,15 +59,6 @@ CREATE TABLE IF NOT EXISTS `clen` (
   KEY `matice` (`matice`),
   KEY `uzivatel` (`uzivatel`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=28 ;
-
---
--- Vypisuji data pro tabulku `clen`
---
-
-INSERT INTO `clen` (`id`, `uzivatel`, `matice`) VALUES
-(25, 2, 19),
-(26, 5, 19),
-(27, 11, 19);
 
 -- --------------------------------------------------------
 
@@ -91,9 +81,7 @@ CREATE TABLE IF NOT EXISTS `matice` (
 
 INSERT INTO `matice` (`id`, `nazev`, `zamer`, `cil`) VALUES
 (1, 'První testovací matice', 'Pomoci svetu', 'Uklidit ulice'),
-(2, 'Druhá testovací matice', 'Nevim', 'Vůbec nevim'),
-(3, 'Prázdná matice', 'Empty prostě', ''),
-(19, 'asdf', '', '');
+(3, 'Prázdná matice', 'Empty prostě', '');
 
 -- --------------------------------------------------------
 
@@ -178,6 +166,9 @@ CREATE TABLE IF NOT EXISTS `uzivatel` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `username` varchar(40) COLLATE utf8_unicode_ci NOT NULL,
   `password` varchar(40) COLLATE utf8_unicode_ci NOT NULL,
+  `jmeno` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
+  `prijmeni` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
+  `skupina` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
   `role` varchar(40) COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `username` (`username`)
@@ -187,17 +178,17 @@ CREATE TABLE IF NOT EXISTS `uzivatel` (
 -- Vypisuji data pro tabulku `uzivatel`
 --
 
-INSERT INTO `uzivatel` (`id`, `username`, `password`, `role`) VALUES
-(2, 'xzajic07@stud.fit.vutbr.cz', '912ec803b2ce49e4a541068d495ab570', ''),
-(3, 'xbedna33@stud.fit.vutbr.cz', '50a1e8d0ea071aca23f99488fd969483', ''),
-(4, 'xpodiv01@stud.fit.vutbr.cz', '50a1e8d0ea071aca23f99488fd969483', ''),
-(5, 'xranda00@stud.fit.vutbr.cz', '50a1e8d0ea071aca23f99488fd969483', ''),
-(6, 'xpodho02@stud.fit.vutbr.cz', '50a1e8d0ea071aca23f99488fd969483', ''),
-(7, 'xmarci00@stud.fit.vutbr.cz', '50a1e8d0ea071aca23f99488fd969483', ''),
-(8, 'xkrize06@stud.fit.vutbr.cz', '50a1e8d0ea071aca23f99488fd969483', ''),
-(9, 'xcekan00@stud.fit.vutbr.cz', '50a1e8d0ea071aca23f99488fd969483', ''),
-(10, 'xkucer60@stud.fit.vutbr.cz', '50a1e8d0ea071aca23f99488fd969483', ''),
-(11, 'xtothr00@stud.fit.vutbr.cz', '50a1e8d0ea071aca23f99488fd969483', '');
+INSERT INTO `uzivatel` (`id`, `username`, `password`, `jmeno`, `prijmeni`, `skupina`, `role`) VALUES
+(2, 'xzajic07@stud.fit.vutbr.cz', '912ec803b2ce49e4a541068d495ab570', 'Jiří', 'Zajíc', '', ''),
+(3, 'xbedna33@stud.fit.vutbr.cz', '50a1e8d0ea071aca23f99488fd969483', '', '', '', ''),
+(4, 'xpodiv01@stud.fit.vutbr.cz', '50a1e8d0ea071aca23f99488fd969483', '', '', '', ''),
+(5, 'xranda00@stud.fit.vutbr.cz', '50a1e8d0ea071aca23f99488fd969483', '', '', '', ''),
+(6, 'xpodho02@stud.fit.vutbr.cz', '50a1e8d0ea071aca23f99488fd969483', '', '', '', ''),
+(7, 'xmarci00@stud.fit.vutbr.cz', '50a1e8d0ea071aca23f99488fd969483', '', '', '', ''),
+(8, 'xkrize06@stud.fit.vutbr.cz', '50a1e8d0ea071aca23f99488fd969483', '', '', '', ''),
+(9, 'xcekan00@stud.fit.vutbr.cz', '50a1e8d0ea071aca23f99488fd969483', '', '', '', ''),
+(10, 'xkucer60@stud.fit.vutbr.cz', '50a1e8d0ea071aca23f99488fd969483', '', '', '', ''),
+(11, 'xtothr00@stud.fit.vutbr.cz', '50a1e8d0ea071aca23f99488fd969483', '', '', '', '');
 
 -- --------------------------------------------------------
 
@@ -221,10 +212,8 @@ CREATE TABLE IF NOT EXISTS `vystup` (
 
 INSERT INTO `vystup` (`id`, `nazev`, `matice`, `poradi`) VALUES
 (1, 'Vystup a', 1, 3),
-(4, 'Výstup druhé matice', 2, 10),
 (5, 'Výstup 5', 1, 2),
-(13, '111', 1, 1),
-(14, 'asdf', 19, 10);
+(13, '111', 1, 1);
 
 -- --------------------------------------------------------
 

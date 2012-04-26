@@ -14,6 +14,29 @@ class SettingsPresenter extends SecuredPresenter
 		$this->template->anyVariable = 'any value';
 	}
     
+    public function createComponentChangeInfoForm($name)
+    {
+        $form = new \Nette\Application\UI\Form($this, $name);
+        
+        $form->addGroup('Informace');
+        $form->addText('jmeno', 'Jméno:')
+                ->setDefaultValue($this->db->table('uzivatel')->get($this->getUser()->getId())->jmeno);
+        $form->addText('prijmeni', 'Příjmení:')
+                ->setDefaultValue($this->db->table('uzivatel')->get($this->getUser()->getId())->prijmeni);
+        $form->addSubmit('submit', 'Uložit');
+        $form->onSuccess[] = callback($this, 'changeInfoFormSubmitted');
+        
+        return $form;
+    }
+    
+    public function changeInfoFormSubmitted(\Nette\Application\UI\Form $form)
+    {
+        $values = $form->getValues();
+        $this->db->table('uzivatel')->get($this->getUser()->getId())->update($values);
+        $this->flashMessage('Vaše údaje byly změněny.');
+        $this->redirect('Settings:');
+    }
+    
     public function createComponentChangePasswordForm($name)
     {
         $form = new \Nette\Application\UI\Form($this, $name);
@@ -53,6 +76,7 @@ class SettingsPresenter extends SecuredPresenter
         {
             $this->flashMessage('Nezadali jste správně staré heslo.', 'error');
         }
+        $this->flashMessage('Heslo bylo úspěšně změněno.');
         $this->redirect('Settings:');
     }
 
