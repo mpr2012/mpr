@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Počítač: localhost
--- Vygenerováno: Čtv 26. dub 2012, 20:55
+-- Vygenerováno: Pát 27. dub 2012, 00:27
 -- Verze MySQL: 5.5.9
 -- Verze PHP: 5.3.6
 
@@ -32,7 +32,7 @@ CREATE TABLE IF NOT EXISTS `aktivita` (
   `poradi` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `aktivita_ibfk_1` (`vystup`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=5 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=14 ;
 
 --
 -- Vypisuji data pro tabulku `aktivita`
@@ -42,7 +42,8 @@ INSERT INTO `aktivita` (`id`, `nazev`, `vystup`, `zacatek`, `konec`, `zdroje`, `
 (1, 'Ukol 1', 1, '2012-04-10 12:11:06', '2012-04-26 07:29:49', 'Zdroj 1', 10),
 (2, 'Ukol 2', 1, '2012-04-11 00:00:00', '2012-04-19 00:00:00', 'Zdroj asdf', 20),
 (3, 'asdf', 1, '2012-00-00 00:00:00', '2012-00-00 00:00:00', '', 0),
-(4, 'Něco', 5, '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', 0);
+(4, 'Něco', 5, '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', 0),
+(13, 'a', 14, '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', 0);
 
 -- --------------------------------------------------------
 
@@ -58,7 +59,16 @@ CREATE TABLE IF NOT EXISTS `clen` (
   PRIMARY KEY (`id`),
   KEY `matice` (`matice`),
   KEY `uzivatel` (`uzivatel`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=28 ;
+
+--
+-- Vypisuji data pro tabulku `clen`
+--
+
+INSERT INTO `clen` (`id`, `uzivatel`, `matice`) VALUES
+(25, 2, 19),
+(26, 5, 19),
+(27, 11, 19);
 
 -- --------------------------------------------------------
 
@@ -73,7 +83,7 @@ CREATE TABLE IF NOT EXISTS `matice` (
   `zamer` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
   `cil` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=4 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=20 ;
 
 --
 -- Vypisuji data pro tabulku `matice`
@@ -82,16 +92,17 @@ CREATE TABLE IF NOT EXISTS `matice` (
 INSERT INTO `matice` (`id`, `nazev`, `zamer`, `cil`) VALUES
 (1, 'První testovací matice', 'Pomoci svetu', 'Uklidit ulice'),
 (2, 'Druhá testovací matice', 'Nevim', 'Vůbec nevim'),
-(3, 'Prázdná matice', 'Empty prostě', '');
+(3, 'Prázdná matice', 'Empty prostě', ''),
+(19, 'asdf', '', '');
 
 -- --------------------------------------------------------
 
 --
--- Struktura tabulky `news`
+-- Struktura tabulky `novinka`
 --
 
-DROP TABLE IF EXISTS `news`;
-CREATE TABLE IF NOT EXISTS `news` (
+DROP TABLE IF EXISTS `novinka`;
+CREATE TABLE IF NOT EXISTS `novinka` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `header` varchar(40) COLLATE utf8_unicode_ci NOT NULL,
   `text` text COLLATE utf8_unicode_ci NOT NULL,
@@ -102,10 +113,10 @@ CREATE TABLE IF NOT EXISTS `news` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=5 ;
 
 --
--- Vypisuji data pro tabulku `news`
+-- Vypisuji data pro tabulku `novinka`
 --
 
-INSERT INTO `news` (`id`, `header`, `text`, `date`, `author`) VALUES
+INSERT INTO `novinka` (`id`, `header`, `text`, `date`, `author`) VALUES
 (1, 'První novinka', 'Právě byla spuštěna první verze webového portálu týmu Ones - MPR 2012.', '2012-03-25 10:32:10', 2),
 (3, 'Novinky - výpis', 'Implementován výpis novinek na úvodní domovskou stránku webu.', '2012-03-25 10:52:15', 2);
 
@@ -146,7 +157,7 @@ CREATE TABLE IF NOT EXISTS `ukazatel` (
   `matice` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `matice` (`matice`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=3 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=5 ;
 
 --
 -- Vypisuji data pro tabulku `ukazatel`
@@ -159,11 +170,11 @@ INSERT INTO `ukazatel` (`id`, `nazev`, `radek`, `matice`) VALUES
 -- --------------------------------------------------------
 
 --
--- Struktura tabulky `users`
+-- Struktura tabulky `uzivatel`
 --
 
-DROP TABLE IF EXISTS `users`;
-CREATE TABLE IF NOT EXISTS `users` (
+DROP TABLE IF EXISTS `uzivatel`;
+CREATE TABLE IF NOT EXISTS `uzivatel` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `username` varchar(40) COLLATE utf8_unicode_ci NOT NULL,
   `password` varchar(40) COLLATE utf8_unicode_ci NOT NULL,
@@ -173,10 +184,10 @@ CREATE TABLE IF NOT EXISTS `users` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=12 ;
 
 --
--- Vypisuji data pro tabulku `users`
+-- Vypisuji data pro tabulku `uzivatel`
 --
 
-INSERT INTO `users` (`id`, `username`, `password`, `role`) VALUES
+INSERT INTO `uzivatel` (`id`, `username`, `password`, `role`) VALUES
 (2, 'xzajic07@stud.fit.vutbr.cz', '912ec803b2ce49e4a541068d495ab570', ''),
 (3, 'xbedna33@stud.fit.vutbr.cz', '50a1e8d0ea071aca23f99488fd969483', ''),
 (4, 'xpodiv01@stud.fit.vutbr.cz', '50a1e8d0ea071aca23f99488fd969483', ''),
@@ -202,17 +213,18 @@ CREATE TABLE IF NOT EXISTS `vystup` (
   `poradi` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `matice` (`matice`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=6 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=15 ;
 
 --
 -- Vypisuji data pro tabulku `vystup`
 --
 
 INSERT INTO `vystup` (`id`, `nazev`, `matice`, `poradi`) VALUES
-(1, 'Vystup a', 1, 10),
-(2, 'Vystup b', 1, 20),
+(1, 'Vystup a', 1, 3),
 (4, 'Výstup druhé matice', 2, 10),
-(5, 'Výstup 5', 1, 0);
+(5, 'Výstup 5', 1, 2),
+(13, '111', 1, 1),
+(14, 'asdf', 19, 10);
 
 -- --------------------------------------------------------
 
@@ -253,14 +265,14 @@ ALTER TABLE `aktivita`
 -- Omezení pro tabulku `clen`
 --
 ALTER TABLE `clen`
-  ADD CONSTRAINT `clen_ibfk_2` FOREIGN KEY (`uzivatel`) REFERENCES `users` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `clen_ibfk_2` FOREIGN KEY (`uzivatel`) REFERENCES `uzivatel` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `clen_ibfk_1` FOREIGN KEY (`matice`) REFERENCES `matice` (`id`) ON DELETE CASCADE;
 
 --
--- Omezení pro tabulku `news`
+-- Omezení pro tabulku `novinka`
 --
-ALTER TABLE `news`
-  ADD CONSTRAINT `news_ibfk_1` FOREIGN KEY (`author`) REFERENCES `users` (`id`) ON DELETE CASCADE;
+ALTER TABLE `novinka`
+  ADD CONSTRAINT `novinka_ibfk_1` FOREIGN KEY (`author`) REFERENCES `uzivatel` (`id`) ON DELETE CASCADE;
 
 --
 -- Omezení pro tabulku `predpoklad`
