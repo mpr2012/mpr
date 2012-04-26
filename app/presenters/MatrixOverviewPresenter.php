@@ -39,6 +39,10 @@ class MatrixOverviewPresenter extends SecuredPresenter
             $this->template->aktivity           = array();
             foreach ($this->template->vystupy as $vystup)
                 $this->template->aktivity[$vystup->id] = $this->db->table('aktivita')->where(array('vystup' => $vystup->id))->order('poradi');
+            $this->template->akt_frm_nazev = '';
+            $this->template->akt_frm_zdroje = '';
+            $this->template->akt_frm_od = '';
+            $this->template->akt_frm_do = '';
         }
     }
     
@@ -263,9 +267,14 @@ class MatrixOverviewPresenter extends SecuredPresenter
         $this->invalidateControl('ul_zdroje');
         $this->invalidateControl('ul_casram');
     }
-    public function handleEdit_aktivity($id, $text, $akt_id)
+    public function handleEdit_aktivity($id, $akt_id)
     {
-        // TODO
+        $this->template->akt_frm_nazev = $this->db->table('aktivita')->get($akt_id)->nazev;
+        $this->template->akt_frm_zdroje = $this->db->table('aktivita')->get($akt_id)->zdroje;
+        $this->template->akt_frm_od = $this->db->table('aktivita')->get($akt_id)->zacatek;
+        $this->template->akt_frm_do = $this->db->table('aktivita')->get($akt_id)->konec;
+        $this->template->vystupy = $this->db->table('vystup')->where(array('matice' => $id))->order('poradi');
+        $this->invalidateControl('aktivita_form');
     }
     public function handleDelete_aktivity($id, $rec_id)
     {

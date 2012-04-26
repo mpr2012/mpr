@@ -372,7 +372,7 @@ $(document).ready(function(){
                         var end = $(this).attr("class").indexOf(" ", st);
                         akt_id = end == -1 ? $(this).attr("class").substr(st) : $(this).attr("class").substr(st, end-st);
                     }
-                    $.get('?do=edit_aktivity&akt_id='+akt_id,function(){
+                    $.get('?do=edit_aktivity&akt_id='+akt_id, function(){
                         // po tom, co je nacten novy obsah do snippetu zobrazi dialog
                         $("#snippet--aktivita_form")
                             .dialog({
