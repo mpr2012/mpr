@@ -11,6 +11,8 @@ jQuery.extend({
 	nette: {
 		updateSnippet: function (id, html) {
 			$("#" + id).html(html);
+                        if (refresh_sortable)
+                            refresh_sortable();
 		},
 
 		success: function (payload) {

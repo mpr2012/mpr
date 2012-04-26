@@ -27,47 +27,7 @@ $(document).ready(function(){
     var icon_delete = '<span class="icon-container floatr ui-corner-all"> <span class="ui-icon ui-icon-close"></span></span>';     
     var icon_help =   '<span class="icon-container floatr ui-corner-all"> <span class="ui-icon ui-icon-help"></span></span>';     
     
-    
-    $( "#ul_vystupy, #ul_aktivity" ).sortable({
-        placeholder: "ui-state-highlight",
-        stop: function(){
-            console.log("stop");
-            if ($(this).attr("id") == "ul_vystupy"){
-                // vystupy
-                // zjistit nove poradi 
-                $(this).find("li").each(function(){
-                    var poradi = $(this).prevAll("li").length+1;
-                    var data = $(this).parent().data("data");
-                    if (!data) data = {};
-                    data[$(this).attr("id").substr(3)] = poradi;
-                    $(this).parent().data("data",data);
-                });
-                console.log([$(this).data("data")]);
-                $.post('?do=change_seq_vystupy',{all_data:$(this).data("data")});
-            } else {
-                // aktivity
-                $(this).find("li").each(function(){
-                    var st = $(this).attr("class").indexOf("vys");
-                    var end = $(this).attr("class").indexOf(" ", st);
-                    var vysId = end == -1 ? $(this).attr("class").substr(st) : $(this).attr("class").substr(st, end-st);
-                    
-                    var poradi = $(this).prevAll("li."+vysId).length+1;
-                    var data = $(this).parent().data("data");
-                    if (!data) data = {};
-                    data[$(this).attr("id").substr(3)] = poradi;
-                    $(this).parent().data("data",data);
-                });
-                console.log([$(this).data("data")]);
-                $.post('?do=change_seq_aktivity',{all_data:$(this).data("data")});
-            }
-        }
-//        out: function(){console.log("out")},
-//        deactivate: function(){console.log("deactivate")}
-        
-    });
-    $( "#ul_vystupy, #ul_aktivity" ).disableSelection();
-    
-    
+    refresh_sortable();
     /* Ikony + na vsechny pole*/
     $("table.matrix h2")
         .addClass("ui-widget-header ui-corner-all")
@@ -367,7 +327,7 @@ $(document).ready(function(){
            //alert("?do="+action+" ; data: "+data);
            var params = '';
            for (var nazev in data)
-               params += '&' + nazev + '=' + data[nazev];
+               params += '&' + nazev + '=' + encodeURIComponent(data[nazev]);
 //           alert('?do=' + action + params);
            $.get('?do=' + action + params);
        }); 
@@ -529,4 +489,49 @@ $(document).ready(function(){
 
 function addCalendars(){
     $(".date_input").datepicker($.datepicker.regional['cs']);
+}
+
+function refresh_sortable(){
+    $( "#ul_vystupy, #ul_aktivity" ).sortable({
+        placeholder: "ui-state-highlight",
+        stop: function(){
+            console.log("stop");
+            if ($(this).attr("id") == "ul_vystupy"){
+                // vystupy
+                // zjistit nove poradi 
+                $(this).find("li").each(function(){
+                    var poradi = $(this).prevAll("li").length+1;
+                    var data = $(this).parent().data("data");
+                    if (!data) data = {};
+                    data[$(this).attr("id").substr(3)] = poradi;
+                    $(this).parent().data("data",data);
+                });
+                console.log([$(this).data("data")]);
+                $.post('?do=change_seq_vystupy',{
+                    all_data:$(this).data("data")
+                    });
+            } else {
+                // aktivity
+                $(this).find("li").each(function(){
+                    var st = $(this).attr("class").indexOf("vys");
+                    var end = $(this).attr("class").indexOf(" ", st);
+                    var vysId = end == -1 ? $(this).attr("class").substr(st) : $(this).attr("class").substr(st, end-st);
+                    
+                    var poradi = $(this).prevAll("li."+vysId).length+1;
+                    var data = $(this).parent().data("data");
+                    if (!data) data = {};
+                    data[$(this).attr("id").substr(3)] = poradi;
+                    $(this).parent().data("data",data);
+                });
+                console.log([$(this).data("data")]);
+                $.post('?do=change_seq_aktivity',{
+                    all_data:$(this).data("data")
+                    });
+            }
+        }
+    //        out: function(){console.log("out")},
+    //        deactivate: function(){console.log("deactivate")}
+        
+    });
+    $( "#ul_vystupy, #ul_aktivity" ).disableSelection();
 }

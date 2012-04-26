@@ -108,6 +108,11 @@ table.matrix h2 {
     margin: 0 1px 0 1px;
 }
 
+/* Vystupy a aktivity presouvani mysi*/
+#ul_vystupy li, #ul_aktivity li {
+    cursor: move;
+}
+
 /* Aktivity formular */
 .akt_frm_left ul {
     list-style: none;
