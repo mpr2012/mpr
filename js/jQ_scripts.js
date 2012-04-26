@@ -39,11 +39,11 @@ $(document).ready(function(){
                     var poradi = $(this).prevAll("li").length+1;
                     var data = $(this).parent().data("data");
                     if (!data) data = {};
-                    data[$(this).attr("id")] = poradi;
+                    data[$(this).attr("id").substr(3)] = poradi;
                     $(this).parent().data("data",data);
                 });
                 console.log($(this).data("data"));
-                $.get('?do=change_seq_vystupy',$(this).data("data"));
+                $.get('?do=change_seq_vystupy&poradi=' + JSON.stringify($(this).data("data")));
             } else {
                 // aktivity
                 $(this).find("li").each(function(){
@@ -54,11 +54,11 @@ $(document).ready(function(){
                     var poradi = $(this).prevAll("li."+vysId).length+1;
                     var data = $(this).parent().data("data");
                     if (!data) data = {};
-                    data[$(this).attr("id")] = poradi;
+                    data[$(this).attr("id").substr(3)] = poradi;
                     $(this).parent().data("data",data);
                 });
                 console.log($(this).data("data"));
-                $.post('?do=change_seq_aktivity',$(this).data("data"));
+                $.get('?do=change_seq_aktivity&poradi=' + JSON.stringify($(this).data("data")));
             }
         }
 //        out: function(){console.log("out")},
@@ -241,7 +241,7 @@ $(document).ready(function(){
                                 data['cas_od'] = $("#akt_frm_od").attr("value");
                                 data['cas_do'] = $("#akt_frm_do").attr("value");
                                 data['vys_id'] = vys_id.substr(3);
-//                                $.post('?do='+$(this).data("action"));
+                                $.get('?do=' + action, data);
                                 console.log('?do='+action);
                                 console.log(data);
                                 $( this ).dialog( "close" );
