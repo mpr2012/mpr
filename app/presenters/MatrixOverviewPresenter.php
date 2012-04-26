@@ -195,6 +195,7 @@ class MatrixOverviewPresenter extends SecuredPresenter
             'matice'    => $id
         ))->order('poradi');
         $this->invalidateControl('ul_vys');
+        $this->invalidateControl('aktivita_form');
     }
     public function handleEdit_vystupy($id, $text, $vys_id)
     {
@@ -205,6 +206,7 @@ class MatrixOverviewPresenter extends SecuredPresenter
             'matice'    => $id
         ))->order('poradi');
         $this->invalidateControl('ul_vys');
+        $this->invalidateControl('aktivita_form');
     }
     public function handleDelete_vystupy($id, $rec_id)
     {
@@ -212,20 +214,88 @@ class MatrixOverviewPresenter extends SecuredPresenter
         $this->template->vystupy = $this->db->table('vystup')->where(array(
             'matice'    => $id
         ))->order('poradi');
-        $this->template->aktivity           = array();
+        $this->template->aktivity = array();
         foreach ($this->template->vystupy as $vystup)
             $this->template->aktivity[$vystup->id] = $this->db->table('aktivita')->where(array('vystup' => $vystup->id))->order('poradi');
         $this->invalidateControl('ul_vys');
         $this->invalidateControl('ul_akt');
         $this->invalidateControl('ul_zdroje');
         $this->invalidateControl('ul_casram');
+        $this->invalidateControl('aktivita_form');
     }
-    public function handleChange_seq_vystupy($id)
+    public function handleChange_seq_vystupy($id, $poradi)
     {
+        $poradi = json_decode($poradi);
+        foreach ($poradi as $vys_id => $index)
+        {
+            $this->db->table('vystup')->get($vys_id)->update(array('poradi' => $index));
+        }
+        $this->template->vystupy = $this->db->table('vystup')->where(array(
+            'matice' => $id
+        ))->order('poradi');
+        $this->template->aktivity = array();
+        foreach ($this->template->vystupy as $vystup)
+            $this->template->aktivity[$vystup->id] = $this->db->table('aktivita')->where(array('vystup' => $vystup->id))->order('poradi');
+        $this->invalidateControl('ul_vys');
+        $this->invalidateControl('ul_akt');
+        $this->invalidateControl('ul_zdroje');
+        $this->invalidateControl('ul_casram');
+        $this->invalidateControl('aktivita_form');
     }
-    public function handleEdit_aktivity($akt_id)
+    
+    // aktivity
+    public function handleNew_aktivita($id, $cas_do, $cas_od, $nazev, $vys_id, $zdroje)
     {
-        $this->invalidateControl('aktivity_form');
+        $this->db->table('aktivita')->insert(array(
+            'zacatek'      => $cas_od,
+            'konec'      => $cas_do,
+            'nazev'      => $nazev,
+            'vystup'      => $vys_id,
+            'zdroje'     => $zdroje
+        ));
+        $this->template->vystupy = $this->db->table('vystup')->where(array(
+            'matice'    => $id
+        ))->order('poradi');
+        $this->template->aktivity = array();
+        foreach ($this->template->vystupy as $vystup)
+            $this->template->aktivity[$vystup->id] = $this->db->table('aktivita')->where(array('vystup' => $vystup->id))->order('poradi');
+        $this->invalidateControl('ul_akt');
+        $this->invalidateControl('ul_zdroje');
+        $this->invalidateControl('ul_casram');
+    }
+    public function handleEdit_aktivity($id, $text, $akt_id)
+    {
+        // TODO
+    }
+    public function handleDelete_aktivity($id, $rec_id)
+    {
+        $this->db->table('aktivita')->get($rec_id)->delete();
+        $this->template->vystupy = $this->db->table('vystup')->where(array(
+            'matice'    => $id
+        ))->order('poradi');
+        $this->template->aktivity = array();
+        foreach ($this->template->vystupy as $vystup)
+            $this->template->aktivity[$vystup->id] = $this->db->table('aktivita')->where(array('vystup' => $vystup->id))->order('poradi');
+        $this->invalidateControl('ul_akt');
+        $this->invalidateControl('ul_zdroje');
+        $this->invalidateControl('ul_casram');
+    }
+    public function handleChange_seq_aktivity($id, $poradi)
+    {
+        $poradi = json_decode($poradi);
+        foreach ($poradi as $akt_id => $index)
+        {
+            $this->db->table('aktivita')->get($akt_id)->update(array('poradi' => $index));
+        }
+        $this->template->vystupy = $this->db->table('vystup')->where(array(
+            'matice' => $id
+        ))->order('poradi');
+        $this->template->aktivity = array();
+        foreach ($this->template->vystupy as $vystup)
+            $this->template->aktivity[$vystup->id] = $this->db->table('aktivita')->where(array('vystup' => $vystup->id))->order('poradi');
+        $this->invalidateControl('ul_akt');
+        $this->invalidateControl('ul_zdroje');
+        $this->invalidateControl('ul_casram');
     }
     
 }

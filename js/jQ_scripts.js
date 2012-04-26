@@ -201,7 +201,7 @@ $(document).ready(function(){
                                 data['cas_od'] = $("#akt_frm_od").attr("value");
                                 data['cas_do'] = $("#akt_frm_do").attr("value");
                                 data['vys_id'] = vys_id.substr(3);
-//                                $.post('?do='+$(this).data("action"));
+                                $.get('?do=' + action, data);
                                 console.log('?do='+action);
                                 console.log(data);
                                 $( this ).dialog( "close" );
