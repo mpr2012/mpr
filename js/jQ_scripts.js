@@ -507,9 +507,10 @@ function refresh_sortable(){
                     $(this).parent().data("data",data);
                 });
                 console.log([$(this).data("data")]);
-                $.post('?do=change_seq_vystupy',{
-                    all_data:$(this).data("data")
-                    });
+                $.get('?do=change_seq_vystupy&poradi=' + JSON.stringify($(this).data("data")));
+//                $.post('?do=change_seq_vystupy',{
+//                    all_data:$(this).data("data")
+//                    });
             } else {
                 // aktivity
                 $(this).find("li").each(function(){
@@ -524,9 +525,10 @@ function refresh_sortable(){
                     $(this).parent().data("data",data);
                 });
                 console.log([$(this).data("data")]);
-                $.post('?do=change_seq_aktivity',{
-                    all_data:$(this).data("data")
-                    });
+                $.get('?do=change_seq_aktivity&poradi=' + JSON.stringify($(this).data("data")));
+//                $.post('?do=change_seq_aktivity',{
+//                    all_data:$(this).data("data")
+//                    });
             }
         }
     //        out: function(){console.log("out")},
