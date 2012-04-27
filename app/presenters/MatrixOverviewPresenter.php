@@ -104,12 +104,15 @@ class MatrixOverviewPresenter extends SecuredPresenter
             'zamer' => $text
         ));
         $this->template->zamer  = $this->db->table('matice')->get($id)->zamer;
+        
         $this->invalidateControl('ul_zamer');
     }
     
     // cil
     public function handleEdit_cil($id, $text)
     {
+        $this->payload->message = 'Sucess';
+        $this->payload->status = 'ok';
         $this->db->table('matice')->get($id)->update(array(
             'cil' => $text
         ));

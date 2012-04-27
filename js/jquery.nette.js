@@ -14,6 +14,16 @@ jQuery.extend({
                         if (refresh_sortable)
                             refresh_sortable();
 		},
+                
+                showMessage : function (msg,status){
+                    $("#ajax_msg").text(msg);
+                    if (status=='ok')
+                        $("#ajax_msg").removeClass("error").addClass("ok");
+                    else
+                        $("#ajax_msg").removeClass("ok").addClass("error");
+                    $("#ajax_msg").slideDown(600,function(){setTimeout('$("#ajax_msg").slideUp(600);',2000);})
+                    
+                },
 
 		success: function (payload) {
 			// redirect
@@ -28,6 +38,9 @@ jQuery.extend({
 					jQuery.nette.updateSnippet(i, payload.snippets[i]);
 				}
 			}
+                        if (payload.message && payload.status){
+                            jQuery.nette.showMessage(payload.message,payload.status);
+                        }
 		}
 	}
 });

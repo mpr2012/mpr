@@ -170,3 +170,32 @@ table.matrix h2 {
 /* Pomocne tridy */
 .floatr{float:right;}
 .color_white{color:white !important;}
+
+
+
+
+
+#ajax_msg{
+    display:none;
+    position:fixed;
+    top:0px;
+    left: 30%;
+    right: 30%;
+    height: 30px;
+/*    width: 500px;*/
+    z-index: 9000;
+    padding: 5px 30px 5px 30px;
+    border: 1px solid;
+    margin:0 auto;
+    text-align: center;
+}
+
+#ajax_msg.ok {
+    background-color: #d4ffd0;
+    border-color:#080;
+}
+#ajax_msg.error {
+    background-color: #ff857c;
+    border-color: #C22;
+        
+}
