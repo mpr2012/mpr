@@ -1,31 +1,17 @@
-// TODO: zmena poradi aktivit, vystupu
 // TODO: pridani/editace aktivit
 // TODO: zobrazeni napovedy
-// TODO: editace na zdroji ci na case spusti editaci aktivity
 // TODO: zotaveni z chyby pri ukladani do db z ajax pozadavku
 // TODO: behem zpracovani ajax pozadavku, nejaky waiting window
 // TODO: flash zprava po dokonceni pozadavku
 
-//$(function() {
-//    $( "#sortable" ).sortable({
-//        placeholder: "ui-state-highlight",
-//        stop: function(){console.log("stop")},
-//        out: function(){console.log("out")},
-//        deactivate: function(){console.log("deactivate")},
-//        over: function(){console.log("over")}
-//    });
-//    $( "#sortable" ).disableSelection();
-//});
 $(document).ready(function(){
-    
-//    $("#ul_cil_uk").selectable();    
     
     var icon_pencil = '<span class="icon-container floatr ui-corner-all"><span class="ui-icon ui-icon-pencil"></span></span>';     
     var icon_plus =   '<span class="icon-container floatr ui-corner-all"> <span class="ui-icon ui-icon-plusthick"></span></span>';     
     var icon_accept = '<span class="icon-container floatr ui-corner-all"> <span class="ui-icon ui-icon-check"></span></span>';     
     var icon_cancel = '<span class="icon-container floatr ui-corner-all"> <span class="ui-icon ui-icon-cancel"></span></span>';     
     var icon_delete = '<span class="icon-container floatr ui-corner-all"> <span class="ui-icon ui-icon-close"></span></span>';     
-    var icon_help =   '<span class="icon-container floatr ui-corner-all"> <span class="ui-icon ui-icon-help"></span></span>';     
+    var icon_help =   '<span class="icon-container floatr ui-corner-all"><span class="ui-icon ui-icon-help"></span></span>';     
     
     refresh_sortable();
     /* Ikony + na vsechny pole*/
@@ -74,7 +60,51 @@ $(document).ready(function(){
         }
     });
     
-    /* Ukazatele */
+    /* Napoveda */
+    $(document).on("click", ".ui-icon-help",function(){
+        // zjistim, ceho napovedu
+        var ul = $(this).parents("td").find("ul");
+        var nadpis = $(this).parents("td").find("h2").text();
+        var text = "";
+        switch(ul.attr("id")){
+            case "ul_zamer":
+                text = "Bla bla, toto je zamer";
+                break;
+            case "ul_cil":
+                break;                        
+            case "ul_zamer_uk":
+            case "ul_cil_uk":
+            case "ul_vystupy_uk":
+                // data: text, id radku
+                break;                        
+            case "ul_zamer_zdroje":
+            case "ul_cil_zdroje":
+            case "ul_vystupy_zdroje":
+                // data: text, id radku
+                break;                        
+
+            case "ul_cil_predpoklady":
+            case "ul_vystupy_predpoklady":
+            case "ul_aktivity_predpoklady":
+            case "ul_pred_podm":
+                // data: text, id radku
+                break;
+            case  "ul_vystupy":
+                break;
+
+        } 
+        // zobrazim dialog
+        if (text){
+            $("#dialog")
+                .text(text)
+                .dialog({
+                    title: nadpis,
+                    modal:true
+                    
+                })
+            ;
+        }
+    });
     
     
     
@@ -368,12 +398,19 @@ $(document).ready(function(){
                         akt_id = li.attr("id").substr(3);
                     }
                     else {
-                        var st = $(this).attr("class").indexOf("akt");
-                        var end = $(this).attr("class").indexOf(" ", st);
-                        akt_id = end == -1 ? $(this).attr("class").substr(st) : $(this).attr("class").substr(st, end-st);
+                        var st = li.attr("class").indexOf("akt")+3;
+                        var end = li.attr("class").indexOf(" ", st);
+                        akt_id = end == -1 ? li.attr("class").substr(st) : li.attr("class").substr(st, end-st);
+                        
                     }
-                    $.get('?do=edit_aktivity&akt_id='+akt_id, function(){
+                    $.get('?do=edit_aktivity&akt_id='+akt_id, function(payload){
                         // po tom, co je nacten novy obsah do snippetu zobrazi dialog
+                        if (payload.snippets) {
+                            for (var i in payload.snippets) {
+                                jQuery.nette.updateSnippet(i, payload.snippets[i]);
+                            }
+			}
+                        addCalendars();
                         $("#snippet--aktivita_form")
                             .dialog({
                                 width: 800,
@@ -393,9 +430,13 @@ $(document).ready(function(){
                                         data['cas_od'] = $("#akt_frm_od").attr("value");
                                         data['cas_do'] = $("#akt_frm_do").attr("value");
                                         data['vys_id'] = vys_id.substr(3);
-                                        //                                $.post('?do='+$(this).data("action"));
-                                        console.log('?do='+action);
+                                        var params = '';
+                                        for (var nazev in data)
+                                            params += '&' + nazev + '=' + encodeURIComponent(data[nazev]);
+                                //           alert('?do=' + action + params);
                                         console.log(data);
+                                        $.get('?do=' + action + params);
+                                        //                                $.post('?do='+$(this).data("action"));
                                         $( this ).dialog( "close" );
                                     },
                                     "Storno": function() {
