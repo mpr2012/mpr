@@ -5,7 +5,7 @@
     <div class="news">
     {foreach $news as $new}
         <div class="new">
-            <h2>{$new->header}<span>{$authors[$new->author]->username} | {$new->date}</span></h2>
+            <h2>{$new->header}<span>{$authors[$new->author]->jmeno} {$authors[$new->author]->prijmeni} | {$new->date}</span></h2>
             <p>{$new->text}</p>
         </div>
     {/foreach}

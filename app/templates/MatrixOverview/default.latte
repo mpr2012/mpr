@@ -7,6 +7,8 @@
         <li>
             <a n:href="MatrixOverview:view $matrix->id" title="Zobrazit matici '{$matrix->nazev}'">{$matrix->nazev}</a>
             <div class="controls">
+                <a n:href="MatrixOverview:print $matrix->id" title="Tisknout matici '{$matrix->nazev}'">tisk</a>
+                <a n:href="MatrixOverview:export $matrix->id" title="Exportovat matici '{$matrix->nazev}'">export</a>
                 <a n:href="MatrixOverview:delete $matrix->id" title="Smazat matici '{$matrix->nazev}'">smazat</a>
             </div>
         </li>

@@ -28,13 +28,17 @@ class MatrixOverviewPresenter extends SecuredPresenter
 			->setRequired('Název nesmí být prázdný řetězec.');
 
         $form->addGroup('Oprávnění');
+        $groups = array();
+        foreach ($this->db->table('uzivatel')->select('DISTINCT skupina') as $group)
+            $groups[] = $group->skupina;
+        $form->addCheckboxList('skupiny', 'Skupiny:', $groups);
         $users = array();
         foreach ($this->db->table('uzivatel') as $user)
             if ($user->id != $this->getUser()->getId())
-                $users[$user->id] = $user->username;
+                $users[$user->id] = $user->jmeno . " " . $user->prijmeni . " (" . $user->username . ")";
         $form->addCheckboxList('users', 'Uživatelé:', $users);
         
-        $form->addGroup();
+        $form->addGroup('Potvrzení');
 		$form->addSubmit('create', 'Vytvořit');
 
 		$form->onSuccess[] = callback($this, 'NewMatrixFormSubmitted');
@@ -63,6 +67,75 @@ class MatrixOverviewPresenter extends SecuredPresenter
         $this->flashMessage("Matice '$nazev' byla úspěšně smazána.");
         $this->redirect('MatrixOverview:');
     }
+    
+    /**
+     * BEGIN
+     * --- EXPORT MATICE - MARCEL ---
+     * 
+     */
+    public function renderExport($id)
+    {
+        $this->template->matrix = $this->db->table('matice')->get($id);
+        $this->template->xml = $this->exportMatrix($id);
+    }
+    
+    public function exportMatrix($matriceID)
+    {
+
+        $xmlText  = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n";
+        $xmlText .= "<Project xmlns=\"http://schemas.microsoft.com/project\">\"\n";
+        $xmlText .= "<SaveVersion>1</SaveVersion>\n";
+        $xmlText .= "<Name>" . $this->db->table('matice')->get($matriceID)->nazev . ".xml</Name>\n";
+        $xmlText .= "<Title>Plan projektu_" . $this->db->table('matice')->get($matriceID)->nazev . "</Title>\n";
+        $xmlText .= "<Author>Ones</Author>\n";
+
+        $xmlText .= "<LastSaved>2012-04-27T13:06:00</LastSaved>\n";
+        $xmlText .= "<ScheduleFromStart>1</ScheduleFromStart>\n";
+        $xmlText .= "<CalendarUID>3</CalendarUID>\n";
+        $xmlText .= "<MinutesPerDay>1440</MinutesPerDay>\n";
+        $xmlText .= "<MinutesPerWeek>10080</MinutesPerWeek>\n";
+        $xmlText .= "<DaysPerMonth>100</DaysPerMonth>\n";
+        $xmlText .= "<ProjectExternallyEdited>0</ProjectExternallyEdited>\n";
+//        $xmlText .= $this->calendars;
+
+        $tasks = "<Tasks>\n";
+        $resources = "<Resources>\n";
+        $assignments = "<Assignments>\n";
+
+//        $query = "select * from vystup where id=" + $matriceID;
+//        $resultSummary = mysql_query($query, $connection) or die("Could not complete database query");
+//        $internalID = 1;
+//        while ($rowSummary = mysql_fetch_array($resultSummary)) {
+//            $tasks .= newSummary($internalID++, $rowSummary["nazev"], $rowSummary["poradi"]);
+//            $query .= "select * from aktivita where vystup=" . $rowSummary["id"];
+//            $resultTask = mysql_query($query, $connection) or die("Could not complete database query");
+//            while($rowTask = mysql_fetch_array($resultTask)) {
+//                $taskUID = $internalID++;
+//                $tasks  .= newTask($taskUID, $rowTask["nazev"],$rowTask["zacatek"],$rowTask["konec"],$rowTask["poradi"], $rowSummary["poradi"]);
+//            /* for each resource */
+//                $resUID  = $internalID++;
+//                $resources   .= newResource($resUID, $rowSummary["zdroje"], $rowTask["poradi"], $rowSummary["poradi"]);
+//                $assignments .= newAssignments($internalID++, $resUID, $taskUID);
+//            }
+//        }
+
+        $tasks .= "</Tasks>\n";
+        $resources .= "</Resources>\n";
+        $assignments .= "</Assignments>\n";
+
+        $xmlText .= $tasks;
+        $xmlText .= $resources;
+        $xmlText .= $assignments;
+        $xmlText .= "</Project>\n";
+
+        return $xmlText;
+    }
+    
+    /**
+     * END
+     * --- EXPORT MATICE - MARCEL ---
+     * 
+     */
     
     public function renderView($id)
     {

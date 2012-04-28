@@ -77,7 +77,7 @@ hr {
 
 #top ul li {
     float: left;
-    width: 32.92%;
+    width: 49.69%;
     margin: 0 1px 1px 0px;
 }
 
@@ -173,6 +173,10 @@ hr {
 
 #matrix-view h1, #matrix-create h1 {
     font-size: 32px;
+}
+
+#matrix-export pre {
+    font-size: 150%;
 }
 
 #footer * {
