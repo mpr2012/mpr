@@ -276,10 +276,11 @@
             <div class="akt_frm_left">
                 <h5>Údaje o aktivitě:</h5>
                 <table>
+                    <div id="akt_frm_id" style="display: none">{$akt_frm_id}</div>
                     <tr><td width="100"><label for="akt_frm_nazev">Název</label> </td><td> <input class="text_input" type="text" id="akt_frm_nazev" value="{$akt_frm_nazev}" /> </td></tr>                    
                     <tr><td><label for="akt_frm_zdroje">Zdroje</label> </td><td>  <input class="text_input"type="text" id="akt_frm_zdroje" value="{$akt_frm_zdroje}" /></td> </tr>                    
-                    <tr><td><label for="akt_frm_cas_od">Od</label>  </td><td> <input class="date_input" type="date" id="akt_frm_od" value="{$akt_frm_od|date:'%m/%d/%Y'}" readonly /> </td></tr>                    
-                    <tr><td><label for="akt_frm_cas_do">Do</label>  </td><td> <input class="date_input" type="date" id="akt_frm_do" value="{$akt_frm_do|date:'%m/%d/%Y'}" readonly/> </td></tr>                    
+                    <tr><td><label for="akt_frm_cas_od">Od</label>  </td><td> <input class="date_input" type="date" id="akt_frm_od" value="{$akt_frm_od|date:'%m/%d/%Y'}" /> </td></tr>                    
+                    <tr><td><label for="akt_frm_cas_do">Do</label>  </td><td> <input class="date_input" type="date" id="akt_frm_do" value="{$akt_frm_do|date:'%m/%d/%Y'}" /> </td></tr>                    
                 </table>                
             </div>
             <div class="akt_frm_right">
@@ -288,7 +289,7 @@
                     {if count($vystupy)}
                         {var $counter = 1}
                         {foreach $vystupy as $vystup}
-                            <li id="vys{$vystup->id}" class="ui-state-default">
+                            <li id="vys{$vystup->id}" class="ui-state-default{$akt_frm_vystup == $vystup->id ? ' ui-state-hover color_white'}">
                                     <span class="vystup_num">{$counter++}</span> {$vystup->nazev}
                             </li>
                         {/foreach}

@@ -430,6 +430,7 @@ $(document).ready(function(){
                                         data['cas_od'] = $("#akt_frm_od").attr("value");
                                         data['cas_do'] = $("#akt_frm_do").attr("value");
                                         data['vys_id'] = vys_id.substr(3);
+                                        data['akt_id'] = $("#akt_frm_id").html();
                                         var params = '';
                                         for (var nazev in data)
                                             params += '&' + nazev + '=' + encodeURIComponent(data[nazev]);
@@ -529,7 +530,8 @@ $(document).ready(function(){
 });
 
 function addCalendars(){
-    $(".date_input").datepicker($.datepicker.regional['cs']);
+//    $(".date_input").datepicker($.datepicker.regional['cs']);
+    $(".date_input").datepicker({ altFormat: "yy-mm-dd" });
 }
 
 function refresh_sortable(){

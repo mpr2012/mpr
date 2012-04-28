@@ -94,6 +94,8 @@ class MatrixOverviewPresenter extends SecuredPresenter
             $this->template->akt_frm_zdroje = '';
             $this->template->akt_frm_od = '';
             $this->template->akt_frm_do = '';
+            $this->template->akt_frm_vystup = '';
+            $this->template->akt_frm_id = '';
         }
     }
     
@@ -256,6 +258,8 @@ class MatrixOverviewPresenter extends SecuredPresenter
         $this->template->akt_frm_zdroje = '';
         $this->template->akt_frm_od = '';
         $this->template->akt_frm_do = '';
+        $this->template->akt_frm_vystup = '';
+        $this->template->akt_frm_id = '';
         $this->invalidateControl('ul_vys');
         $this->invalidateControl('aktivita_form');
 
@@ -272,6 +276,8 @@ class MatrixOverviewPresenter extends SecuredPresenter
         $this->template->akt_frm_zdroje = '';
         $this->template->akt_frm_od = '';
         $this->template->akt_frm_do = '';
+        $this->template->akt_frm_vystup = '';
+        $this->template->akt_frm_id = '';
         $this->invalidateControl('ul_vys');
         $this->invalidateControl('aktivita_form');
     }
@@ -288,6 +294,8 @@ class MatrixOverviewPresenter extends SecuredPresenter
         $this->template->akt_frm_zdroje = '';
         $this->template->akt_frm_od = '';
         $this->template->akt_frm_do = '';
+        $this->template->akt_frm_vystup = '';
+        $this->template->akt_frm_id = '';
         $this->invalidateControl('ul_vys');
         $this->invalidateControl('ul_akt');
         $this->invalidateControl('ul_zdroje');
@@ -311,6 +319,8 @@ class MatrixOverviewPresenter extends SecuredPresenter
         $this->template->akt_frm_zdroje = '';
         $this->template->akt_frm_od = '';
         $this->template->akt_frm_do = '';
+        $this->template->akt_frm_vystup = '';
+        $this->template->akt_frm_id = '';
         $this->invalidateControl('ul_vys');
         $this->invalidateControl('ul_akt');
         $this->invalidateControl('ul_zdroje');
@@ -322,11 +332,11 @@ class MatrixOverviewPresenter extends SecuredPresenter
     public function handleNew_aktivita($id, $cas_do, $cas_od, $nazev, $vys_id, $zdroje)
     {
         $this->db->table('aktivita')->insert(array(
-            'zacatek'      => $cas_od,
-            'konec'      => $cas_do,
-            'nazev'      => $nazev,
-            'vystup'      => $vys_id,
-            'zdroje'     => $zdroje
+            'zacatek'   => date('Y-m-d', strtotime($cas_od)),
+            'konec'     => date('Y-m-d', strtotime($cas_od)),
+            'nazev'     => $nazev,
+            'vystup'    => $vys_id,
+            'zdroje'    => $zdroje
         ));
         $this->template->vystupy = $this->db->table('vystup')->where(array(
             'matice'    => $id
@@ -334,9 +344,16 @@ class MatrixOverviewPresenter extends SecuredPresenter
         $this->template->aktivity = array();
         foreach ($this->template->vystupy as $vystup)
             $this->template->aktivity[$vystup->id] = $this->db->table('aktivita')->where(array('vystup' => $vystup->id))->order('poradi');
+        $this->template->akt_frm_nazev = '';
+        $this->template->akt_frm_zdroje = '';
+        $this->template->akt_frm_od = '';
+        $this->template->akt_frm_do = '';
+        $this->template->akt_frm_vystup = '';
+        $this->template->akt_frm_id = '';
         $this->invalidateControl('ul_akt');
         $this->invalidateControl('ul_zdroje');
         $this->invalidateControl('ul_casram');
+        $this->invalidateControl('aktivita_form');
     }
     public function handleEdit_aktivity($id, $akt_id)
     {
@@ -344,7 +361,35 @@ class MatrixOverviewPresenter extends SecuredPresenter
         $this->template->akt_frm_zdroje = $this->db->table('aktivita')->get($akt_id)->zdroje;
         $this->template->akt_frm_od = $this->db->table('aktivita')->get($akt_id)->zacatek;
         $this->template->akt_frm_do = $this->db->table('aktivita')->get($akt_id)->konec;
+        $this->template->akt_frm_vystup = $this->db->table('aktivita')->get($akt_id)->vystup;
+        $this->template->akt_frm_id = $akt_id;
         $this->template->vystupy = $this->db->table('vystup')->where(array('matice' => $id))->order('poradi');
+        $this->invalidateControl('aktivita_form');
+    }
+    public function handleEdit_aktivita($id, $akt_id, $nazev, $zdroje, $cas_od, $cas_do, $vys_id)
+    {
+        $this->db->table('aktivita')->get($akt_id)->update(array(
+            'nazev'     => $nazev,
+            'zdroje'     => $zdroje,
+            'zacatek'   => date('Y-m-d', strtotime($cas_od)),
+            'konec'     => date('Y-m-d', strtotime($cas_od)),
+            'vystup'     => $vys_id
+        ));
+        $this->template->vystupy = $this->db->table('vystup')->where(array(
+            'matice'    => $id
+        ))->order('poradi');
+        $this->template->aktivity = array();
+        foreach ($this->template->vystupy as $vystup)
+            $this->template->aktivity[$vystup->id] = $this->db->table('aktivita')->where(array('vystup' => $vystup->id))->order('poradi');
+        $this->template->akt_frm_nazev = '';
+        $this->template->akt_frm_zdroje = '';
+        $this->template->akt_frm_od = '';
+        $this->template->akt_frm_do = '';
+        $this->template->akt_frm_vystup = '';
+        $this->template->akt_frm_id = '';
+        $this->invalidateControl('ul_akt');
+        $this->invalidateControl('ul_zdroje');
+        $this->invalidateControl('ul_casram');
         $this->invalidateControl('aktivita_form');
     }
     public function handleDelete_aktivity($id, $rec_id)
