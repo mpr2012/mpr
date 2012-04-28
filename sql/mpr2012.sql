@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Počítač: localhost
--- Vygenerováno: Pát 27. dub 2012, 00:42
+-- Vygenerováno: Sob 28. dub 2012, 14:51
 -- Verze MySQL: 5.5.9
 -- Verze PHP: 5.3.6
 
@@ -32,17 +32,15 @@ CREATE TABLE IF NOT EXISTS `aktivita` (
   `poradi` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `aktivita_ibfk_1` (`vystup`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=14 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=27 ;
 
 --
 -- Vypisuji data pro tabulku `aktivita`
 --
 
 INSERT INTO `aktivita` (`id`, `nazev`, `vystup`, `zacatek`, `konec`, `zdroje`, `poradi`) VALUES
-(1, 'Ukol 1', 1, '2012-04-10 12:11:06', '2012-04-26 07:29:49', 'Zdroj 1', 10),
-(2, 'Ukol 2', 1, '2012-04-11 00:00:00', '2012-04-19 00:00:00', 'Zdroj asdf', 20),
-(3, 'asdf', 1, '2012-00-00 00:00:00', '2012-00-00 00:00:00', '', 0),
-(4, 'Něco', 5, '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', 0);
+(19, 'asdf', 13, '2012-04-30 00:00:00', '2012-04-30 00:00:00', 'asdf', 0),
+(26, 'asdf', 13, '1970-01-01 00:00:00', '1970-01-01 00:00:00', '', 0);
 
 -- --------------------------------------------------------
 
@@ -58,7 +56,7 @@ CREATE TABLE IF NOT EXISTS `clen` (
   PRIMARY KEY (`id`),
   KEY `matice` (`matice`),
   KEY `uzivatel` (`uzivatel`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=28 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=32 ;
 
 -- --------------------------------------------------------
 
@@ -73,7 +71,7 @@ CREATE TABLE IF NOT EXISTS `matice` (
   `zamer` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
   `cil` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=20 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=22 ;
 
 --
 -- Vypisuji data pro tabulku `matice`
@@ -129,7 +127,7 @@ CREATE TABLE IF NOT EXISTS `predpoklad` (
 --
 
 INSERT INTO `predpoklad` (`id`, `nazev`, `radek`, `matice`) VALUES
-(1, 'USA', '2', 1);
+(1, 'aUSA', '2', 1);
 
 -- --------------------------------------------------------
 
@@ -168,7 +166,7 @@ CREATE TABLE IF NOT EXISTS `uzivatel` (
   `password` varchar(40) COLLATE utf8_unicode_ci NOT NULL,
   `jmeno` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
   `prijmeni` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
-  `skupina` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
+  `skupina` varchar(30) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'Výchozí',
   `role` varchar(40) COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `username` (`username`)
@@ -179,16 +177,16 @@ CREATE TABLE IF NOT EXISTS `uzivatel` (
 --
 
 INSERT INTO `uzivatel` (`id`, `username`, `password`, `jmeno`, `prijmeni`, `skupina`, `role`) VALUES
-(2, 'xzajic07@stud.fit.vutbr.cz', '912ec803b2ce49e4a541068d495ab570', 'Jiří', 'Zajíc', '', ''),
-(3, 'xbedna33@stud.fit.vutbr.cz', '50a1e8d0ea071aca23f99488fd969483', '', '', '', ''),
-(4, 'xpodiv01@stud.fit.vutbr.cz', '50a1e8d0ea071aca23f99488fd969483', '', '', '', ''),
-(5, 'xranda00@stud.fit.vutbr.cz', '50a1e8d0ea071aca23f99488fd969483', '', '', '', ''),
-(6, 'xpodho02@stud.fit.vutbr.cz', '50a1e8d0ea071aca23f99488fd969483', '', '', '', ''),
-(7, 'xmarci00@stud.fit.vutbr.cz', '50a1e8d0ea071aca23f99488fd969483', '', '', '', ''),
-(8, 'xkrize06@stud.fit.vutbr.cz', '50a1e8d0ea071aca23f99488fd969483', '', '', '', ''),
-(9, 'xcekan00@stud.fit.vutbr.cz', '50a1e8d0ea071aca23f99488fd969483', '', '', '', ''),
-(10, 'xkucer60@stud.fit.vutbr.cz', '50a1e8d0ea071aca23f99488fd969483', '', '', '', ''),
-(11, 'xtothr00@stud.fit.vutbr.cz', '50a1e8d0ea071aca23f99488fd969483', '', '', '', '');
+(2, 'xzajic07@stud.fit.vutbr.cz', '912ec803b2ce49e4a541068d495ab570', 'Jiří', 'Zajíc', 'Výchozí', ''),
+(3, 'xbedna33@stud.fit.vutbr.cz', '50a1e8d0ea071aca23f99488fd969483', '', '', 'Výchozí', ''),
+(4, 'xpodiv01@stud.fit.vutbr.cz', '50a1e8d0ea071aca23f99488fd969483', '', '', 'Výchozí', ''),
+(5, 'xranda00@stud.fit.vutbr.cz', '50a1e8d0ea071aca23f99488fd969483', '', '', 'Výchozí', ''),
+(6, 'xpodho02@stud.fit.vutbr.cz', '50a1e8d0ea071aca23f99488fd969483', '', '', 'Výchozí', ''),
+(7, 'xmarci00@stud.fit.vutbr.cz', '50a1e8d0ea071aca23f99488fd969483', '', '', 'Výchozí', ''),
+(8, 'xkrize06@stud.fit.vutbr.cz', '50a1e8d0ea071aca23f99488fd969483', '', '', 'Výchozí', ''),
+(9, 'xcekan00@stud.fit.vutbr.cz', '50a1e8d0ea071aca23f99488fd969483', '', '', 'Výchozí', ''),
+(10, 'xkucer60@stud.fit.vutbr.cz', '50a1e8d0ea071aca23f99488fd969483', '', '', 'Výchozí', ''),
+(11, 'xtothr00@stud.fit.vutbr.cz', '50a1e8d0ea071aca23f99488fd969483', '', '', 'Výchozí', '');
 
 -- --------------------------------------------------------
 
@@ -204,15 +202,13 @@ CREATE TABLE IF NOT EXISTS `vystup` (
   `poradi` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `matice` (`matice`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=15 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=16 ;
 
 --
 -- Vypisuji data pro tabulku `vystup`
 --
 
 INSERT INTO `vystup` (`id`, `nazev`, `matice`, `poradi`) VALUES
-(1, 'Vystup a', 1, 3),
-(5, 'Výstup 5', 1, 2),
 (13, '111', 1, 1);
 
 -- --------------------------------------------------------

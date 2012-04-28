@@ -406,7 +406,7 @@ class MatrixOverviewPresenter extends SecuredPresenter
     {
         $this->db->table('aktivita')->insert(array(
             'zacatek'   => date('Y-m-d', strtotime($cas_od)),
-            'konec'     => date('Y-m-d', strtotime($cas_od)),
+            'konec'     => date('Y-m-d', strtotime($cas_do)),
             'nazev'     => $nazev,
             'vystup'    => $vys_id,
             'zdroje'    => $zdroje
@@ -445,7 +445,7 @@ class MatrixOverviewPresenter extends SecuredPresenter
             'nazev'     => $nazev,
             'zdroje'     => $zdroje,
             'zacatek'   => date('Y-m-d', strtotime($cas_od)),
-            'konec'     => date('Y-m-d', strtotime($cas_od)),
+            'konec'     => date('Y-m-d', strtotime($cas_do)),
             'vystup'     => $vys_id
         ));
         $this->template->vystupy = $this->db->table('vystup')->where(array(
