@@ -23,11 +23,11 @@ class MatrixOverviewPresenter extends SecuredPresenter
     {
 		$form = new \Nette\Application\UI\Form;
         $form->addGroup('LRM');
-		$form->addText('nazev', 'Název projektu:')
+		$form->addText('nazev', 'NĂˇzev projektu:')
             ->setAttribute('size', '30')
-			->setRequired('Název nesmí být prázdný řetězec.');
+			->setRequired('NĂˇzev nesmĂ­ bĂ˝t prĂˇzdnĂ˝ Ĺ™etÄ›zec.');
 
-        $form->addGroup('Oprávnění');
+        $form->addGroup('OprĂˇvnÄ›nĂ­');
         $groups = array();
         foreach ($this->db->table('uzivatel')->select('DISTINCT skupina') as $group)
             $groups[] = $group->skupina;
@@ -36,10 +36,10 @@ class MatrixOverviewPresenter extends SecuredPresenter
         foreach ($this->db->table('uzivatel') as $user)
             if ($user->id != $this->getUser()->getId())
                 $users[$user->id] = $user->jmeno . " " . $user->prijmeni . " (" . $user->username . ")";
-        $form->addCheckboxList('users', 'Uživatelé:', $users);
+        $form->addCheckboxList('users', 'UĹľivatelĂ©:', $users);
         
-        $form->addGroup('Potvrzení');
-		$form->addSubmit('create', 'Vytvořit');
+        $form->addGroup('PotvrzenĂ­');
+		$form->addSubmit('create', 'VytvoĹ™it');
 
 		$form->onSuccess[] = callback($this, 'NewMatrixFormSubmitted');
 		return $form;
@@ -56,7 +56,7 @@ class MatrixOverviewPresenter extends SecuredPresenter
         if ($values['users'])
             foreach ($values['users'] as $userId)
                 $this->db->table('clen')->insert(array('matice' => $maticeId, 'uzivatel' => $userId));
-        $this->flashMessage("Matice s názvem '$nazev' byla úspěšně vložena. Pokračujte její editací.");
+        $this->flashMessage("Matice s nĂˇzvem '$nazev' byla ĂşspÄ›ĹˇnÄ› vloĹľena. PokraÄŤujte jejĂ­ editacĂ­.");
         $this->redirect('MatrixOverview:view', $maticeId);
     }
     
@@ -64,7 +64,7 @@ class MatrixOverviewPresenter extends SecuredPresenter
     {
         $nazev = $this->db->table('matice')->get($id)->nazev;
         $this->db->table('matice')->get($id)->delete();
-        $this->flashMessage("Matice '$nazev' byla úspěšně smazána.");
+        $this->flashMessage("Matice '$nazev' byla ĂşspÄ›ĹˇnÄ› smazĂˇna.");
         $this->redirect('MatrixOverview:');
     }
     
@@ -77,63 +77,70 @@ class MatrixOverviewPresenter extends SecuredPresenter
     {
         $this->template->matrix = $this->db->table('matice')->get($id);
         $this->template->xml = $this->exportMatrix($id);
+    }//80
+
+    public function newSummary($UID, $nazev, $poradi)
+    {
+	$task  = "<Task>\n";
+	$task .= "<UID>{$UID}</UID>\n";
+	$task .= "<Name>{$nazev}</Name>\n";
+	$task .= "<IsNull>0</IsNull>\n";
+	$task .= "<WBS>{$poradi}</WBS>\n";
+	$task .= "<WBSLevel>1</WBSLevel>\n";
+	$task .= "<OutlineNumber>{$poradi}</OutlineNumber>\n";
+	$task .= "<OutlineLevel>1</OutlineLevel>\n";
+	$task .= "<Summary>1</Summary>\n";
+	$task .= "</Task>\n";
+	return $task;
     }
-	
-	private function newSummary($UID, $nazev, $poradi){
-		$task  = "<Task>\n";
-		$task += "<UID>".$UID".</UID>\n";
-		$task += "<Name>".$nazev".</Name>\n";
-		$task += "<IsNull>0</IsNull>\n";
-		$task += "<WBS>".$poradi".</WBS>\n";
-		$task += "<WBSLevel>1</WBSLevel>\n";
-		$task += "<OutlineNumber>".$poradi".</OutlineNumber>\n";
-		$task += "<OutlineLevel>1</OutlineLevel>\n";
-		$task += "<Summary>1</Summary>\n";
-		$task += "</Task>\n";
-		return $task;
-	}
-	private function newTask($UID, $nazev, $zacatek, $konec, $poradi) {
-		$task += "<Task>\n";
-		$task  = "<UID>".$UID."</UID>\n";
-		$task += "<Name>".$nazev."</Name>\n";
-		$task += "<Manual>1</Manual>\n";
-		$task += "<IsNull>0</IsNull>\n";
-		$task += "<WBS>".$poradi."</WBS>\n";
-		$task += "<WBSLevel>2</WBSLevel>\n";
-		$task += "<OutlineNumber>".$poradi."</OutlineNumber>\n";
-		$task += "<OutlineLevel>2</OutlineLevel>\n";
-		$task += "<CalendarUID>-1</CalendarUID>\n";
-		echo($zacatek);
-		$task += "<ManualStart>2012-04-23T09:00:00</ManualStart>\n";
-		echo($konec);
-		$task += "<ManualFinish>2012-04-24T17:00:00</ManualFinish>\n";
-//		echo($konec - $zacatek);
-		$task += "<ManualDuration>PT72H0M0S</ManualDuration>\n";
-		$task += "<DurationFormat>7</DurationFormat>\n";
-		$task += "<Milestone>0</Milestone>\n";
-		$task += "<Summary>0</Summary>\n";
-		$task += "</Task>\n";
-		return $task;
-	}
-	private function newResource($UID, $nazov, $poradi) {
-		$resource  = "<Resource>\n";
-		$resource += "<UID>".$UID."</UID>\n";
-		$resource += "<Name>".$nazov."_".$poradi."</Name>\n";
-		$resource += "<Type>0</Type>\n";
-		$resource += "<IsNull>0</IsNull>\n";
-		$resource += "<WorkGroup>1</WorkGroup>\n";
-		$resource += "<IsCostResource>1</IsCostResource>\n";
-		$resource += "</Resource>\n";
-		return $resource;
-	}
-	private function newAssignments($UID, $resUID, $taskUID) {
-		$assignment  = "<Assignment>\n";
-		$assignment += "<UID>".$UID."</UID>\n";
-		$assignment += "<TaskUID>".$taskUID."</TaskUID>\n";
-		$assignment += "<ResourceUID>".$resUID."</ResourceUID>\n";
-		$assignment += "</Assignment>\n";
-		return $assignment;
-	}
+
+    public function newTask($UID, $nazev, $zacatek, $konec, $poradi)
+    {
+	$task  = "<Task>\n";
+	$task .= "<UID>{$UID}</UID>\n";
+	$task .= "<Name>{$nazev}</Name>\n";
+	$task .= "<Manual>1</Manual>\n";
+	$task .= "<IsNull>0</IsNull>\n";
+	$task .= "<WBS>{$poradi}</WBS>\n";
+	$task .= "<WBSLevel>2</WBSLevel>\n";
+	$task .= "<OutlineNumber>{$poradi}</OutlineNumber>\n";
+	$task .= "<OutlineLevel>2</OutlineLevel>\n";
+	$task .= "<CalendarUID>-1</CalendarUID>\n";
+	echo($zacatek);
+	$task .= "<ManualStart>2012-04-23T09:00:00</ManualStart>\n";
+	echo($konec);
+	$task .= "<ManualFinish>2012-04-24T17:00:00</ManualFinish>\n";
+//	echo($konec - $zacatek);
+	$task .= "<ManualDuration>PT72H0M0S</ManualDuration>\n";
+	$task .= "<DurationFormat>7</DurationFormat>\n";
+	$task .= "<Milestone>0</Milestone>\n";
+	$task .= "<Summary>0</Summary>\n";
+	$task .= "</Task>\n";
+	return $task;
+    }
+
+    public function newResource($UID, $nazev, $poradi)
+    {
+	$resource  = "<Resource>\n";
+	$resource .= "<UID>{$UID}</UID>\n";
+	$resource .= "<Name>{$nazev}_{$poradi}</Name>\n";
+	$resource .= "<Type>0</Type>\n";
+	$resource .= "<IsNull>0</IsNull>\n";
+	$resource .= "<WorkGroup>1</WorkGroup>\n";
+	$resource .= "<IsCostResource>1</IsCostResource>\n";
+	$resource .= "</Resource>\n";
+	return $resource;
+    }
+
+    public function newAssignments($UID, $resUID, $taskUID)
+    {
+	$assignment  = "<Assignment>\n";
+	$assignment .= "<UID>{$UID}</UID>\n";
+	$assignment .= "<TaskUID>{$taskUID}</TaskUID>\n";
+	$assignment .= "<ResourceUID>{$resUID}</ResourceUID>\n";
+	$assignment .= "</Assignment>\n";
+	return $assignment;
+    }
     
     public function exportMatrix($matriceID)
     {
@@ -144,8 +151,8 @@ class MatrixOverviewPresenter extends SecuredPresenter
         $xmlText .= "<Name>" . $this->db->table('matice')->get($matriceID)->nazev . ".xml</Name>\n";
         $xmlText .= "<Title>Plan projektu_" . $this->db->table('matice')->get($matriceID)->nazev . "</Title>\n";
         $xmlText .= "<Author>Ones</Author>\n";
-	
-        $xmlText .= "<LastSaved>" . date(Y-m-d\TG:i:s) . "</LastSaved>\n";
+
+        $xmlText .= "<LastSaved>" . date("Y-m-d\TG:i:s") . "</LastSaved>\n";
         $xmlText .= "<ScheduleFromStart>1</ScheduleFromStart>\n";
         $xmlText .= "<CalendarUID>3</CalendarUID>\n";
         $xmlText .= "<MinutesPerDay>1440</MinutesPerDay>\n";
@@ -240,23 +247,23 @@ class MatrixOverviewPresenter extends SecuredPresenter
 	$tasks = "<Tasks>\n";
 	$resources = "<Resources>\n";
 	$assignments = "<Assignments>\n";
-		
+
 	$internalID = 0;
 
 	foreach ( $this->db->table('vystup')->where("matice", $matriceID) as $rowVystup ) {	// select all outputs of choosen matrice
-		$summaryUID = internalID++;
+		$summaryUID = $internalID++;
 		echo $rowVystup->nazev;
-		$tasks .= newSummary($summaryUID, $rowVystup->nazev, $rowVystup->poradi);
+		$tasks .= $this->newSummary($summaryUID, $rowVystup->nazev, $rowVystup->poradi);
 		foreach ( $this->db->table('aktivita')->where("vystup", $rowVystup->id) as $rowAktivita) {	// select all tasks of choosen output
 			$taskUID = $internalID++;
 			$order = $rowVystup->poradi . "." . $rowAktivita->poradi; //"1.5"
-			$tasks .= newTask($taskUID, $rowAktivita->nazev, $rowAktivita->zacatek, $rowAktivita->konec, $order);
+			$tasks .= $this->newTask($taskUID, $rowAktivita->nazev, $rowAktivita->zacatek, $rowAktivita->konec, $order);
 			$resOrder = 1;
-			foreach( split(',',$rowAktivita->zdroje) as $zdroj) {	// process all resources of choosen task
+			foreach( explode(',',$rowAktivita->zdroje) as $zdroj) {	// process all resources of choosen task
 				$resUID  = $internalID++;
-				$resources .= newResource($resUID, $zdroj, $order . "." . $resOrder); // "1.5.2"
+				$resources .= $this->newResource($resUID, $zdroj, $order . "." . $resOrder); // "1.5.2"
 				$resOrder++;
-				$assignments .= newAssignments($internalID++, $resUID, $taskUID);
+				$assignments .= $this->newAssignments($internalID++, $resUID, $taskUID);
 			}
 		}
 	}
@@ -640,3 +647,4 @@ class MatrixOverviewPresenter extends SecuredPresenter
     }
     
 }
+		
