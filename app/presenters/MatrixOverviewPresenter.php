@@ -78,56 +78,199 @@ class MatrixOverviewPresenter extends SecuredPresenter
         $this->template->matrix = $this->db->table('matice')->get($id);
         $this->template->xml = $this->exportMatrix($id);
     }
+	
+	private function newSummary($UID, $nazev, $poradi){
+		$task  = "<Task>\n";
+		$task += "<UID>".$UID".</UID>\n";
+		$task += "<Name>".$nazev".</Name>\n";
+		$task += "<IsNull>0</IsNull>\n";
+		$task += "<WBS>".$poradi".</WBS>\n";
+		$task += "<WBSLevel>1</WBSLevel>\n";
+		$task += "<OutlineNumber>".$poradi".</OutlineNumber>\n";
+		$task += "<OutlineLevel>1</OutlineLevel>\n";
+		$task += "<Summary>1</Summary>\n";
+		$task += "</Task>\n";
+		return $task;
+	}
+	private function newTask($UID, $nazev, $zacatek, $konec, $poradi) {
+		$task += "<Task>\n";
+		$task  = "<UID>".$UID."</UID>\n";
+		$task += "<Name>".$nazev."</Name>\n";
+		$task += "<Manual>1</Manual>\n";
+		$task += "<IsNull>0</IsNull>\n";
+		$task += "<WBS>".$poradi."</WBS>\n";
+		$task += "<WBSLevel>2</WBSLevel>\n";
+		$task += "<OutlineNumber>".$poradi."</OutlineNumber>\n";
+		$task += "<OutlineLevel>2</OutlineLevel>\n";
+		$task += "<CalendarUID>-1</CalendarUID>\n";
+		echo($zacatek);
+		$task += "<ManualStart>2012-04-23T09:00:00</ManualStart>\n";
+		echo($konec);
+		$task += "<ManualFinish>2012-04-24T17:00:00</ManualFinish>\n";
+//		echo($konec - $zacatek);
+		$task += "<ManualDuration>PT72H0M0S</ManualDuration>\n";
+		$task += "<DurationFormat>7</DurationFormat>\n";
+		$task += "<Milestone>0</Milestone>\n";
+		$task += "<Summary>0</Summary>\n";
+		$task += "</Task>\n";
+		return $task;
+	}
+	private function newResource($UID, $nazov, $poradi) {
+		$resource  = "<Resource>\n";
+		$resource += "<UID>".$UID."</UID>\n";
+		$resource += "<Name>".$nazov."_".$poradi."</Name>\n";
+		$resource += "<Type>0</Type>\n";
+		$resource += "<IsNull>0</IsNull>\n";
+		$resource += "<WorkGroup>1</WorkGroup>\n";
+		$resource += "<IsCostResource>1</IsCostResource>\n";
+		$resource += "</Resource>\n";
+		return $resource;
+	}
+	private function newAssignments($UID, $resUID, $taskUID) {
+		$assignment  = "<Assignment>\n";
+		$assignment += "<UID>".$UID."</UID>\n";
+		$assignment += "<TaskUID>".$taskUID."</TaskUID>\n";
+		$assignment += "<ResourceUID>".$resUID."</ResourceUID>\n";
+		$assignment += "</Assignment>\n";
+		return $assignment;
+	}
     
     public function exportMatrix($matriceID)
     {
-
+	{ // base project formating and atributes
         $xmlText  = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n";
         $xmlText .= "<Project xmlns=\"http://schemas.microsoft.com/project\">\"\n";
         $xmlText .= "<SaveVersion>1</SaveVersion>\n";
         $xmlText .= "<Name>" . $this->db->table('matice')->get($matriceID)->nazev . ".xml</Name>\n";
         $xmlText .= "<Title>Plan projektu_" . $this->db->table('matice')->get($matriceID)->nazev . "</Title>\n";
         $xmlText .= "<Author>Ones</Author>\n";
-
-        $xmlText .= "<LastSaved>2012-04-27T13:06:00</LastSaved>\n";
+	
+        $xmlText .= "<LastSaved>" . date(Y-m-d\TG:i:s) . "</LastSaved>\n";
         $xmlText .= "<ScheduleFromStart>1</ScheduleFromStart>\n";
         $xmlText .= "<CalendarUID>3</CalendarUID>\n";
         $xmlText .= "<MinutesPerDay>1440</MinutesPerDay>\n";
         $xmlText .= "<MinutesPerWeek>10080</MinutesPerWeek>\n";
         $xmlText .= "<DaysPerMonth>100</DaysPerMonth>\n";
         $xmlText .= "<ProjectExternallyEdited>0</ProjectExternallyEdited>\n";
-//        $xmlText .= $this->calendars;
+	}
+	{ // set calendar
+	$xmlText .= "<Calendars>\n";
+	$xmlText .= "<Calendar>\n";
+	$xmlText .= "<UID>3</UID>\n";
+	$xmlText .= "<Name>FullTime</Name>\n";
+	$xmlText .= "<IsBaseCalendar>1</IsBaseCalendar>\n";
+	$xmlText .= "<IsBaselineCalendar>0</IsBaselineCalendar>\n";
+	$xmlText .= "<BaseCalendarUID>-1</BaseCalendarUID>\n";
+	$xmlText .= "<WeekDays>\n";
+	$xmlText .= "<WeekDay>\n";
+	$xmlText .= "<DayType>1</DayType>\n";
+	$xmlText .= "<DayWorking>1</DayWorking>\n";
+	$xmlText .= "<WorkingTimes>\n";
+	$xmlText .= "<WorkingTime>\n";
+	$xmlText .= "<FromTime>00:00:00</FromTime>\n";
+	$xmlText .= "<ToTime>00:00:00</ToTime>\n";
+	$xmlText .= "</WorkingTime>\n";
+	$xmlText .= "</WorkingTimes>\n";
+	$xmlText .= "</WeekDay>\n";
+	$xmlText .= "<WeekDay>\n";
+	$xmlText .= "<DayType>2</DayType>\n";
+	$xmlText .= "<DayWorking>1</DayWorking>\n";
+	$xmlText .= "<WorkingTimes>\n";
+	$xmlText .= "<WorkingTime>\n";
+	$xmlText .= "<FromTime>00:00:00</FromTime>\n";
+	$xmlText .= "<ToTime>00:00:00</ToTime>\n";
+	$xmlText .= "</WorkingTime>\n";
+	$xmlText .= "</WorkingTimes>\n";
+	$xmlText .= "</WeekDay>\n";
+	$xmlText .= "<WeekDay>\n";
+	$xmlText .= "<DayType>3</DayType>\n";
+	$xmlText .= "<DayWorking>1</DayWorking>\n";
+	$xmlText .= "<WorkingTimes>\n";
+	$xmlText .= "<WorkingTime>\n";
+	$xmlText .= "<FromTime>00:00:00</FromTime>\n";
+	$xmlText .= "<ToTime>00:00:00</ToTime>\n";
+	$xmlText .= "</WorkingTime>\n";
+	$xmlText .= "</WorkingTimes>\n";
+	$xmlText .= "</WeekDay>\n";
+	$xmlText .= "<WeekDay>\n";
+	$xmlText .= "<DayType>4</DayType>\n";
+	$xmlText .= "<DayWorking>1</DayWorking>\n";
+	$xmlText .= "<WorkingTimes>\n";
+	$xmlText .= "<WorkingTime>\n";
+	$xmlText .= "<FromTime>00:00:00</FromTime>\n";
+	$xmlText .= "<ToTime>00:00:00</ToTime>\n";
+	$xmlText .= "</WorkingTime>\n";
+	$xmlText .= "</WorkingTimes>\n";
+	$xmlText .= "</WeekDay>\n";
+	$xmlText .= "<WeekDay>\n";
+	$xmlText .= "<DayType>5</DayType>\n";
+	$xmlText .= "<DayWorking>1</DayWorking>\n";
+	$xmlText .= "<WorkingTimes>\n";
+	$xmlText .= "<WorkingTime>\n";
+	$xmlText .= "<FromTime>00:00:00</FromTime>\n";
+	$xmlText .= "<ToTime>00:00:00</ToTime>\n";
+	$xmlText .= "</WorkingTime>\n";
+	$xmlText .= "</WorkingTimes>\n";
+	$xmlText .= "</WeekDay>\n";
+	$xmlText .= "<WeekDay>\n";
+	$xmlText .= "<DayType>6</DayType>\n";
+	$xmlText .= "<DayWorking>1</DayWorking>\n";
+	$xmlText .= "<WorkingTimes>\n";
+	$xmlText .= "<WorkingTime>\n";
+	$xmlText .= "<FromTime>00:00:00</FromTime>\n";
+	$xmlText .= "<ToTime>00:00:00</ToTime>\n";
+	$xmlText .= "</WorkingTime>\n";
+	$xmlText .= "</WorkingTimes>\n";
+	$xmlText .= "</WeekDay>\n";
+	$xmlText .= "<WeekDay>\n";
+	$xmlText .= "<DayType>7</DayType>\n";
+	$xmlText .= "<DayWorking>1</DayWorking>\n";
+	$xmlText .= "<WorkingTimes>\n";
+	$xmlText .= "<WorkingTime>\n";
+	$xmlText .= "<FromTime>00:00:00</FromTime>\n";
+	$xmlText .= "<ToTime>00:00:00</ToTime>\n";
+	$xmlText .= "</WorkingTime>\n";
+	$xmlText .= "</WorkingTimes>\n";
+	$xmlText .= "</WeekDay>\n";
+	$xmlText .= "</WeekDays>\n";
+	$xmlText .= "</Calendar>\n";
+	$xmlText .= "</Calendars>\n";
+	}
+	{ // process tasks
+	$tasks = "<Tasks>\n";
+	$resources = "<Resources>\n";
+	$assignments = "<Assignments>\n";
+		
+	$internalID = 0;
 
-        $tasks = "<Tasks>\n";
-        $resources = "<Resources>\n";
-        $assignments = "<Assignments>\n";
+	foreach ( $this->db->table('vystup')->where("matice", $matriceID) as $rowVystup ) {	// select all outputs of choosen matrice
+		$summaryUID = internalID++;
+		echo $rowVystup->nazev;
+		$tasks .= newSummary($summaryUID, $rowVystup->nazev, $rowVystup->poradi);
+		foreach ( $this->db->table('aktivita')->where("vystup", $rowVystup->id) as $rowAktivita) {	// select all tasks of choosen output
+			$taskUID = $internalID++;
+			$order = $rowVystup->poradi . "." . $rowAktivita->poradi; //"1.5"
+			$tasks .= newTask($taskUID, $rowAktivita->nazev, $rowAktivita->zacatek, $rowAktivita->konec, $order);
+			$resOrder = 1;
+			foreach( split(',',$rowAktivita->zdroje) as $zdroj) {	// process all resources of choosen task
+				$resUID  = $internalID++;
+				$resources .= newResource($resUID, $zdroj, $order . "." . $resOrder); // "1.5.2"
+				$resOrder++;
+				$assignments .= newAssignments($internalID++, $resUID, $taskUID);
+			}
+		}
+	}
 
-//        $query = "select * from vystup where id=" + $matriceID;
-//        $resultSummary = mysql_query($query, $connection) or die("Could not complete database query");
-//        $internalID = 1;
-//        while ($rowSummary = mysql_fetch_array($resultSummary)) {
-//            $tasks .= newSummary($internalID++, $rowSummary["nazev"], $rowSummary["poradi"]);
-//            $query .= "select * from aktivita where vystup=" . $rowSummary["id"];
-//            $resultTask = mysql_query($query, $connection) or die("Could not complete database query");
-//            while($rowTask = mysql_fetch_array($resultTask)) {
-//                $taskUID = $internalID++;
-//                $tasks  .= newTask($taskUID, $rowTask["nazev"],$rowTask["zacatek"],$rowTask["konec"],$rowTask["poradi"], $rowSummary["poradi"]);
-//            /* for each resource */
-//                $resUID  = $internalID++;
-//                $resources   .= newResource($resUID, $rowSummary["zdroje"], $rowTask["poradi"], $rowSummary["poradi"]);
-//                $assignments .= newAssignments($internalID++, $resUID, $taskUID);
-//            }
-//        }
-
-        $tasks .= "</Tasks>\n";
-        $resources .= "</Resources>\n";
+        $tasks       .= "</Tasks>\n";
+        $resources   .= "</Resources>\n";
         $assignments .= "</Assignments>\n";
-
+	}
+	{ // complete together
         $xmlText .= $tasks;
         $xmlText .= $resources;
         $xmlText .= $assignments;
         $xmlText .= "</Project>\n";
-
+	}
         return $xmlText;
     }
     
