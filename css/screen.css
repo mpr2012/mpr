@@ -146,25 +146,56 @@ hr {
     list-style-type: none;
     margin: 0;
     padding: 0;
-    width: 500px;
+    width: 100%;
     margin-bottom: 40px;
 }
 
-#martix-overview ul li {
-    padding: 5px;
+.matrix_overview li{
+    width:100%;
+}
+.button {
     line-height: 30px;
+    display: block;
+    width: auto;
+    margin: 2px;
+    float:left;
+}
+.button:after { clear: left; }
+#martix-overview ul li{
+/*    color:black;*/
+    padding: 5px;
+    line-height: 25px;
+    margin: 2px;
+}
+#martix-overview ul li.ui-state-hover a {
+    color:white;
 }
 
 #martix-overview a {
+    font-size: 80%;
+    font-style: normal;
     padding: 5px;
     text-decoration: none;
-    color: black;
-    background-color: #f6f6f6;
-    border: 1px solid #dddddd;
+/*    color: in;*/
+/*    background-color: #f6f6f6;
+    border: 1px solid #dddddd;*/
 }
+.controls {
+    font-size: 90%;
+    font-weight: normal;
+}
+#martix-overview .controls a {
+    font-weight: normal;
+    padding: 5px;
+    text-decoration: none;
+}
+#martix-overview .controls a:hover {
+    text-decoration: underline;
+}
+
 #martix-overview a:hover {
-    background-color: #0073EA;
-    color: white;
+/*    background-color: #0073EA;*/
+/*    color: white;*/
 }
 
 #matrix-view {

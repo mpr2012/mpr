@@ -2,22 +2,28 @@
 <div id="martix-overview">
     <h1>Přehled matic</h1>
     {if $matrixs}
-    <ul>
+    <ul class="matrix_overview">
     {foreach $matrixs as $matrix}
-        <li>
+        <li class="ui-state-default">
             <a n:href="MatrixOverview:view $matrix->id" title="Zobrazit matici '{$matrix->nazev}'">{$matrix->nazev}</a>
-            <div class="controls">
-                <a n:href="MatrixOverview:print $matrix->id" title="Tisknout matici '{$matrix->nazev}'">tisk</a>
-                <a n:href="MatrixOverview:export $matrix->id" title="Exportovat matici '{$matrix->nazev}'">export</a>
-                <a n:href="MatrixOverview:delete $matrix->id" title="Smazat matici '{$matrix->nazev}'">smazat</a>
-            </div>
+            <span class="controls">
+                {*
+                <a class="floatr" n:href="MatrixOverview:print $matrix->id" title="Tisknout matici '{$matrix->nazev}'"><span class="icon-container floatr ui-corner-all"><span class="ui-icon ui-icon-print"></span></span></a>
+                <a class="floatr" n:href="MatrixOverview:export $matrix->id" title="Exportovat matici '{$matrix->nazev}'"><span class="icon-container floatr ui-corner-all"><span class="ui-icon ui-icon-extlink"></span></span> </a>
+                <a class="floatr" n:href="MatrixOverview:delete $matrix->id" title="Smazat matici '{$matrix->nazev}'"><span class="icon-container floatr ui-corner-all"><span class="ui-icon ui-icon-closethick"></span></span> </a>
+                *}
+                <a class="" n:href="MatrixOverview:print $matrix->id" title="Tisknout matici '{$matrix->nazev}'">tisknout</a> |
+                <a class="" n:href="MatrixOverview:export $matrix->id" title="Exportovat matici '{$matrix->nazev}'">exportovat</a> | 
+                <a class="" n:href="MatrixOverview:delete $matrix->id" title="Smazat matici '{$matrix->nazev}'">smazat</a>
+            </span>
         </li>
     {/foreach}
     </ul>
     {else}
     <center>Žádné matice nebyly v databázi nenalezeny.</center>
     {/if}
-    <a n:href="MatrixOverview:create" title="Vytvořit novou matici" class="ui-corner-all">
+    <a n:href="MatrixOverview:create" title="Vytvořit novou matici" class="ui-state-default ui-corner-all button">
         Vytvořit novou matici
     </a>
+    <div class="ui-helper-clearfix"></div>
 </div>

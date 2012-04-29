@@ -5,6 +5,12 @@
 // TODO: flash zprava po dokonceni pozadavku
 
 $(document).ready(function(){
+    /* Prehled matic */
+    $(document).on({
+        mouseenter: function(){$(this).addClass('ui-state-hover').addClass('color_white')},
+        mouseleave: function(){$(this).removeClass('ui-state-hover').removeClass('color_white')}
+    },".matrix_overview li, .button");
+    
     
     var icon_pencil = '<span class="icon-container floatr ui-corner-all"><span class="ui-icon ui-icon-pencil"></span></span>';     
     var icon_plus =   '<span class="icon-container floatr ui-corner-all"> <span class="ui-icon ui-icon-plusthick"></span></span>';     
@@ -68,28 +74,40 @@ $(document).ready(function(){
         var text = "";
         switch(ul.attr("id")){
             case "ul_zamer":
-                text = "Bla bla, toto je zamer";
+                text = "Záměr projektu zodpovídá otázku PROČ chceme dosáhnout daných změn. Zpravidla se jedná o nepřímo dosažitelný věc. Záměr projektu je pouze jeden.";
                 break;
             case "ul_cil":
+                text = "Cíl projektu popisuje zaměření projektu a odpovídá na otázku ČEHO konkrétně chceme dosáhnout. Cíl projektu je pouze jeden.";
                 break;                        
             case "ul_zamer_uk":
             case "ul_cil_uk":
             case "ul_vystupy_uk":
-                // data: text, id radku
+                text ="Objektivně ověřitelné ukazatele prokazují, že záměru, cíle, nebo konkrétních výstupů bylo dosaženo.";
                 break;                        
             case "ul_zamer_zdroje":
             case "ul_cil_zdroje":
             case "ul_vystupy_zdroje":
-                // data: text, id radku
+                text = "Zdroje ověření uvádí, jakým způsobem budou ukazatele zjištěny, případně kdo a pomocí jakého postupu je zjistí.";
                 break;                        
-
+            case "ul_aktivity_droje":
+                text = "Zdroje jsou prostředky, které jsou nutné k uskutečnění dané aktivity. Zadávají se současně s vytvořením samotné aktivity. Jednotlivé zdroje příslušející ke stejné aktivitě jsou odděleny čárkou.";
+                break;
+            case "ul_aktivity_cas":
+                text = "Časový rámec dané aktivity je dán jejím začátkem a koncem. Zadává se při tvorbě aktivity.";
+                break;
             case "ul_cil_predpoklady":
             case "ul_vystupy_predpoklady":
             case "ul_aktivity_predpoklady":
+                text ="Předpoklady a rizika, ze kterých se vychází, a které by mohli ovlivnit konkrétní výstupy, cíl, či záměr projektu.";
+                break;
             case "ul_pred_podm":
-                // data: text, id radku
+                text ="Předběžné podmínky jsou takové podmínky, které je nutné splinit, aby mohl být projekt zahájen.";
                 break;
             case  "ul_vystupy":
+                text = "Konkrétní výstupy projektu blíže specifikují, JAK chceme cíle dosáhnout, co je třeba fyzicky realizovat.";
+                break;
+            case  "ul_aktivity":
+                text = "Aktivity jsou jednotlivé klíčové činnosti, které ovlivňují realizaci konkrétních výstupů.";
                 break;
 
         } 
