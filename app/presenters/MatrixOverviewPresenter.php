@@ -69,6 +69,74 @@ class MatrixOverviewPresenter extends SecuredPresenter
     }
     
     /**
+ * MatrixOverview presenter.
+ *
+ * @author     Petr Kucera
+ * @package    MyApplication
+ */
+class MatrixOverviewPresenter extends SecuredPresenter
+{
+    
+	public function renderDefault()
+	{
+		$this->template->matrixs = $this->db->table('matice')->order('nazev DESC');
+	}
+    
+    public function renderCreate()
+    {
+        
+    }
+    
+    public function createComponentCreateNewMatrixForm()
+    {
+		$form = new \Nette\Application\UI\Form;
+        $form->addGroup('LRM');
+		$form->addText('nazev', 'Název projektu:')
+            ->setAttribute('size', '30')
+			->setRequired('Název nesmí být prázdný řetězec.');
+
+        $form->addGroup('Oprávnění');
+        $groups = array();
+        foreach ($this->db->table('uzivatel')->select('DISTINCT skupina') as $group)
+            $groups[] = $group->skupina;
+        $form->addCheckboxList('skupiny', 'Skupiny:', $groups);
+        $users = array();
+        foreach ($this->db->table('uzivatel') as $user)
+            if ($user->id != $this->getUser()->getId())
+                $users[$user->id] = $user->jmeno . " " . $user->prijmeni . " (" . $user->username . ")";
+        $form->addCheckboxList('users', 'Uživatelé:', $users);
+        
+        $form->addGroup('Potvrzení');
+		$form->addSubmit('create', 'Vytvořit');
+
+		$form->onSuccess[] = callback($this, 'NewMatrixFormSubmitted');
+		return $form;
+    }
+    
+    public function newMatrixFormSubmitted(\Nette\Application\UI\Form $form)
+    {
+        $values = $form->getValues();
+        $nazev = $values['nazev'];
+        unset($values['nazev']);
+        $this->db->table('matice')->insert(array('nazev' => $nazev));
+        $maticeId = $this->db->lastInsertId();
+        $this->db->table('clen')->insert(array('matice' => $maticeId, 'uzivatel' => $this->getUser()->getId()));
+        if ($values['users'])
+            foreach ($values['users'] as $userId)
+                $this->db->table('clen')->insert(array('matice' => $maticeId, 'uzivatel' => $userId));
+        $this->flashMessage("Matice s názvem '$nazev' byla úspěšně vložena. Pokračujte její editací.");
+        $this->redirect('MatrixOverview:view', $maticeId);
+    }
+    
+    public function renderDelete($id)
+    {
+        $nazev = $this->db->table('matice')->get($id)->nazev;
+        $this->db->table('matice')->get($id)->delete();
+        $this->flashMessage("Matice '$nazev' byla úspěšně smazána.");
+        $this->redirect('MatrixOverview:');
+    }
+    
+    /**
      * BEGIN
      * --- EXPORT MATICE - MARCEL ---
      * 
@@ -77,7 +145,7 @@ class MatrixOverviewPresenter extends SecuredPresenter
     {
         $this->template->matrix = $this->db->table('matice')->get($id);
         $this->template->xml = $this->exportMatrix($id);
-    }//80
+    }
 
     public function newSummary($UID, $nazev, $poradi)
     {
@@ -106,12 +174,12 @@ class MatrixOverviewPresenter extends SecuredPresenter
 	$task .= "<OutlineNumber>{$poradi}</OutlineNumber>\n";
 	$task .= "<OutlineLevel>2</OutlineLevel>\n";
 	$task .= "<CalendarUID>-1</CalendarUID>\n";
-	echo($zacatek);
-	$task .= "<ManualStart>2012-04-23T09:00:00</ManualStart>\n";
-	echo($konec);
-	$task .= "<ManualFinish>2012-04-24T17:00:00</ManualFinish>\n";
-//	echo($konec - $zacatek);
-	$task .= "<ManualDuration>PT72H0M0S</ManualDuration>\n";
+	$datetime1 = new DateTime($zacatek);
+	$datetime2 = new DateTime($konec);
+	$interval = $datetime1->diff($datetime2);
+	$diff = ((int)$interval->format('%h'))+24;
+	$task .= "<Start>{$zacatek->format('Y-m-d')}T08:00:00</Start>\n";
+	$task .= "<ActualDuration>PT{$diff}H0M0S</ActualDuration>\n";
 	$task .= "<DurationFormat>7</DurationFormat>\n";
 	$task .= "<Milestone>0</Milestone>\n";
 	$task .= "<Summary>0</Summary>\n";
@@ -132,12 +200,14 @@ class MatrixOverviewPresenter extends SecuredPresenter
 	return $resource;
     }
 
-    public function newAssignments($UID, $resUID, $taskUID)
+    public function newAssignments($UID, $resUID, $taskUID, $date)
     {
 	$assignment  = "<Assignment>\n";
 	$assignment .= "<UID>{$UID}</UID>\n";
 	$assignment .= "<TaskUID>{$taskUID}</TaskUID>\n";
 	$assignment .= "<ResourceUID>{$resUID}</ResourceUID>\n";
+	$assignment .= "<Start>{$date->format('Y-m-d')}T08:00:00</Start>\n";
+	$assignment .= "<Finish>{$date->format('Y-m-d')}T08:00:00</Finish>\n";
 	$assignment .= "</Assignment>\n";
 	return $assignment;
     }
@@ -145,20 +215,20 @@ class MatrixOverviewPresenter extends SecuredPresenter
     public function exportMatrix($matriceID)
     {
 	{ // base project formating and atributes
-        $xmlText  = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n";
-        $xmlText .= "<Project xmlns=\"http://schemas.microsoft.com/project\">\"\n";
-        $xmlText .= "<SaveVersion>1</SaveVersion>\n";
-        $xmlText .= "<Name>" . $this->db->table('matice')->get($matriceID)->nazev . ".xml</Name>\n";
-        $xmlText .= "<Title>Plan projektu_" . $this->db->table('matice')->get($matriceID)->nazev . "</Title>\n";
-        $xmlText .= "<Author>Ones</Author>\n";
+	$xmlText  = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n";
+	$xmlText .= "<Project xmlns=\"http://schemas.microsoft.com/project\">\"\n";
+	$xmlText .= "<SaveVersion>1</SaveVersion>\n";
+	$xmlText .= "<Name>" . $this->db->table('matice')->get($matriceID)->nazev . ".xml</Name>\n";
+	$xmlText .= "<Title>Plan projektu_" . $this->db->table('matice')->get($matriceID)->nazev . "</Title>\n";
+	$xmlText .= "<Author>Ones</Author>\n";
 
-        $xmlText .= "<LastSaved>" . date("Y-m-d\TG:i:s") . "</LastSaved>\n";
-        $xmlText .= "<ScheduleFromStart>1</ScheduleFromStart>\n";
-        $xmlText .= "<CalendarUID>3</CalendarUID>\n";
-        $xmlText .= "<MinutesPerDay>1440</MinutesPerDay>\n";
-        $xmlText .= "<MinutesPerWeek>10080</MinutesPerWeek>\n";
-        $xmlText .= "<DaysPerMonth>100</DaysPerMonth>\n";
-        $xmlText .= "<ProjectExternallyEdited>0</ProjectExternallyEdited>\n";
+	$xmlText .= "<LastSaved>" . date("Y-m-d\TG:i:s") . "</LastSaved>\n";
+	$xmlText .= "<ScheduleFromStart>1</ScheduleFromStart>\n";
+	$xmlText .= "<CalendarUID>3</CalendarUID>\n";
+	$xmlText .= "<MinutesPerDay>1440</MinutesPerDay>\n";
+	$xmlText .= "<MinutesPerWeek>10080</MinutesPerWeek>\n";
+	$xmlText .= "<DaysPerMonth>100</DaysPerMonth>\n";
+	$xmlText .= "<ProjectExternallyEdited>0</ProjectExternallyEdited>\n";
 	}
 	{ // set calendar
 	$xmlText .= "<Calendars>\n";
@@ -252,7 +322,6 @@ class MatrixOverviewPresenter extends SecuredPresenter
 
 	foreach ( $this->db->table('vystup')->where("matice", $matriceID) as $rowVystup ) {	// select all outputs of choosen matrice
 		$summaryUID = $internalID++;
-		echo $rowVystup->nazev;
 		$tasks .= $this->newSummary($summaryUID, $rowVystup->nazev, $rowVystup->poradi);
 		foreach ( $this->db->table('aktivita')->where("vystup", $rowVystup->id) as $rowAktivita) {	// select all tasks of choosen output
 			$taskUID = $internalID++;
@@ -263,22 +332,22 @@ class MatrixOverviewPresenter extends SecuredPresenter
 				$resUID  = $internalID++;
 				$resources .= $this->newResource($resUID, $zdroj, $order . "." . $resOrder); // "1.5.2"
 				$resOrder++;
-				$assignments .= $this->newAssignments($internalID++, $resUID, $taskUID);
+				$assignments .= $this->newAssignments($internalID++, $resUID, $taskUID, $rowAktivita->zacatek);
 			}
 		}
 	}
 
-        $tasks       .= "</Tasks>\n";
-        $resources   .= "</Resources>\n";
-        $assignments .= "</Assignments>\n";
+	$tasks       .= "</Tasks>\n";
+	$resources   .= "</Resources>\n";
+	$assignments .= "</Assignments>\n";
 	}
 	{ // complete together
-        $xmlText .= $tasks;
-        $xmlText .= $resources;
-        $xmlText .= $assignments;
-        $xmlText .= "</Project>\n";
+	$xmlText .= $tasks;
+	$xmlText .= $resources;
+	$xmlText .= $assignments;
+	$xmlText .= "</Project>\n";
 	}
-        return $xmlText;
+	return $xmlText;
     }
     
     /**
