@@ -5,7 +5,8 @@
     <ul class="matrix_overview">
     {foreach $matrixs as $matrix}
         <li class="ui-state-default">
-            <a n:href="MatrixOverview:view $matrix->id" title="Zobrazit matici '{$matrix->nazev}'">{$matrix->nazev}</a>
+<!--            <a n:href="MatrixOverview:view $matrix->id" title="Zobrazit matici '{$matrix->nazev}'">{$matrix->nazev}</a>-->
+            {$matrix->nazev}
             <span class="controls">
                 {*
                 <a class="floatr" n:href="MatrixOverview:print $matrix->id" title="Tisknout matici '{$matrix->nazev}'"><span class="icon-container floatr ui-corner-all"><span class="ui-icon ui-icon-print"></span></span></a>
@@ -14,6 +15,7 @@
                 *}
                 <a class="" n:href="MatrixOverview:print $matrix->id" title="Tisknout matici '{$matrix->nazev}'">tisknout</a> |
                 <a class="" n:href="MatrixOverview:export $matrix->id" title="Exportovat matici '{$matrix->nazev}'">exportovat</a> | 
+                <a class="" n:href="MatrixOverview:view $matrix->id" title="Zobrazit matici '{$matrix->nazev}'">zobrazit</a> |
                 <a class="" n:href="MatrixOverview:delete $matrix->id" title="Smazat matici '{$matrix->nazev}'">smazat</a>
             </span>
         </li>

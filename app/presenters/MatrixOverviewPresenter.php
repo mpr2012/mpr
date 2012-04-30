@@ -10,7 +10,19 @@ class MatrixOverviewPresenter extends SecuredPresenter
     
 	public function renderDefault()
 	{
-		$this->template->matrixs = $this->db->table('matice')->order('nazev DESC');
+		$allMatrixs = $this->db->table('matice')->order('nazev DESC');
+        $this->template->matrixs = array();
+        foreach ($allMatrixs as $matrix)
+        {
+            if ($this->db->table('clen')->where(array(
+                'uzivatel'  => $this->template->userData['id'],
+                'matice'    => $matrix->id
+            ))->count())
+            {
+                $this->template->matrixs[] = $matrix;
+            }
+        }
+//        dump($this->template->userData);
 	}
     
     public function renderCreate()
@@ -21,6 +33,7 @@ class MatrixOverviewPresenter extends SecuredPresenter
     public function createComponentCreateNewMatrixForm()
     {
 		$form = new \Nette\Application\UI\Form;
+        $form->addHidden('majitel', $this->template->userData['id']);
         $form->addGroup('LRM');
 		$form->addText('nazev', 'Název projektu:')
             ->setAttribute('size', '30')
@@ -48,8 +61,10 @@ class MatrixOverviewPresenter extends SecuredPresenter
     {
         $values = $form->getValues();
         $nazev = $values['nazev'];
+        $majitel = $values['majitel'];
         unset($values['nazev']);
-        $this->db->table('matice')->insert(array('nazev' => $nazev));
+        unset($values['majitel']);
+        $this->db->table('matice')->insert(array('nazev' => $nazev, 'majitel' => $majitel));
         $maticeId = $this->db->lastInsertId();
         $this->db->table('clen')->insert(array('matice' => $maticeId, 'uzivatel' => $this->getUser()->getId()));
         if ($values['users'])
@@ -303,6 +318,7 @@ class MatrixOverviewPresenter extends SecuredPresenter
     {
         $this->template->matrixId = $id;
         $this->template->matrixNazev = $this->db->table('matice')->get($id)->nazev;
+        $this->template->matrixMajitel = $this->db->table('matice')->get($id)->majitel;
         
         if (!$this->isAjax())
         {
