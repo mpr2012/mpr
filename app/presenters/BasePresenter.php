@@ -10,7 +10,6 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
 {
     
     protected $db;
-    protected $user;
     
     public function __construct(Nette\DI\IContainer $context) {
         parent::__construct($context);
