@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Počítač: localhost
--- Vygenerováno: Pon 30. dub 2012, 15:08
+-- Vygenerováno: Pon 30. dub 2012, 20:08
 -- Verze MySQL: 5.5.9
 -- Verze PHP: 5.3.6
 
@@ -29,7 +29,7 @@ CREATE TABLE IF NOT EXISTS `aktivita` (
   `zacatek` datetime NOT NULL,
   `konec` datetime NOT NULL,
   `zdroje` text COLLATE utf8_unicode_ci NOT NULL,
-  `poradi` int(11) NOT NULL,
+  `poradi` int(11) NOT NULL DEFAULT '0' ,
   PRIMARY KEY (`id`),
   KEY `aktivita_ibfk_1` (`vystup`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=27 ;
@@ -214,7 +214,7 @@ CREATE TABLE IF NOT EXISTS `vystup` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `nazev` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
   `matice` int(11) NOT NULL,
-  `poradi` int(11) NOT NULL,
+  `poradi` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `matice` (`matice`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=16 ;

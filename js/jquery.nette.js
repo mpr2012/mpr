@@ -13,6 +13,8 @@ jQuery.extend({
 			$("#" + id).html(html);
                         if (refresh_sortable)
                             refresh_sortable();
+                        if (addCalendars)
+                            addCalendars();
 		},
                 
                 showMessage : function (msg,status){

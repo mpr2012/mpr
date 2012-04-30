@@ -1,7 +1,7 @@
 {block content}
 <div id="matrix-view">
     <h1>{$matrixNazev}</h1>
-    <div id="editable">{$matrixMajitel == $userData['id']}</div>
+    {if ($matrixMajitel == $userData['id'])}<div id="editable"></div>{/if}
     <table class="matrix">
         <tr id="row1">
             <td id="zamer"><h2>Záměr</h2>

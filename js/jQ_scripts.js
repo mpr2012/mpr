@@ -30,8 +30,10 @@ $(document).ready(function(){
             function(){$(this).find(".icon-container").hide(200)}
         )
         .not($("table.matrix td").has("#ul_aktivity_zdroje,#ul_aktivity_cas").find("h2"))
-        .append(icon_plus)
+        .append(icon_plus);
     ;
+    
+    
     /* Zobrazovani ikonek po najeti na li */
     $(document).on({
        mouseenter: function(){
@@ -65,6 +67,13 @@ $(document).ready(function(){
             });
         }
     });
+    
+    // POKUD JE MATICE JEN PRO CTENI
+    if (!$("#editable").length){
+        // chovat ikonu + ,x, pencil
+        $(".ui-icon-pencil, .ui-icon-plusthick, .ui-icon-close").parents(".icon-container").remove();
+        
+    }
     
     /* Napoveda */
     $(document).on("click", ".ui-icon-help",function(){
