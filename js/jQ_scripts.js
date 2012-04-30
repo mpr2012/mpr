@@ -9,7 +9,7 @@ $(document).ready(function(){
     $(document).on({
         mouseenter: function(){$(this).addClass('ui-state-hover').addClass('color_white')},
         mouseleave: function(){$(this).removeClass('ui-state-hover').removeClass('color_white')}
-    },".matrix_overview li, .button");
+    },".matrix_overview li, .mybutton");
     
     
     var icon_pencil = '<span class="icon-container floatr ui-corner-all"><span class="ui-icon ui-icon-pencil"></span></span>';     
