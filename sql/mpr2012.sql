@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Počítač: localhost
--- Vygenerováno: Sob 28. dub 2012, 14:51
+-- Vygenerováno: Pon 30. dub 2012, 15:08
 -- Verze MySQL: 5.5.9
 -- Verze PHP: 5.3.6
 
@@ -39,7 +39,7 @@ CREATE TABLE IF NOT EXISTS `aktivita` (
 --
 
 INSERT INTO `aktivita` (`id`, `nazev`, `vystup`, `zacatek`, `konec`, `zdroje`, `poradi`) VALUES
-(19, 'asdf', 13, '2012-04-30 00:00:00', '2012-04-30 00:00:00', 'asdf', 0),
+(19, 'asdf', 13, '2012-04-13 00:00:00', '2012-04-30 00:00:00', 'asdf', 0),
 (26, 'asdf', 13, '1970-01-01 00:00:00', '1970-01-01 00:00:00', '', 0);
 
 -- --------------------------------------------------------
@@ -56,7 +56,17 @@ CREATE TABLE IF NOT EXISTS `clen` (
   PRIMARY KEY (`id`),
   KEY `matice` (`matice`),
   KEY `uzivatel` (`uzivatel`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=32 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=39 ;
+
+--
+-- Vypisuji data pro tabulku `clen`
+--
+
+INSERT INTO `clen` (`id`, `uzivatel`, `matice`) VALUES
+(34, 2, 1),
+(35, 2, 3),
+(37, 2, 29),
+(38, 2, 30);
 
 -- --------------------------------------------------------
 
@@ -70,16 +80,21 @@ CREATE TABLE IF NOT EXISTS `matice` (
   `nazev` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
   `zamer` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
   `cil` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=22 ;
+  `majitel` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `majitel` (`majitel`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=31 ;
 
 --
 -- Vypisuji data pro tabulku `matice`
 --
 
-INSERT INTO `matice` (`id`, `nazev`, `zamer`, `cil`) VALUES
-(1, 'První testovací matice', 'Pomoci svetu', 'Uklidit ulice'),
-(3, 'Prázdná matice', 'Empty prostě', '');
+INSERT INTO `matice` (`id`, `nazev`, `zamer`, `cil`, `majitel`) VALUES
+(1, 'První testovací matice', 'Pomoci svetu', 'Uklidit ulice', 2),
+(3, 'Prázdná matice', 'Empty prostě', '', 2),
+(26, 'asdf', '', '', 3),
+(29, 'Owner', '', '', 2),
+(30, 'Member (only)', '', '', 3);
 
 -- --------------------------------------------------------
 
@@ -252,6 +267,12 @@ ALTER TABLE `aktivita`
 ALTER TABLE `clen`
   ADD CONSTRAINT `clen_ibfk_2` FOREIGN KEY (`uzivatel`) REFERENCES `uzivatel` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `clen_ibfk_1` FOREIGN KEY (`matice`) REFERENCES `matice` (`id`) ON DELETE CASCADE;
+
+--
+-- Omezení pro tabulku `matice`
+--
+ALTER TABLE `matice`
+  ADD CONSTRAINT `matice_ibfk_1` FOREIGN KEY (`majitel`) REFERENCES `uzivatel` (`id`);
 
 --
 -- Omezení pro tabulku `novinka`

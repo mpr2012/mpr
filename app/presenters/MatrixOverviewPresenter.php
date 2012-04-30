@@ -10,7 +10,19 @@ class MatrixOverviewPresenter extends SecuredPresenter
     
 	public function renderDefault()
 	{
-		$this->template->matrixs = $this->db->table('matice')->order('nazev DESC');
+		$allMatrixs = $this->db->table('matice')->order('nazev DESC');
+        $this->template->matrixs = array();
+        foreach ($allMatrixs as $matrix)
+        {
+            if ($this->db->table('clen')->where(array(
+                'uzivatel'  => $this->template->userData['id'],
+                'matice'    => $matrix->id
+            ))->count())
+            {
+                $this->template->matrixs[] = $matrix;
+            }
+        }
+//        dump($this->template->userData);
 	}
     
     public function renderCreate()
@@ -21,6 +33,7 @@ class MatrixOverviewPresenter extends SecuredPresenter
     public function createComponentCreateNewMatrixForm()
     {
 		$form = new \Nette\Application\UI\Form;
+        $form->addHidden('majitel', $this->template->userData['id']);
         $form->addGroup('LRM');
 		$form->addText('nazev', 'Název projektu:')
             ->setAttribute('size', '30')
@@ -48,8 +61,10 @@ class MatrixOverviewPresenter extends SecuredPresenter
     {
         $values = $form->getValues();
         $nazev = $values['nazev'];
+        $majitel = $values['majitel'];
         unset($values['nazev']);
-        $this->db->table('matice')->insert(array('nazev' => $nazev));
+        unset($values['majitel']);
+        $this->db->table('matice')->insert(array('nazev' => $nazev, 'majitel' => $majitel));
         $maticeId = $this->db->lastInsertId();
         $this->db->table('clen')->insert(array('matice' => $maticeId, 'uzivatel' => $this->getUser()->getId()));
         if ($values['users'])
@@ -74,8 +89,17 @@ class MatrixOverviewPresenter extends SecuredPresenter
      */
     public function renderExport($id)
     {
+        \Nette\Environment::getHttpResponse()->setContentType('<?xml version="1.0" encoding="utf-8"?>');
+        \Nette\Environment::getHttpResponse()->setHeader('Pragma', "public");
+        \Nette\Environment::getHttpResponse()->setHeader('Expires', 0);
+        \Nette\Environment::getHttpResponse()->setHeader('Cache-Control', "must-revalidate, post-check=0, pre-check=0");
+        \Nette\Environment::getHttpResponse()->setHeader('Content-Transfer-Encoding', "binary");
+        \Nette\Environment::getHttpResponse()->setHeader('Content-Description', "File Transfer");
+        \Nette\Environment::getHttpResponse()->setHeader('Content-Length', mb_strlen($this->exportMatrix($id)));
+        \Nette\Environment::getHttpResponse()->setHeader('Content-Disposition', 'attachment; filename="' . $this->db->table('matice')->get($id)->nazev . " " . date('d-m-Y') . '"');
         $this->template->matrix = $this->db->table('matice')->get($id);
-        $this->template->xml = $this->exportMatrix($id);
+        echo $this->exportMatrix($id);
+        $this->terminate();
     }
 
     public function newSummary($UID, $nazev, $poradi)
@@ -145,140 +169,143 @@ class MatrixOverviewPresenter extends SecuredPresenter
     
     public function exportMatrix($matriceID)
     {
-	{ // base project formating and atributes
-	$xmlText  = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n";
-	$xmlText .= "<Project xmlns=\"http://schemas.microsoft.com/project\">\"\n";
-	$xmlText .= "<SaveVersion>1</SaveVersion>\n";
-	$xmlText .= "<Name>" . $this->db->table('matice')->get($matriceID)->nazev . ".xml</Name>\n";
-	$xmlText .= "<Title>Plan projektu_" . $this->db->table('matice')->get($matriceID)->nazev . "</Title>\n";
-	$xmlText .= "<Author>Ones</Author>\n";
+        // base project formating and atributes
+        $xmlText  = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n";
+        $xmlText .= "<Project xmlns=\"http://schemas.microsoft.com/project\">\n";
+        $xmlText .= "<SaveVersion>1</SaveVersion>\n";
+        $xmlText .= "<Name>" . $this->db->table('matice')->get($matriceID)->nazev . ".xml</Name>\n";
+        $xmlText .= "<Title>Plan projektu_" . $this->db->table('matice')->get($matriceID)->nazev . "</Title>\n";
+        $xmlText .= "<Author>Ones</Author>\n";
 
-	$xmlText .= "<LastSaved>" . date("Y-m-d\TG:i:s") . "</LastSaved>\n";
-	$xmlText .= "<ScheduleFromStart>1</ScheduleFromStart>\n";
-	$xmlText .= "<CalendarUID>3</CalendarUID>\n";
-	$xmlText .= "<MinutesPerDay>1440</MinutesPerDay>\n";
-	$xmlText .= "<MinutesPerWeek>10080</MinutesPerWeek>\n";
-	$xmlText .= "<DaysPerMonth>100</DaysPerMonth>\n";
-	$xmlText .= "<ProjectExternallyEdited>0</ProjectExternallyEdited>\n";
-	}
-	{ // set calendar
-	$xmlText .= "<Calendars>\n";
-	$xmlText .= "<Calendar>\n";
-	$xmlText .= "<UID>3</UID>\n";
-	$xmlText .= "<Name>FullTime</Name>\n";
-	$xmlText .= "<IsBaseCalendar>1</IsBaseCalendar>\n";
-	$xmlText .= "<IsBaselineCalendar>0</IsBaselineCalendar>\n";
-	$xmlText .= "<BaseCalendarUID>-1</BaseCalendarUID>\n";
-	$xmlText .= "<WeekDays>\n";
-	$xmlText .= "<WeekDay>\n";
-	$xmlText .= "<DayType>1</DayType>\n";
-	$xmlText .= "<DayWorking>1</DayWorking>\n";
-	$xmlText .= "<WorkingTimes>\n";
-	$xmlText .= "<WorkingTime>\n";
-	$xmlText .= "<FromTime>00:00:00</FromTime>\n";
-	$xmlText .= "<ToTime>00:00:00</ToTime>\n";
-	$xmlText .= "</WorkingTime>\n";
-	$xmlText .= "</WorkingTimes>\n";
-	$xmlText .= "</WeekDay>\n";
-	$xmlText .= "<WeekDay>\n";
-	$xmlText .= "<DayType>2</DayType>\n";
-	$xmlText .= "<DayWorking>1</DayWorking>\n";
-	$xmlText .= "<WorkingTimes>\n";
-	$xmlText .= "<WorkingTime>\n";
-	$xmlText .= "<FromTime>00:00:00</FromTime>\n";
-	$xmlText .= "<ToTime>00:00:00</ToTime>\n";
-	$xmlText .= "</WorkingTime>\n";
-	$xmlText .= "</WorkingTimes>\n";
-	$xmlText .= "</WeekDay>\n";
-	$xmlText .= "<WeekDay>\n";
-	$xmlText .= "<DayType>3</DayType>\n";
-	$xmlText .= "<DayWorking>1</DayWorking>\n";
-	$xmlText .= "<WorkingTimes>\n";
-	$xmlText .= "<WorkingTime>\n";
-	$xmlText .= "<FromTime>00:00:00</FromTime>\n";
-	$xmlText .= "<ToTime>00:00:00</ToTime>\n";
-	$xmlText .= "</WorkingTime>\n";
-	$xmlText .= "</WorkingTimes>\n";
-	$xmlText .= "</WeekDay>\n";
-	$xmlText .= "<WeekDay>\n";
-	$xmlText .= "<DayType>4</DayType>\n";
-	$xmlText .= "<DayWorking>1</DayWorking>\n";
-	$xmlText .= "<WorkingTimes>\n";
-	$xmlText .= "<WorkingTime>\n";
-	$xmlText .= "<FromTime>00:00:00</FromTime>\n";
-	$xmlText .= "<ToTime>00:00:00</ToTime>\n";
-	$xmlText .= "</WorkingTime>\n";
-	$xmlText .= "</WorkingTimes>\n";
-	$xmlText .= "</WeekDay>\n";
-	$xmlText .= "<WeekDay>\n";
-	$xmlText .= "<DayType>5</DayType>\n";
-	$xmlText .= "<DayWorking>1</DayWorking>\n";
-	$xmlText .= "<WorkingTimes>\n";
-	$xmlText .= "<WorkingTime>\n";
-	$xmlText .= "<FromTime>00:00:00</FromTime>\n";
-	$xmlText .= "<ToTime>00:00:00</ToTime>\n";
-	$xmlText .= "</WorkingTime>\n";
-	$xmlText .= "</WorkingTimes>\n";
-	$xmlText .= "</WeekDay>\n";
-	$xmlText .= "<WeekDay>\n";
-	$xmlText .= "<DayType>6</DayType>\n";
-	$xmlText .= "<DayWorking>1</DayWorking>\n";
-	$xmlText .= "<WorkingTimes>\n";
-	$xmlText .= "<WorkingTime>\n";
-	$xmlText .= "<FromTime>00:00:00</FromTime>\n";
-	$xmlText .= "<ToTime>00:00:00</ToTime>\n";
-	$xmlText .= "</WorkingTime>\n";
-	$xmlText .= "</WorkingTimes>\n";
-	$xmlText .= "</WeekDay>\n";
-	$xmlText .= "<WeekDay>\n";
-	$xmlText .= "<DayType>7</DayType>\n";
-	$xmlText .= "<DayWorking>1</DayWorking>\n";
-	$xmlText .= "<WorkingTimes>\n";
-	$xmlText .= "<WorkingTime>\n";
-	$xmlText .= "<FromTime>00:00:00</FromTime>\n";
-	$xmlText .= "<ToTime>00:00:00</ToTime>\n";
-	$xmlText .= "</WorkingTime>\n";
-	$xmlText .= "</WorkingTimes>\n";
-	$xmlText .= "</WeekDay>\n";
-	$xmlText .= "</WeekDays>\n";
-	$xmlText .= "</Calendar>\n";
-	$xmlText .= "</Calendars>\n";
-	}
-	{ // process tasks
-	$tasks = "<Tasks>\n";
-	$resources = "<Resources>\n";
-	$assignments = "<Assignments>\n";
+        $xmlText .= "<LastSaved>" . date("Y-m-d\TG:i:s") . "</LastSaved>\n";
+        $xmlText .= "<ScheduleFromStart>1</ScheduleFromStart>\n";
+        $xmlText .= "<CalendarUID>3</CalendarUID>\n";
+        $xmlText .= "<MinutesPerDay>1440</MinutesPerDay>\n";
+        $xmlText .= "<MinutesPerWeek>10080</MinutesPerWeek>\n";
+        $xmlText .= "<DaysPerMonth>100</DaysPerMonth>\n";
+        $xmlText .= "<ProjectExternallyEdited>0</ProjectExternallyEdited>\n";
+        
+        // set calendar
+        $xmlText .= "<Calendars>\n";
+        $xmlText .= "<Calendar>\n";
+        $xmlText .= "<UID>3</UID>\n";
+        $xmlText .= "<Name>FullTime</Name>\n";
+        $xmlText .= "<IsBaseCalendar>1</IsBaseCalendar>\n";
+        $xmlText .= "<IsBaselineCalendar>0</IsBaselineCalendar>\n";
+        $xmlText .= "<BaseCalendarUID>-1</BaseCalendarUID>\n";
+        $xmlText .= "<WeekDays>\n";
+        $xmlText .= "<WeekDay>\n";
+        $xmlText .= "<DayType>1</DayType>\n";
+        $xmlText .= "<DayWorking>1</DayWorking>\n";
+        $xmlText .= "<WorkingTimes>\n";
+        $xmlText .= "<WorkingTime>\n";
+        $xmlText .= "<FromTime>00:00:00</FromTime>\n";
+        $xmlText .= "<ToTime>00:00:00</ToTime>\n";
+        $xmlText .= "</WorkingTime>\n";
+        $xmlText .= "</WorkingTimes>\n";
+        $xmlText .= "</WeekDay>\n";
+        $xmlText .= "<WeekDay>\n";
+        $xmlText .= "<DayType>2</DayType>\n";
+        $xmlText .= "<DayWorking>1</DayWorking>\n";
+        $xmlText .= "<WorkingTimes>\n";
+        $xmlText .= "<WorkingTime>\n";
+        $xmlText .= "<FromTime>00:00:00</FromTime>\n";
+        $xmlText .= "<ToTime>00:00:00</ToTime>\n";
+        $xmlText .= "</WorkingTime>\n";
+        $xmlText .= "</WorkingTimes>\n";
+        $xmlText .= "</WeekDay>\n";
+        $xmlText .= "<WeekDay>\n";
+        $xmlText .= "<DayType>3</DayType>\n";
+        $xmlText .= "<DayWorking>1</DayWorking>\n";
+        $xmlText .= "<WorkingTimes>\n";
+        $xmlText .= "<WorkingTime>\n";
+        $xmlText .= "<FromTime>00:00:00</FromTime>\n";
+        $xmlText .= "<ToTime>00:00:00</ToTime>\n";
+        $xmlText .= "</WorkingTime>\n";
+        $xmlText .= "</WorkingTimes>\n";
+        $xmlText .= "</WeekDay>\n";
+        $xmlText .= "<WeekDay>\n";
+        $xmlText .= "<DayType>4</DayType>\n";
+        $xmlText .= "<DayWorking>1</DayWorking>\n";
+        $xmlText .= "<WorkingTimes>\n";
+        $xmlText .= "<WorkingTime>\n";
+        $xmlText .= "<FromTime>00:00:00</FromTime>\n";
+        $xmlText .= "<ToTime>00:00:00</ToTime>\n";
+        $xmlText .= "</WorkingTime>\n";
+        $xmlText .= "</WorkingTimes>\n";
+        $xmlText .= "</WeekDay>\n";
+        $xmlText .= "<WeekDay>\n";
+        $xmlText .= "<DayType>5</DayType>\n";
+        $xmlText .= "<DayWorking>1</DayWorking>\n";
+        $xmlText .= "<WorkingTimes>\n";
+        $xmlText .= "<WorkingTime>\n";
+        $xmlText .= "<FromTime>00:00:00</FromTime>\n";
+        $xmlText .= "<ToTime>00:00:00</ToTime>\n";
+        $xmlText .= "</WorkingTime>\n";
+        $xmlText .= "</WorkingTimes>\n";
+        $xmlText .= "</WeekDay>\n";
+        $xmlText .= "<WeekDay>\n";
+        $xmlText .= "<DayType>6</DayType>\n";
+        $xmlText .= "<DayWorking>1</DayWorking>\n";
+        $xmlText .= "<WorkingTimes>\n";
+        $xmlText .= "<WorkingTime>\n";
+        $xmlText .= "<FromTime>00:00:00</FromTime>\n";
+        $xmlText .= "<ToTime>00:00:00</ToTime>\n";
+        $xmlText .= "</WorkingTime>\n";
+        $xmlText .= "</WorkingTimes>\n";
+        $xmlText .= "</WeekDay>\n";
+        $xmlText .= "<WeekDay>\n";
+        $xmlText .= "<DayType>7</DayType>\n";
+        $xmlText .= "<DayWorking>1</DayWorking>\n";
+        $xmlText .= "<WorkingTimes>\n";
+        $xmlText .= "<WorkingTime>\n";
+        $xmlText .= "<FromTime>00:00:00</FromTime>\n";
+        $xmlText .= "<ToTime>00:00:00</ToTime>\n";
+        $xmlText .= "</WorkingTime>\n";
+        $xmlText .= "</WorkingTimes>\n";
+        $xmlText .= "</WeekDay>\n";
+        $xmlText .= "</WeekDays>\n";
+        $xmlText .= "</Calendar>\n";
+        $xmlText .= "</Calendars>\n";
 
-	$internalID = 0;
+        // process tasks
+        $tasks = "<Tasks>\n";
+        $resources = "<Resources>\n";
+        $assignments = "<Assignments>\n";
 
-	foreach ( $this->db->table('vystup')->where("matice", $matriceID) as $rowVystup ) {	// select all outputs of choosen matrice
-		$summaryUID = $internalID++;
-		$tasks .= $this->newSummary($summaryUID, $rowVystup->nazev, $rowVystup->poradi);
-		foreach ( $this->db->table('aktivita')->where("vystup", $rowVystup->id) as $rowAktivita) {	// select all tasks of choosen output
-			$taskUID = $internalID++;
-			$order = $rowVystup->poradi . "." . $rowAktivita->poradi; //"1.5"
-			$tasks .= $this->newTask($taskUID, $rowAktivita->nazev, $rowAktivita->zacatek, $rowAktivita->konec, $order);
-			$resOrder = 1;
-			foreach( explode(',',$rowAktivita->zdroje) as $zdroj) {	// process all resources of choosen task
-				$resUID  = $internalID++;
-				$resources .= $this->newResource($resUID, $zdroj, $order . "." . $resOrder); // "1.5.2"
-				$resOrder++;
-				$assignments .= $this->newAssignments($internalID++, $resUID, $taskUID, $rowAktivita->zacatek);
-			}
-		}
-	}
+        $internalID = 0;
 
-	$tasks       .= "</Tasks>\n";
-	$resources   .= "</Resources>\n";
-	$assignments .= "</Assignments>\n";
-	}
-	{ // complete together
-	$xmlText .= $tasks;
-	$xmlText .= $resources;
-	$xmlText .= $assignments;
-	$xmlText .= "</Project>\n";
-	}
-	return $xmlText;
+        foreach ( $this->db->table('vystup')->where("matice", $matriceID) as $rowVystup )
+        {	// select all outputs of choosen matrice
+            $summaryUID = $internalID++;
+            $tasks .= $this->newSummary($summaryUID, $rowVystup->nazev, $rowVystup->poradi);
+            foreach ( $this->db->table('aktivita')->where("vystup", $rowVystup->id) as $rowAktivita)
+            {	// select all tasks of choosen output
+                $taskUID = $internalID++;
+                $order = $rowVystup->poradi . "." . $rowAktivita->poradi; //"1.5"
+                $tasks .= $this->newTask($taskUID, $rowAktivita->nazev, $rowAktivita->zacatek, $rowAktivita->konec, $order);
+                $resOrder = 1;
+                foreach (explode(',',$rowAktivita->zdroje) as $zdroj)
+                {	// process all resources of choosen task
+                    $resUID  = $internalID++;
+                    $resources .= $this->newResource($resUID, $zdroj, $order . "." . $resOrder); // "1.5.2"
+                    $resOrder++;
+                    $assignments .= $this->newAssignments($internalID++, $resUID, $taskUID, $rowAktivita->zacatek);
+                }
+            }
+        }
+
+        $tasks       .= "</Tasks>\n";
+        $resources   .= "</Resources>\n";
+        $assignments .= "</Assignments>\n";
+
+        // complete together
+        $xmlText .= $tasks;
+        $xmlText .= $resources;
+        $xmlText .= $assignments;
+        $xmlText .= "</Project>\n";
+
+        return $xmlText;
     }
     
     /**
@@ -291,6 +318,7 @@ class MatrixOverviewPresenter extends SecuredPresenter
     {
         $this->template->matrixId = $id;
         $this->template->matrixNazev = $this->db->table('matice')->get($id)->nazev;
+        $this->template->matrixMajitel = $this->db->table('matice')->get($id)->majitel;
         
         if (!$this->isAjax())
         {
