@@ -1,7 +1,7 @@
 body {
     font: 100% "Trebuchet MS", "Geneva CE", lucida, sans-serif;
     color: #333;
-    background-color: #fff;
+    background-color: #fafafa;
     width: 960px;
     margin: auto;
 }
@@ -236,6 +236,16 @@ hr {
     padding-left: 0.5em;
 }
 
+#matrix-create fieldset {
+    width: auto;
+    display: list-item;
+    background-color: white;
+    border: 1px solid #f0f0f0;
+}
+#matrix-create table td {
+    padding-right: 3em;
+    
+}
 
 /* Zobrazeni matic*/
 
@@ -432,4 +442,10 @@ table.matrix h2 {
     background-color: #ff857c;
     border-color: #C22;
         
+}
+
+#loading{
+    z-index: 9000;
+    position: absoulute;
+    background:#fafafa url(/images/loading.gif) 50% 50% no-repeat;
 }

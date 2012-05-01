@@ -378,14 +378,15 @@ class MatrixOverviewPresenter extends SecuredPresenter
             'zamer' => $text
         ));
         $this->template->zamer  = $this->db->table('matice')->get($id)->zamer;
-        
+        $this->payload->message = 'Záměr úspěšně uložen.';
+        $this->payload->status = 'ok';
         $this->invalidateControl('ul_zamer');
     }
     
     // cil
     public function handleEdit_cil($id, $text)
     {
-        $this->payload->message = 'Sucess';
+        $this->payload->message = 'Cíl úspěšně uložen.';
         $this->payload->status = 'ok';
         $this->db->table('matice')->get($id)->update(array(
             'cil' => $text
@@ -407,6 +408,8 @@ class MatrixOverviewPresenter extends SecuredPresenter
             'matice'    => $id,
             'radek'     => $row_id
         ));
+        $this->payload->message = 'Ukazatel úspěšně uložen.';
+        $this->payload->status = 'ok';
         $this->invalidateControl('ul_uk' . $row_id);
     }
     public function handleEdit_uk($id, $text, $uk_id)
@@ -420,6 +423,8 @@ class MatrixOverviewPresenter extends SecuredPresenter
             'matice'    => $id,
             'radek'     => $row_id
         ));
+        $this->payload->message = 'Ukazatel úspěšně uložen.';
+        $this->payload->status = 'ok';
         $this->invalidateControl('ul_uk' . $row_id);
     }
     public function handleDelete_uk($id, $rec_id)
@@ -431,6 +436,8 @@ class MatrixOverviewPresenter extends SecuredPresenter
             'matice'    => $id,
             'radek'     => $row_id
         ));
+        $this->payload->message = 'Ukazatel úspěšně smazán.';
+        $this->payload->status = 'ok';
         $this->invalidateControl('ul_uk' . $row_id);
     }
     
@@ -447,6 +454,8 @@ class MatrixOverviewPresenter extends SecuredPresenter
             'matice'    => $id,
             'radek'     => $row_id
         ));
+        $this->payload->message = 'Zdroj úspěšně uložen.';
+        $this->payload->status = 'ok';
         $this->invalidateControl('ul_zd' . $row_id);
     }
     public function handleEdit_zdroje($id, $text, $zdr_id)
@@ -460,6 +469,8 @@ class MatrixOverviewPresenter extends SecuredPresenter
             'matice'    => $id,
             'radek'     => $row_id
         ));
+        $this->payload->message = 'Zdroj úspěšně uložen.';
+        $this->payload->status = 'ok';
         $this->invalidateControl('ul_zd' . $row_id);
     }
     public function handleDelete_zdroje($id, $rec_id)
@@ -471,6 +482,8 @@ class MatrixOverviewPresenter extends SecuredPresenter
             'matice'    => $id,
             'radek'     => $row_id
         ));
+        $this->payload->message = 'Zdroj úspěšně smazán.';
+        $this->payload->status = 'ok';
         $this->invalidateControl('ul_zd' . $row_id);
     }
     
@@ -487,6 +500,13 @@ class MatrixOverviewPresenter extends SecuredPresenter
             'matice'    => $id,
             'radek'     => $row_id
         ));
+        if ($row_id == 5){
+            $this->payload->message = 'Předběžná podmínka úspěšně uložena.';
+            $this->payload->status = 'ok';
+        } else {
+            $this->payload->message = 'Předpoklad úspěšně uložen.';
+            $this->payload->status = 'ok';
+        }
         $this->invalidateControl('ul_pr' . $row_id);
     }
     public function handleEdit_predpoklady($id, $text, $pr_id)
@@ -500,6 +520,13 @@ class MatrixOverviewPresenter extends SecuredPresenter
             'matice'    => $id,
             'radek'     => $row_id
         ));
+        if ($row_id == 5){
+            $this->payload->message = 'Předběžná podmínka úspěšně uložena.';
+            $this->payload->status = 'ok';
+        } else {
+            $this->payload->message = 'Předpoklad úspěšně uložen.';
+            $this->payload->status = 'ok';
+        }
         $this->invalidateControl('ul_pr' . $row_id);
     }
     public function handleDelete_predpoklady($id, $rec_id)
@@ -511,6 +538,13 @@ class MatrixOverviewPresenter extends SecuredPresenter
             'matice'    => $id,
             'radek'     => $row_id
         ));
+        if ($row_id == 4){
+            $this->payload->message = 'Předběžná podmínka úspěšně smazána.';
+            $this->payload->status = 'ok';
+        } else {
+            $this->payload->message = 'Předpoklad úspěšně smazán.';
+            $this->payload->status = 'ok';
+        }
         $this->invalidateControl('ul_pr' . $row_id);
     }
     
@@ -532,6 +566,10 @@ class MatrixOverviewPresenter extends SecuredPresenter
         $this->template->akt_frm_do = '';
         $this->template->akt_frm_vystup = '';
         $this->template->akt_frm_id = '';
+
+        $this->payload->message = 'Výstup úspěšně uložen.';
+        $this->payload->status = 'ok';
+        
         $this->invalidateControl('ul_vys');
         $this->invalidateControl('aktivita_form');
 
@@ -550,6 +588,10 @@ class MatrixOverviewPresenter extends SecuredPresenter
         $this->template->akt_frm_do = '';
         $this->template->akt_frm_vystup = '';
         $this->template->akt_frm_id = '';
+        
+        $this->payload->message = 'Výstup úspěšně uložen.';
+        $this->payload->status = 'ok';
+        
         $this->invalidateControl('ul_vys');
         $this->invalidateControl('aktivita_form');
     }
@@ -568,6 +610,10 @@ class MatrixOverviewPresenter extends SecuredPresenter
         $this->template->akt_frm_do = '';
         $this->template->akt_frm_vystup = '';
         $this->template->akt_frm_id = '';
+        
+        $this->payload->message = 'Výstup úspěšně smazán.';
+        $this->payload->status = 'ok';
+        
         $this->invalidateControl('ul_vys');
         $this->invalidateControl('ul_akt');
         $this->invalidateControl('ul_zdroje');
@@ -593,6 +639,10 @@ class MatrixOverviewPresenter extends SecuredPresenter
         $this->template->akt_frm_do = '';
         $this->template->akt_frm_vystup = '';
         $this->template->akt_frm_id = '';
+        
+        $this->payload->message = 'Nové pořadí úspěšně uloženo.';
+        $this->payload->status = 'ok';
+        
         $this->invalidateControl('ul_vys');
         $this->invalidateControl('ul_akt');
         $this->invalidateControl('ul_zdroje');
@@ -622,6 +672,10 @@ class MatrixOverviewPresenter extends SecuredPresenter
         $this->template->akt_frm_do = '';
         $this->template->akt_frm_vystup = '';
         $this->template->akt_frm_id = '';
+        
+        $this->payload->message = 'Aktivita úspěšně uložena.';
+        $this->payload->status = 'ok';
+        
         $this->invalidateControl('ul_akt');
         $this->invalidateControl('ul_zdroje');
         $this->invalidateControl('ul_casram');
@@ -636,6 +690,7 @@ class MatrixOverviewPresenter extends SecuredPresenter
         $this->template->akt_frm_vystup = $this->db->table('aktivita')->get($akt_id)->vystup;
         $this->template->akt_frm_id = $akt_id;
         $this->template->vystupy = $this->db->table('vystup')->where(array('matice' => $id))->order('poradi');
+        
         $this->invalidateControl('aktivita_form');
     }
     public function handleEdit_aktivita($id, $akt_id, $nazev, $zdroje, $cas_od, $cas_do, $vys_id)
@@ -659,6 +714,10 @@ class MatrixOverviewPresenter extends SecuredPresenter
         $this->template->akt_frm_do = '';
         $this->template->akt_frm_vystup = '';
         $this->template->akt_frm_id = '';
+        
+        $this->payload->message = 'Aktivita úspěšně uložena.';
+        $this->payload->status = 'ok';
+        
         $this->invalidateControl('ul_akt');
         $this->invalidateControl('ul_zdroje');
         $this->invalidateControl('ul_casram');
@@ -673,6 +732,10 @@ class MatrixOverviewPresenter extends SecuredPresenter
         $this->template->aktivity = array();
         foreach ($this->template->vystupy as $vystup)
             $this->template->aktivity[$vystup->id] = $this->db->table('aktivita')->where(array('vystup' => $vystup->id))->order('poradi');
+        
+        $this->payload->message = 'Aktivita úspěšně smazána.';
+        $this->payload->status = 'ok';
+        
         $this->invalidateControl('ul_akt');
         $this->invalidateControl('ul_zdroje');
         $this->invalidateControl('ul_casram');
@@ -690,6 +753,10 @@ class MatrixOverviewPresenter extends SecuredPresenter
         $this->template->aktivity = array();
         foreach ($this->template->vystupy as $vystup)
             $this->template->aktivity[$vystup->id] = $this->db->table('aktivita')->where(array('vystup' => $vystup->id))->order('poradi');
+
+        $this->payload->message = 'Nové pořadí úspěšně uloženo.';
+        $this->payload->status = 'ok';
+        
         $this->invalidateControl('ul_akt');
         $this->invalidateControl('ul_zdroje');
         $this->invalidateControl('ul_casram');

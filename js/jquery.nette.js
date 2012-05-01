@@ -43,6 +43,7 @@ jQuery.extend({
                         if (payload.message && payload.status){
                             jQuery.nette.showMessage(payload.message,payload.status);
                         }
+                        $("#loading").hide();
 		}
 	}
 });

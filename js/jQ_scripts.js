@@ -1,11 +1,7 @@
-// TODO: pridani/editace aktivit
-// TODO: zobrazeni napovedy
 // TODO: zotaveni z chyby pri ukladani do db z ajax pozadavku
-// TODO: behem zpracovani ajax pozadavku, nejaky waiting window
-// TODO: flash zprava po dokonceni pozadavku
 
 $(document).ready(function(){
-    /* FORM Nova matice */
+    /* FORM Nova matice = kliknuti na skupinu oznaci/odznaci vsechny uzivatele */
     $(document).on({
         change : function(){
             var value = $(this).attr("checked") ? true : false;
@@ -41,7 +37,7 @@ $(document).ready(function(){
         )
         .not($("table.matrix td").has("#ul_aktivity_zdroje,#ul_aktivity_cas").find("h2"))
         .append(icon_plus);
-    ;
+    
     
     
     /* Zobrazovani ikonek po najeti na li */
@@ -84,6 +80,13 @@ $(document).ready(function(){
         $(".ui-icon-pencil, .ui-icon-plusthick, .ui-icon-close").parents(".icon-container").remove();
         
     }
+    
+    /* Potvrzovani inputu enterem*/
+    $(document).on("keypress","#editing_input,#inserting_input",function(event){
+        if(event.which==13){
+            $(this).parent().find(".ui-icon-check").trigger("click");
+        }
+    });
     
     /* Napoveda */
     $(document).on("click", ".ui-icon-help",function(){
@@ -397,6 +400,7 @@ $(document).ready(function(){
                params += '&' + nazev + '=' + encodeURIComponent(data[nazev]);
 //           alert('?do=' + action + params);
            $.get('?do=' + action + params);
+           showLoading(ul);
        }); 
        
        
@@ -568,7 +572,7 @@ $(document).ready(function(){
 
 function addCalendars(){
 //    $(".date_input").datepicker($.datepicker.regional['cs']);
-    $(".date_input").datepicker({ altFormat: "yy-mm-dd" });
+    $(".date_input").datepicker({altFormat: "yy-mm-dd"});
 }
 
 function refresh_sortable(){
@@ -616,4 +620,12 @@ function refresh_sortable(){
         
     });
     $( "#ul_vystupy, #ul_aktivity" ).disableSelection();
+}
+
+function showLoading(ul){
+    if($("#loading").length){
+        $("#loading").remove();
+    }
+    $("body").append('<div id="loading"></div>');
+    $("#loading").offset(ul.offset()).width(ul.innerWidth()).height(ul.height()).show();    
 }
