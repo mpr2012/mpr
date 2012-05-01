@@ -13,9 +13,9 @@
                 <a class="floatr" n:href="MatrixOverview:export $matrix->id" title="Exportovat matici '{$matrix->nazev}'"><span class="icon-container floatr ui-corner-all"><span class="ui-icon ui-icon-extlink"></span></span> </a>
                 <a class="floatr" n:href="MatrixOverview:delete $matrix->id" title="Smazat matici '{$matrix->nazev}'"><span class="icon-container floatr ui-corner-all"><span class="ui-icon ui-icon-closethick"></span></span> </a>
                 *}
+                {if ($matrix->majitel == $userData['id'])}<a class="" n:href="MatrixOverview:view $matrix->id" title="Editovat matici '{$matrix->nazev}'">editovat</a> | {/if}
                 <a class="" n:href="MatrixOverview:print $matrix->id" title="Tisknout matici '{$matrix->nazev}'">tisknout</a> |
                 <a class="" n:href="MatrixOverview:export $matrix->id" title="Exportovat matici '{$matrix->nazev}'">exportovat</a> | 
-                <a class="" n:href="MatrixOverview:view $matrix->id" title="Zobrazit matici '{$matrix->nazev}'">zobrazit</a> |
                 <a class="" n:href="MatrixOverview:delete $matrix->id" title="Smazat matici '{$matrix->nazev}'">smazat</a>
             </span>
         </li>

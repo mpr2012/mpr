@@ -40,15 +40,26 @@ class MatrixOverviewPresenter extends SecuredPresenter
 			->setRequired('Název nesmí být prázdný řetězec.');
 
         $form->addGroup('Oprávnění');
-        $groups = array();
-        foreach ($this->db->table('uzivatel')->select('DISTINCT skupina') as $group)
-            $groups[] = $group->skupina;
-        $form->addCheckboxList('skupiny', 'Skupiny:', $groups);
-        $users = array();
-        foreach ($this->db->table('uzivatel') as $user)
-            if ($user->id != $this->getUser()->getId())
-                $users[$user->id] = $user->jmeno . " " . $user->prijmeni . " (" . $user->username . ")";
-        $form->addCheckboxList('users', 'Uživatelé:', $users);
+//        $groups = array();
+        $i = 0;
+        foreach ($this->db->table('uzivatel')->select('DISTINCT skupina') as $group){
+            // najit uzivatele ze skupiny
+            $form->addCheckbox("skupiny".  $i++, $group->skupina);
+            foreach ($this->db->table('uzivatel')->where('skupina',$group->skupina) as $user){
+                if ($user->id != $this->getUser()->getId()){
+                    $form->addCheckbox("user".$user->id ,$user->jmeno . " " . $user->prijmeni . " (" . $user->username . ")")
+                        ->setAttribute("class",$group->skupina." user-in-group");
+                        
+                }
+            }
+//            $groups[] = $group->skupina;
+        }
+//        $form->addCheckboxList('skupiny', 'Skupiny:', $groups);
+//        $users = array();
+//        foreach ($this->db->table('uzivatel') as $user)
+//            if ($user->id != $this->getUser()->getId())
+//                $users[$user->id] = $user->jmeno . " " . $user->prijmeni . " (" . $user->username . ")";
+//        $form->addCheckboxList('users', 'Uživatelé:', $users);
         
         $form->addGroup('Potvrzení');
 		$form->addSubmit('create', 'Vytvořit');
@@ -64,12 +75,22 @@ class MatrixOverviewPresenter extends SecuredPresenter
         $majitel = $values['majitel'];
         unset($values['nazev']);
         unset($values['majitel']);
-        $this->db->table('matice')->insert(array('nazev' => $nazev, 'majitel' => $majitel));
+        $this->db->table('matice')->insert(array('nazev' => $nazev, 'majitel' => $majitel, 'cil' => '', 'zamer' => ''));
         $maticeId = $this->db->lastInsertId();
         $this->db->table('clen')->insert(array('matice' => $maticeId, 'uzivatel' => $this->getUser()->getId()));
-        if ($values['users'])
-            foreach ($values['users'] as $userId)
+        // zjistit vsechny klice uzivatelu
+        $users = array();
+        foreach (array_keys((array)$values) as $key){
+            if (substr($key, 0,4) == "user" && $values[$key]){
+                $users[] = substr($key, 4);
+            }
+        }
+        if ($users)
+            foreach ($users as $userId)
                 $this->db->table('clen')->insert(array('matice' => $maticeId, 'uzivatel' => $userId));
+//        if ($values['users'])
+//            foreach ($values['users'] as $userId)
+//                $this->db->table('clen')->insert(array('matice' => $maticeId, 'uzivatel' => $userId));
         $this->flashMessage("Matice s názvem '$nazev' byla úspěšně vložena. Pokračujte její editací.");
         $this->redirect('MatrixOverview:view', $maticeId);
     }

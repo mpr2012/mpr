@@ -5,6 +5,16 @@
 // TODO: flash zprava po dokonceni pozadavku
 
 $(document).ready(function(){
+    /* FORM Nova matice */
+    $(document).on({
+        change : function(){
+            var value = $(this).attr("checked") ? true : false;
+            $("."+$(this).parent().find("label").text()).attr("checked",value);
+        }
+    },"input[name^=skupiny]");
+    
+    
+
     /* Prehled matic */
     $(document).on({
         mouseenter: function(){$(this).addClass('ui-state-hover').addClass('color_white')},
