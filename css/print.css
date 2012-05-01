@@ -1,12 +1,37 @@
+@page
+{
+    size: landscape;
+    margin: 2cm;
+}
+
 body {
-	font: 12pt/1.4 "Trebuchet MS", "Geneva CE", lucida, sans-serif;
+	font: 10pt "Trebuchet MS", "Geneva CE", lucida, sans-serif;
 	color: black;
 	background: none;
-	width: 100%;
+	width: 29cm;
 }
 
-a img { border: none; }
-
-#ajax-spinner {
-	display: none;
+table.matrix {
+    width: 100%;
 }
+
+table.matrix h2 {
+    font-size: 12pt;
+    margin-top: 3px;
+    border-bottom:1px solid #e0e0e0;
+    padding-left: 1em;
+}
+table.matrix td {
+    vertical-align: top;
+    border:1px solid #e0e0e0;
+    
+}
+#ul_aktivity,#ul_vystupy, #ul_aktivity_zdroje,#ul_aktivity_cas{
+    list-style: none;
+}
+
+.vystup_num,.ak_num{
+    font-weight: bold;
+    
+}
+

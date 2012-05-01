@@ -111,7 +111,7 @@ $(document).ready(function(){
             case "ul_vystupy_zdroje":
                 text = "Zdroje ověření uvádí, jakým způsobem budou ukazatele zjištěny, případně kdo a pomocí jakého postupu je zjistí.";
                 break;                        
-            case "ul_aktivity_droje":
+            case "ul_aktivity_zdroje":
                 text = "Zdroje jsou prostředky, které jsou nutné k uskutečnění dané aktivity. Zadávají se současně s vytvořením samotné aktivity. Jednotlivé zdroje příslušející ke stejné aktivitě jsou odděleny čárkou.";
                 break;
             case "ul_aktivity_cas":
