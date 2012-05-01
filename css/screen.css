@@ -312,7 +312,7 @@ table.matrix ul li {
      margin: 0 6px 1px 6px;
      padding: 5px;
      font-size: 1.2em;
-     height: 1.5em; 
+     min-height: 1.5em; 
      border-collapse: collapse;
      color: #444;
      font-weight: normal;

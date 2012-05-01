@@ -16,9 +16,10 @@
                 <ul id="ul_zamer_uk">
                     {if count($ukazatele1)}
                         {foreach $ukazatele1 as $ukazatel1}
-                            <li id="uk{$ukazatel1->id}" class="ui-state-default">{$ukazatel1->nazev}
+                            <li id="uk{$ukazatel1->id}" class="ui-state-default">
                                 <span class="icon-container floatr ui-corner-all"><span class="ui-icon ui-icon-pencil"></span></span>
                                 <span class="icon-container floatr ui-corner-all"> <span class="ui-icon ui-icon-close"></span></span>
+                                {$ukazatel1->nazev}
                             </li>
                         {/foreach}
                     {/if}
@@ -30,9 +31,10 @@
                 <ul id="ul_zamer_zdroje">
                     {if count($zdroje_overeni1)}
                         {foreach $zdroje_overeni1 as $zdroj_overeni1}
-                            <li id="zdr{$zdroj_overeni1->id}" class="ui-state-default">{$zdroj_overeni1->nazev}
+                            <li id="zdr{$zdroj_overeni1->id}" class="ui-state-default">
                                 <span class="icon-container floatr ui-corner-all"><span class="ui-icon ui-icon-pencil"></span></span>
                                 <span class="icon-container floatr ui-corner-all"><span class="ui-icon ui-icon-close"></span></span>
+                                {$zdroj_overeni1->nazev}
                             </li>
                         {/foreach}
                     {/if}
@@ -55,9 +57,10 @@
                 <ul id="ul_cil_uk">
                     {if count($ukazatele2)}
                         {foreach $ukazatele2 as $ukazatel2}
-                            <li id="uk{$ukazatel2->id}" class="ui-state-default">{$ukazatel2->nazev}
+                            <li id="uk{$ukazatel2->id}" class="ui-state-default">
                                 <span class="icon-container floatr ui-corner-all"><span class="ui-icon ui-icon-pencil"></span></span>
                                 <span class="icon-container floatr ui-corner-all"><span class="ui-icon ui-icon-close"></span></span>
+                                {$ukazatel2->nazev}
                             </li>
                         {/foreach}
                     {/if}
@@ -69,9 +72,10 @@
                 <ul id="ul_cil_zdroje">
                 {if count($zdroje_overeni2)}
                         {foreach $zdroje_overeni2 as $zdroj_overeni2}
-                            <li id="zdr{$zdroj_overeni2->id}" class="ui-state-default">{$zdroj_overeni2->nazev}
+                            <li id="zdr{$zdroj_overeni2->id}" class="ui-state-default">
                                 <span class="icon-container floatr ui-corner-all"><span class="ui-icon ui-icon-pencil"></span></span>
                                 <span class="icon-container floatr ui-corner-all"><span class="ui-icon ui-icon-close"></span></span>
+                                {$zdroj_overeni2->nazev}
                             </li>
                         {/foreach}
                     {/if}
@@ -83,9 +87,10 @@
                 <ul id="ul_cil_predpoklady">
                     {if count($predpoklady2)}
                         {foreach $predpoklady2 as $predpoklad2}
-                            <li id="pr{$predpoklad2->id}" class="ui-state-default">{$predpoklad2->nazev}
+                            <li id="pr{$predpoklad2->id}" class="ui-state-default">
                                 <span class="icon-container floatr ui-corner-all"><span class="ui-icon ui-icon-pencil"></span></span>
                                 <span class="icon-container floatr ui-corner-all"><span class="ui-icon ui-icon-close"></span></span>
+                                {$predpoklad2->nazev}
                             </li>
                         {/foreach}
                     {/if}
@@ -101,12 +106,12 @@
                     {var $counter = 1}
                     {foreach $vystupy as $vystup}
                         <li id="vys{$vystup->id}" class="ui-state-default">
+                            <span class="icon-container floatr ui-corner-all"><span class="ui-icon ui-icon-pencil"></span></span>
+                            <span class="icon-container floatr ui-corner-all"><span class="ui-icon ui-icon-close"></span></span>    
                             <input id="vys{$vystup->id}_cb" type="checkbox" checked/>
                             <label for="vys{$vystup->id}_cb">
                                 <span class="vystup_num">{$counter++}</span> {$vystup->nazev}
                             </label>
-                            <span class="icon-container floatr ui-corner-all"><span class="ui-icon ui-icon-pencil"></span></span>
-                            <span class="icon-container floatr ui-corner-all"><span class="ui-icon ui-icon-close"></span></span>    
                         </li>
                     {/foreach}
                 {/if}
@@ -118,9 +123,10 @@
                 <ul id="ul_vystupy_uk">
                     {if count($ukazatele3)}
                         {foreach $ukazatele3 as $ukazatel3}
-                            <li id="uk{$ukazatel3->id}" class="ui-state-default">{$ukazatel3->nazev}
+                            <li id="uk{$ukazatel3->id}" class="ui-state-default">
                                 <span class="icon-container floatr ui-corner-all"><span class="ui-icon ui-icon-pencil"></span></span>
                                 <span class="icon-container floatr ui-corner-all"><span class="ui-icon ui-icon-close"></span></span>
+                                {$ukazatel3->nazev}
                             </li>
                         {/foreach}
                     {/if}
@@ -132,9 +138,10 @@
                 <ul id="ul_vystupy_zdroje">
                     {if count($zdroje_overeni3)}
                         {foreach $zdroje_overeni3 as $zdroj_overeni3}
-                            <li id="zdr{$zdroj_overeni3->id}" class="ui-state-default">{$zdroj_overeni3->nazev}
+                            <li id="zdr{$zdroj_overeni3->id}" class="ui-state-default">
                                 <span class="icon-container floatr ui-corner-all"><span class="ui-icon ui-icon-pencil"></span></span>
                                 <span class="icon-container floatr ui-corner-all"><span class="ui-icon ui-icon-close"></span></span>
+                                {$zdroj_overeni3->nazev}
                             </li>
                         {/foreach}
                     {/if}
@@ -146,9 +153,10 @@
                 <ul id="ul_vystupy_predpoklady">
                     {if count($predpoklady3)}
                         {foreach $predpoklady3 as $predpoklad3}
-                            <li id="pr{$predpoklad3->id}" class="ui-state-default">{$predpoklad3->nazev}
+                            <li id="pr{$predpoklad3->id}" class="ui-state-default">
                                 <span class="icon-container floatr ui-corner-all"><span class="ui-icon ui-icon-pencil"></span></span>
                                 <span class="icon-container floatr ui-corner-all"><span class="ui-icon ui-icon-close"></span></span>
+                                {$predpoklad3->nazev}
                             </li>
                         {/foreach}
                     {/if}
@@ -171,9 +179,9 @@
                         {if count($aktivity[$vystup->id])}
                             {foreach $aktivity[$vystup->id] as $aktivita}
                             <li id="akt{$aktivita->id}" class="ui-state-default vys{$aktivita->vystup}">
-                                <span class="vystup_num">{$outputCounter}</span>.<span class="ak_num">{$activityCounter++}</span> {$aktivita->nazev}
                                 <span class="icon-container floatr ui-corner-all"><span class="ui-icon ui-icon-pencil"></span></span>
                                 <span class="icon-container floatr ui-corner-all"><span class="ui-icon ui-icon-close"></span></span>
+                                <span class="vystup_num">{$outputCounter}</span>.<span class="ak_num">{$activityCounter++}</span> {$aktivita->nazev}
                             </li>
                             {/foreach}
                         {/if}
@@ -197,8 +205,8 @@
                         {if count($aktivity[$vystup->id])}
                             {foreach $aktivity[$vystup->id] as $aktivita}
                             <li class="ui-state-default vys{$aktivita->vystup} akt{$aktivita->id}">
-                                <span class="vystup_num">{$outputCounter}</span>.<span class="ak_num">{$activityCounter++}</span> {$aktivita->zdroje}
                                 <span class="icon-container floatr ui-corner-all"><span class="ui-icon ui-icon-pencil"></span></span>
+                                <span class="vystup_num">{$outputCounter}</span>.<span class="ak_num">{$activityCounter++}</span> {$aktivita->zdroje}
                             </li>
                             {/foreach}
                         {/if}
@@ -222,8 +230,8 @@
                         {if count($aktivity[$vystup->id])}
                             {foreach $aktivity[$vystup->id] as $aktivita}
                             <li class="ui-state-default vys{$aktivita->vystup} akt{$aktivita->id}">
-                                <span class="vystup_num">{$outputCounter}</span>.<span class="ak_num">{$activityCounter++}</span> {$aktivita->zacatek|date:'%d.%m.%Y'} - {$aktivita->konec|date:'%d.%m.%Y'}
                                 <span class="icon-container floatr ui-corner-all"><span class="ui-icon ui-icon-pencil"></span></span>
+                                <span class="vystup_num">{$outputCounter}</span>.<span class="ak_num">{$activityCounter++}</span> {$aktivita->zacatek|date:'%d.%m.%Y'} - {$aktivita->konec|date:'%d.%m.%Y'}
                             </li>
                             {/foreach}
                         {/if}
@@ -238,9 +246,10 @@
                 <ul id="ul_aktivity_predpoklady">
                     {if count($predpoklady4)}
                         {foreach $predpoklady4 as $predpoklad4}
-                            <li  class="ui-state-default" id="pr{$predpoklad4->id}">{$predpoklad4->nazev}
+                            <li  class="ui-state-default" id="pr{$predpoklad4->id}">
                                 <span class="icon-container floatr ui-corner-all"><span class="ui-icon ui-icon-pencil"></span></span>
                                 <span class="icon-container floatr ui-corner-all"><span class="ui-icon ui-icon-close"></span></span>
+                                {$predpoklad4->nazev}
                             </li>
                         {/foreach}
                     {/if}
@@ -260,9 +269,10 @@
                 <ul id="ul_pred_podm">
                     {if count($predpoklady5)}
                         {foreach $predpoklady5 as $predpoklad5}
-                            <li id="pr{$predpoklad5->id}" class="ui-state-default">{$predpoklad5->nazev}
+                            <li id="pr{$predpoklad5->id}" class="ui-state-default">
                                 <span class="icon-container floatr ui-corner-all"><span class="ui-icon ui-icon-pencil"></span></span>
                                 <span class="icon-container floatr ui-corner-all"><span class="ui-icon ui-icon-close"></span></span>
+                                {$predpoklad5->nazev}
                             </li>
                         {/foreach}
                     {/if}

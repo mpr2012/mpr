@@ -568,6 +568,8 @@ $(document).ready(function(){
 //            var newLi= '<input id="editing_input" type="text" value="'+li.text()+'"/>'+icon_accept + icon_cancel;
 //            li.html(newLi);
         });
+        
+        resize_activities();    
 });
 
 function addCalendars(){
@@ -628,4 +630,14 @@ function showLoading(ul){
     }
     $("body").append('<div id="loading"></div>');
     $("#loading").offset(ul.offset()).width(ul.innerWidth()).height(ul.height()).show();    
+}
+
+function resize_activities(){
+    $("#ul_aktivity li").each(function(){
+        var id = $(this).attr("id");
+        var newH = Math.max($(this).height(), (Math.max($("#ul_aktivity_zdroje li."+id).height(),$("#ul_aktivity_cas li."+id).height())));
+        $(this).height(newH);
+        $("#ul_aktivity_zdroje li."+id+", #ul_aktivity_cas li."+id).height(newH);
+    });
+    // jsem na aktivite
 }

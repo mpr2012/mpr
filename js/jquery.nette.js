@@ -15,6 +15,8 @@ jQuery.extend({
                             refresh_sortable();
                         if (addCalendars)
                             addCalendars();
+                        if (resize_activities)
+                            resize_activities();
 		},
                 
                 showMessage : function (msg,status){
