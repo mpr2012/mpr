@@ -274,10 +274,10 @@ $(document).ready(function(){
                                 $.get('?do=' + action, data);
                                 console.log('?do='+action);
                                 console.log(data);
-                                $( this ).dialog( "close" );
+                                $( this ).dialog( "destroy" );
                             },
                             "Storno": function() {
-                                $( this ).dialog( "close" );
+                                $( this ).dialog( "destroy" );
                             }
                         }
                     });
@@ -479,10 +479,10 @@ $(document).ready(function(){
                                         console.log(data);
                                         $.get('?do=' + action + params);
                                         //                                $.post('?do='+$(this).data("action"));
-                                        $( this ).dialog( "close" );
+                                        $( this ).dialog( "destroy" );
                                     },
                                     "Storno": function() {
-                                        $( this ).dialog( "close" );
+                                        $( this ).dialog( "destroy" );
                                     }
                                 }
                             });
@@ -556,10 +556,10 @@ $(document).ready(function(){
                 buttons: {
                     Ano: function() {
                         $.get('?do='+$(this).data("action"),$(this).data("data"));
-                        $( this ).dialog( "close" );
+                        $( this ).dialog( "destroy" );
                     },
                     Ne: function() {
-                        $( this ).dialog( "close" );
+                        $( this ).dialog( "destroy" );
                     }
                 }
             });
@@ -581,7 +581,6 @@ function refresh_sortable(){
     $( "#ul_vystupy, #ul_aktivity" ).sortable({
         placeholder: "ui-state-highlight",
         stop: function(){
-            console.log("stop");
             if ($(this).attr("id") == "ul_vystupy"){
                 // vystupy
                 // zjistit nove poradi 
@@ -592,8 +591,9 @@ function refresh_sortable(){
                     data[$(this).attr("id").substr(3)] = poradi;
                     $(this).parent().data("data",data);
                 });
-                console.log([$(this).data("data")]);
+                showLoading($(this));
                 $.get('?do=change_seq_vystupy&poradi=' + JSON.stringify($(this).data("data")));
+                
 //                $.post('?do=change_seq_vystupy',{
 //                    all_data:$(this).data("data")
 //                    });
@@ -610,15 +610,10 @@ function refresh_sortable(){
                     data[$(this).attr("id").substr(3)] = poradi;
                     $(this).parent().data("data",data);
                 });
-                console.log([$(this).data("data")]);
+                showLoading($(this));
                 $.get('?do=change_seq_aktivity&poradi=' + JSON.stringify($(this).data("data")));
-//                $.post('?do=change_seq_aktivity',{
-//                    all_data:$(this).data("data")
-//                    });
             }
         }
-    //        out: function(){console.log("out")},
-    //        deactivate: function(){console.log("deactivate")}
         
     });
     $( "#ul_vystupy, #ul_aktivity" ).disableSelection();
