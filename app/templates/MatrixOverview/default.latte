@@ -15,8 +15,8 @@
                 *}
                 {if ($matrix->majitel == $userData['id'])}<a class="" n:href="MatrixOverview:view $matrix->id" title="Editovat matici '{$matrix->nazev}'">editovat</a> | {/if}
                 <a class="" n:href="MatrixOverview:print $matrix->id" title="Tisknout matici '{$matrix->nazev}'" target="print_lrm">tisknout</a> |
-                <a class="" n:href="MatrixOverview:export $matrix->id" title="Exportovat matici '{$matrix->nazev}'">exportovat</a> | 
-                <a class="" n:href="MatrixOverview:delete $matrix->id" title="Smazat matici '{$matrix->nazev}'">smazat</a>
+                <a class="" n:href="MatrixOverview:export $matrix->id" title="Exportovat matici '{$matrix->nazev}'">exportovat</a>
+                {if ($matrix->majitel == $userData['id'])} | <a class="" n:href="MatrixOverview:delete $matrix->id" title="Smazat matici '{$matrix->nazev}'">smazat</a>  {/if}
             </span>
         </li>
     {/foreach}

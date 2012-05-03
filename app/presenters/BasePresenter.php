@@ -15,7 +15,8 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
         parent::__construct($context);
         
         $this->db = $context->database;
-        $this->template->userData = $this->getUser()->getIdentity()->data;
+        if ($this->getUser()->getIdentity())
+            $this->template->userData = $this->getUser()->getIdentity()->getData();
     }
     
     public function handleSignOut()
