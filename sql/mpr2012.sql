@@ -80,22 +80,6 @@ INSERT INTO `matice` (`id`, `nazev`, `zamer`, `cil`, `majitel`) VALUES
 (33,	'Test',	'',	'',	9),
 (34,	'Ukázková matice',	'Úspěšné absolvování předmětu M',	'Vytvořit Aplikaci pro podporu ',	3);
 
-DROP TABLE IF EXISTS `news`;
-CREATE TABLE `news` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `header` varchar(40) COLLATE utf8_unicode_ci NOT NULL,
-  `text` text COLLATE utf8_unicode_ci NOT NULL,
-  `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `author` int(11) NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `author` (`author`),
-  CONSTRAINT `news_ibfk_1` FOREIGN KEY (`author`) REFERENCES `users` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
-INSERT INTO `news` (`id`, `header`, `text`, `date`, `author`) VALUES
-(1,	'První novinka',	'Právě byla spuštěna první verze webového portálu týmu Ones - MPR 2012.',	'2012-03-25 12:32:10',	2),
-(3,	'Novinky - výpis',	'Implementován výpis novinek na úvodní domovskou stránku webu.',	'2012-03-25 12:52:15',	2);
-
 DROP TABLE IF EXISTS `novinka`;
 CREATE TABLE `novinka` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -150,28 +134,6 @@ INSERT INTO `ukazatel` (`id`, `nazev`, `radek`, `matice`) VALUES
 (6,	'Počet bodů každého člena týmu ',	'1',	34),
 (7,	'hodne, ale hodne dlouhy text, tak dlouhy, ze by se sem nemusel vejit, co kdyz tady bude fakt toho hodne, to vam rikam, panove',	'3',	34),
 (8,	'dalsi, opravdu docela dlouhy popisek, uvidime, jak to bude vypadat, az tu budou dva takovi podobni',	'3',	34);
-
-DROP TABLE IF EXISTS `users`;
-CREATE TABLE `users` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `username` varchar(40) COLLATE utf8_unicode_ci NOT NULL,
-  `password` varchar(40) COLLATE utf8_unicode_ci NOT NULL,
-  `role` varchar(40) COLLATE utf8_unicode_ci NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `username` (`username`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
-INSERT INTO `users` (`id`, `username`, `password`, `role`) VALUES
-(2,	'xzajic07@stud.fit.vutbr.cz',	'912ec803b2ce49e4a541068d495ab570',	''),
-(3,	'xbedna33@stud.fit.vutbr.cz',	'50a1e8d0ea071aca23f99488fd969483',	''),
-(4,	'xpodiv01@stud.fit.vutbr.cz',	'50a1e8d0ea071aca23f99488fd969483',	''),
-(5,	'xranda00@stud.fit.vutbr.cz',	'50a1e8d0ea071aca23f99488fd969483',	''),
-(6,	'xpodho02@stud.fit.vutbr.cz',	'50a1e8d0ea071aca23f99488fd969483',	''),
-(7,	'xmarci00@stud.fit.vutbr.cz',	'50a1e8d0ea071aca23f99488fd969483',	''),
-(8,	'xkrize06@stud.fit.vutbr.cz',	'50a1e8d0ea071aca23f99488fd969483',	''),
-(9,	'xcekan00@stud.fit.vutbr.cz',	'50a1e8d0ea071aca23f99488fd969483',	''),
-(10,	'xkucer60@stud.fit.vutbr.cz',	'50a1e8d0ea071aca23f99488fd969483',	''),
-(11,	'xtothr00@stud.fit.vutbr.cz',	'50a1e8d0ea071aca23f99488fd969483',	'');
 
 DROP TABLE IF EXISTS `uzivatel`;
 CREATE TABLE `uzivatel` (

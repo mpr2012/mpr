@@ -445,6 +445,6 @@ table.matrix h2 {
 
 #loading{
     z-index: 9000;
-    position: absoulute;
-    background:#fafafa url(/images/loading.gif) 50% 50% no-repeat;
+    position: absolute;
+    background: #fafafa url('../images/loading.gif') 50% 50% no-repeat;
 }
